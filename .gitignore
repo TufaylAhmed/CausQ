@@ -1,0 +1,15 @@
+# Rust
+/backend/target
+backend/.env
+
+# SQLite
+*.db
+*.db-wal
+*.db-shm
+
+# OS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/

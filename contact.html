@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Let's engineer what's next | CausQ</title>
+  <meta name="description" content="Talk to CausQ. Book a briefing with our engineers on AI, network modernization and quantum-era security. US & EMEA." />
+  <link rel="canonical" href="https://causq.com/contact.html" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="nav-mount"></div>
+
+  <header class="phero phero-img">
+    <div class="phero-bg"><img src="assets/img/contact-hero.jpg" alt=""></div>
+    <div class="wrap">
+      <p class="crumbs reveal"><a href="index.html">CausQ</a> / Contact</p>
+      <h1 class="display h-xl reveal" data-delay="1">Let&rsquo;s talk.</h1>
+      <p class="lead reveal" data-delay="2">Tell us where you&rsquo;re headed and what&rsquo;s in the way. We&rsquo;ll bring the right
+        engineers and a plan you can act on, usually within one business day.</p>
+    </div>
+    <span class="phero-scroll"></span>
+  </header>
+
+  <section class="section" style="padding-top:40px">
+    <div class="wrap">
+      <div class="feature">
+        <div class="reveal">
+          <span class="kicker">Why a briefing beats an RFP</span>
+          <h2 class="display h-md" style="margin-top:16px">Thirty minutes with an engineer.</h2>
+          <p class="lead" style="margin-top:18px">No sales script, no generic deck. We&rsquo;ll pressure-test your environment
+            and show you exactly where CausQ moves the needle.</p>
+          <ul class="feature-list">
+            <li><span class="n">01</span><span class="t"><b>Direct to senior engineers</b><span>The people who&rsquo;d do the work, not a gatekeeper.</span></span></li>
+            <li><span class="n">02</span><span class="t"><b>Actionable in the first call</b><span>You&rsquo;ll leave with findings you can use immediately.</span></span></li>
+            <li><span class="n">03</span><span class="t"><b>US &amp; EMEA coverage</b><span>In your timezone, under your compliance regime.</span></span></li>
+          </ul>
+          <div style="margin-top:34px; display:flex; flex-direction:column; gap:8px">
+            <p class="kicker plain" style="color:var(--ink-mute)">Prefer email?</p>
+            <a href="mailto:hello@causq.com" class="display h-sm" style="color:var(--ink)">hello@causq.com</a>
+          </div>
+        </div>
+
+        <div class="reveal" data-delay="1">
+          <div class="form">
+            <form data-endpoint="/api/contact" novalidate>
+              <h3>Book a briefing</h3>
+              <p class="sub">We typically respond within one business day.</p>
+              <div class="field row">
+                <div><label for="name">Full name</label><input id="name" name="name" type="text" placeholder="Jane Doe" required></div>
+                <div><label for="email">Work email</label><input id="email" name="email" type="email" placeholder="jane@company.com" required></div>
+              </div>
+              <div class="field row">
+                <div><label for="company">Company</label><input id="company" name="company" type="text" placeholder="Company"></div>
+                <div><label for="region">Region</label><select id="region" name="region"><option>United States</option><option>EMEA</option><option>Other</option></select></div>
+              </div>
+              <div class="field"><label for="interest">What can we help with?</label>
+                <select id="interest" name="interest">
+                  <option>AI &amp; Intelligent Operations</option>
+                  <option>Network Modernization</option>
+                  <option>Quantum-era Security</option>
+                  <option>Cloud &amp; Edge / Managed Services</option>
+                  <option>Not sure yet, let&rsquo;s explore</option>
+                </select>
+              </div>
+              <div class="field"><label for="msg">A little context</label><textarea id="msg" name="message" rows="3" placeholder="Where you&rsquo;re headed and what&rsquo;s in the way…"></textarea></div>
+              <button type="submit" class="btn btn-signal">Send request <span class="arr">&rarr;</span></button>
+              <p class="form-note">By submitting you agree to be contacted by CausQ. We never share your details.</p>
+            </form>
+            <div class="form-success"><div class="ck"><svg fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><h3>Request received</h3><p style="color:var(--ink-mute); margin-top:8px">A CausQ engineer will reach out within one business day.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- offices -->
+  <section class="section warm">
+    <div class="wrap">
+      <div class="split-head">
+        <div><span class="kicker reveal">Where we are</span><h2 class="display h-lg reveal" data-delay="1" style="margin-top:18px">Two hubs.<br>One team.</h2></div>
+        <p class="lead reveal" data-delay="2">Drop in your real office addresses and a map image when you have them.</p>
+      </div>
+      <div class="feature">
+        <div class="reveal">
+          <h3 class="display h-sm">United States</h3>
+          <p style="color:var(--ink-mute); margin-top:10px">Address line one<br>City, State ZIP<br>+1 (000) 000-0000</p>
+        </div>
+        <div class="reveal" data-delay="1">
+          <h3 class="display h-sm">EMEA</h3>
+          <p style="color:var(--ink-mute); margin-top:10px">Address line one<br>City, Country<br>+00 000 000 000</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-mount"></div>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

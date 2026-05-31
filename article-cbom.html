@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building a cryptographic bill of materials | CausQ</title>
+  <meta name="description" content="You can't migrate what you can't see. A field guide to cryptographic discovery and building a CBOM at enterprise scale." />
+  <link rel="canonical" href="https://causq.com/article-cbom.html" />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Building a cryptographic bill of materials" />
+  <meta property="og:image" content="assets/img/think-5.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="nav-mount"></div>
+
+  <header class="phero phero-img">
+    <div class="phero-bg"><img src="assets/img/think-5.jpg" alt=""></div>
+    <div class="wrap">
+      <p class="crumbs reveal"><a href="what-we-think.html">What we think</a> / Quantum</p>
+      <div class="article-meta reveal" data-delay="1" style="margin-bottom:22px"><span class="cat">Quantum</span><span>9 min read</span></div>
+      <h1 class="display h-lg reveal" data-delay="1" style="max-width:20ch">Building a cryptographic bill of materials, the practical way.</h1>
+      <p class="lead reveal" data-delay="2">Every post-quantum plan begins with the same unglamorous step: finding out
+        where your cryptography actually lives. Almost no one knows.</p>
+    </div>
+    <span class="phero-scroll"></span>
+  </header>
+
+  <article class="section">
+    <div class="wrap">
+      <div class="prose">
+        <p class="lede">A <strong>cryptographic bill of materials</strong>, a CBOM, is a living inventory of
+          every algorithm, key, certificate, protocol and library your organisation relies on, and the data each one
+          protects. It is the map you need before you can migrate anything. It is also the artefact most enterprises
+          discover they&rsquo;ve never had.</p>
+
+        <h2>Why you can&rsquo;t skip it</h2>
+        <p>Post-quantum migration, certificate hygiene, incident response, regulatory attestation, all of them
+          assume you know where cryptography is used. Without a CBOM, &ldquo;migrate to PQC&rdquo; is a wish, not a plan,
+          because you can&rsquo;t scope, sequence or prove it. The hidden, hard-coded, vendor-buried cryptography is exactly
+          the cryptography that will bite you.</p>
+
+        <blockquote><p>The most dangerous algorithm in your estate is the one you forgot you were running.</p></blockquote>
+
+        <h2>A practical way to build one</h2>
+        <ol>
+          <li><strong>Pick the lenses, not the boil-the-ocean.</strong> Inventory from several angles, network
+            (what&rsquo;s negotiated on the wire), code and dependencies (libraries and calls), certificates and key
+            stores, and vendor attestations, rather than chasing a single perfect source.</li>
+          <li><strong>Automate discovery.</strong> Use traffic analysis, dependency scanning and certificate inventory
+            tooling to find the bulk; reserve humans for the long tail and the judgement calls.</li>
+          <li><strong>Capture context, not just crypto.</strong> For each finding, record what data it protects and how
+            long that data stays sensitive. That&rsquo;s what turns a list into a priority order.</li>
+          <li><strong>Make it live.</strong> A CBOM that&rsquo;s a one-time PDF is obsolete the next deploy. Wire it into
+            CI/CD and asset management so it updates itself.</li>
+        </ol>
+
+        <div class="callout"><p>Aim for &ldquo;good and current&rdquo; over &ldquo;perfect and stale.&rdquo; A 90%-complete
+          CBOM that refreshes automatically beats a 100% snapshot that&rsquo;s wrong within a month.</p></div>
+
+        <h2>What it unlocks</h2>
+        <p>Once the CBOM exists, the hard questions become answerable: which systems hold our longest-lived secrets?
+          where are we still using deprecated algorithms? if a library breaks tomorrow, what&rsquo;s exposed? It becomes
+          the backbone of crypto-agility, the foundation that lets you change cryptography as routine
+          maintenance instead of a fire drill. Start it now; it&rsquo;s the cheapest, highest-leverage move in the whole
+          quantum-readiness journey.</p>
+      </div>
+      <div class="article-byline"><div class="av">CQ</div>
+        <div class="who"><b>CausQ Security Practice</b><span>Quantum-era Security &middot; US &amp; EMEA</span></div></div>
+    </div>
+  </article>
+
+  <section class="section warm">
+    <div class="wrap">
+      <div class="split-head"><h2 class="display h-md reveal">Keep reading</h2>
+        <p class="lead reveal" data-delay="1"><a href="what-we-think.html" class="tlink" style="font-size:1rem">All thinking <span class="arr">&rarr;</span></a></p></div>
+      <div class="insights">
+        <article class="insight reveal"><figure class="media"><img src="assets/img/think-feature.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">Quantum</span><span>10 min</span></div>
+          <h3>Harvest now, decrypt later: the breach you won&rsquo;t see for a decade.</h3>
+          <a href="article-harvest-now-decrypt-later.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+        <article class="insight reveal" data-delay="1"><figure class="media"><img src="assets/img/think-6.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">EMEA</span><span>4 min</span></div>
+          <h3>NIS2, DORA and the year compliance got real.</h3>
+          <a href="article-nis2-dora.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+        <article class="insight reveal" data-delay="2"><figure class="media"><img src="assets/img/think-2.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">Security</span><span>7 min</span></div>
+          <h3>Zero Trust isn&rsquo;t a product. It&rsquo;s a way of running the network.</h3>
+          <a href="article-zero-trust.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section night cta-band">
+    <div class="wrap"><div style="max-width:760px">
+      <h2 class="display h-lg on-night reveal">Start your CBOM with us.</h2>
+      <p class="lead reveal" data-delay="1" style="margin-top:22px">A cryptographic discovery engagement gives you the map , 
+        and the priority order, in weeks, not quarters.</p>
+      <a href="contact.html" class="btn btn-signal reveal" data-delay="2" style="margin-top:30px">Book a briefing <span class="arr">&rarr;</span></a>
+    </div></div>
+  </section>
+
+  <div id="footer-mount"></div>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

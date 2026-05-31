@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero Trust isn't a product | CausQ</title>
+  <meta name="description" content="How to operationalize identity-first security without grinding the business to a halt. Zero Trust as a way of running the network, not a box you buy." />
+  <link rel="canonical" href="https://causq.com/article-zero-trust.html" />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Zero Trust isn't a product" />
+  <meta property="og:image" content="assets/img/think-2.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="nav-mount"></div>
+
+  <header class="phero phero-img">
+    <div class="phero-bg"><img src="assets/img/think-2.jpg" alt=""></div>
+    <div class="wrap">
+      <p class="crumbs reveal"><a href="what-we-think.html">What we think</a> / Security</p>
+      <div class="article-meta reveal" data-delay="1" style="margin-bottom:22px"><span class="cat">Security</span><span>7 min read</span></div>
+      <h1 class="display h-lg reveal" data-delay="1" style="max-width:18ch">Zero Trust isn&rsquo;t a product. It&rsquo;s a way of running the network.</h1>
+      <p class="lead reveal" data-delay="2">You can&rsquo;t buy Zero Trust. You can only operate it, and most failed
+        programs failed because they tried to install it instead.</p>
+    </div>
+    <span class="phero-scroll"></span>
+  </header>
+
+  <article class="section">
+    <div class="wrap">
+      <div class="prose">
+        <p class="lede">Zero Trust gets sold as a SKU and bought as a project, which is exactly why so many initiatives
+          stall. The principle is simple, never trust, always verify, assume breach. The hard part is that it&rsquo;s
+          a change to how the network is <em>run</em>, every day, not a box that goes in a rack.</p>
+
+        <h2>The shift in one sentence</h2>
+        <p>Old model: get inside the perimeter, and you&rsquo;re trusted. New model: every request, user, device,
+          workload, is authenticated, authorised and continuously evaluated against context, no matter where it
+          originates. The perimeter doesn&rsquo;t disappear; it moves to identity.</p>
+
+        <blockquote><p>The flat trusted network is the single most exploited design decision in enterprise IT. Zero Trust
+          is the discipline of never building one again.</p></blockquote>
+
+        <h2>Why programs stall, and how to keep yours moving</h2>
+        <ul>
+          <li><strong>Boiling the ocean.</strong> Teams try to segment everything at once. Start with one crown-jewel
+            application and one user population; prove the pattern; then expand.</li>
+          <li><strong>Identity debt.</strong> Zero Trust is only as good as your identity data. Clean up accounts,
+            devices and entitlements first, it&rsquo;s unglamorous and decisive.</li>
+          <li><strong>Friction backlash.</strong> If verification annoys people, they&rsquo;ll route around it. Tune for
+            risk-based, mostly-invisible checks so security buys trust instead of spending it.</li>
+          <li><strong>No telemetry.</strong> &ldquo;Assume breach&rdquo; is meaningless without the visibility to detect
+            one. Instrument before you enforce.</li>
+        </ul>
+
+        <div class="callout"><p>A useful test: can you name, for your most sensitive system, exactly which identities can
+          reach it, from which devices, under what conditions, and prove it changed the moment someone left? If
+          not, that&rsquo;s your first sprint.</p></div>
+
+        <h2>Running it, not installing it</h2>
+        <p>Operationalised well, Zero Trust becomes invisible plumbing: policy expressed as code, access granted
+          just-in-time, posture evaluated continuously, and every decision logged. It pairs naturally with SASE for
+          access and with modern segmentation in the fabric, but the technology is downstream of the operating
+          model. Get the model right and the products become interchangeable. Get it wrong and no product saves you.</p>
+      </div>
+      <div class="article-byline"><div class="av">CQ</div>
+        <div class="who"><b>CausQ Security Practice</b><span>Zero Trust &amp; Secure Access &middot; US &amp; EMEA</span></div></div>
+    </div>
+  </article>
+
+  <section class="section warm">
+    <div class="wrap">
+      <div class="split-head"><h2 class="display h-md reveal">Keep reading</h2>
+        <p class="lead reveal" data-delay="1"><a href="what-we-think.html" class="tlink" style="font-size:1rem">All thinking <span class="arr">&rarr;</span></a></p></div>
+      <div class="insights">
+        <article class="insight reveal"><figure class="media"><img src="assets/img/think-1.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">AI</span><span>6 min</span></div>
+          <h3>The network is becoming AI&rsquo;s most demanding customer.</h3>
+          <a href="article-network-ai-workload.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+        <article class="insight reveal" data-delay="1"><figure class="media"><img src="assets/img/think-6.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">EMEA</span><span>4 min</span></div>
+          <h3>NIS2, DORA and the year compliance got real.</h3>
+          <a href="article-nis2-dora.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+        <article class="insight reveal" data-delay="2"><figure class="media"><img src="assets/img/think-feature.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">Quantum</span><span>10 min</span></div>
+          <h3>Harvest now, decrypt later: the breach you won&rsquo;t see for a decade.</h3>
+          <a href="article-harvest-now-decrypt-later.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section night cta-band">
+    <div class="wrap"><div style="max-width:760px">
+      <h2 class="display h-lg on-night reveal">Make Zero Trust an operating capability.</h2>
+      <p class="lead reveal" data-delay="1" style="margin-top:22px">We&rsquo;ll help you start where it counts and scale
+        without the friction backlash.</p>
+      <a href="contact.html" class="btn btn-signal reveal" data-delay="2" style="margin-top:30px">Book a briefing <span class="arr">&rarr;</span></a>
+    </div></div>
+  </section>
+
+  <div id="footer-mount"></div>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harvest now, decrypt later | CausQ</title>
+  <meta name="description" content="Adversaries are storing encrypted data today to crack it once quantum computers mature. A pragmatic plan to become crypto-agile before the deadline finds you." />
+  <link rel="canonical" href="https://causq.com/article-harvest-now-decrypt-later.html" />
+  <meta name="theme-color" content="#0b0b0d" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Harvest now, decrypt later" />
+  <meta property="og:description" content="Why crypto-agility, not a single migration, is the real answer to the quantum threat." />
+  <meta property="og:image" content="assets/img/think-feature.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="nav-mount"></div>
+
+  <header class="phero phero-img">
+    <div class="phero-bg"><img src="assets/img/think-feature.jpg" alt=""></div>
+    <div class="wrap">
+      <p class="crumbs reveal"><a href="what-we-think.html">What we think</a> / Quantum</p>
+      <div class="article-meta reveal" data-delay="1" style="margin-bottom:22px">
+        <span class="cat">Quantum</span><span>10 min read</span><span>Field note</span>
+      </div>
+      <h1 class="display h-lg reveal" data-delay="1" style="max-width:18ch">Harvest now, decrypt later: the breach you won&rsquo;t see for a decade.</h1>
+      <p class="lead reveal" data-delay="2">The most consequential data breach of the 2030s is being committed right now , 
+        quietly, against encrypted traffic nobody can read yet.</p>
+    </div>
+    <span class="phero-scroll"></span>
+  </header>
+
+  <article class="section">
+    <div class="wrap">
+      <div class="prose">
+        <p class="lede">Somewhere, an adversary is copying your encrypted data and filing it away. They can&rsquo;t read
+          it today. They&rsquo;re betting that within a decade a cryptographically relevant quantum computer will let
+          them read all of it, retroactively. That bet has a name: <strong>harvest now, decrypt later</strong>.</p>
+
+        <p>It is the rare cyber-risk that is both certain in direction and uncertain in timing. We don&rsquo;t know the
+          exact year RSA-2048 falls. We do know that the data you encrypt today, medical records, financial
+          positions, state secrets, intellectual property, will still be sensitive when it does. For anything
+          with a long shelf life, the clock has already started.</p>
+
+        <h2>Why a single &ldquo;migration&rdquo; is the wrong mental model</h2>
+        <p>Most organisations frame the quantum threat as a future project: <em>one day we&rsquo;ll swap our algorithms.</em>
+          That framing fails for two reasons. First, you cannot migrate what you cannot see, and almost nobody
+          has a complete inventory of where cryptography lives in their estate. Second, cryptographic standards will
+          keep moving. The goal is not to arrive at a new fixed algorithm; it is to become <strong>crypto-agile</strong>:
+          able to change cryptography the way you change a TLS certificate, routinely, centrally, without a
+          re-architecture each time.</p>
+
+        <blockquote><p>Crypto-agility is the difference between a one-off panic and an operating capability.</p></blockquote>
+
+        <h2>What to actually do this quarter</h2>
+        <p>You don&rsquo;t need a quantum computer to start. You need visibility and a plan. In order of value:</p>
+        <ul>
+          <li><strong>Discover.</strong> Build a cryptographic bill of materials (CBOM): every key, certificate,
+            algorithm, library and protocol in use, and the data each one protects.</li>
+          <li><strong>Prioritise by shelf life.</strong> Rank systems by how long their data stays sensitive. Long-lived
+            secrets move first, they&rsquo;re the ones being harvested today.</li>
+          <li><strong>Pilot hybrid PQC.</strong> Deploy NIST-standardised post-quantum algorithms in hybrid mode
+            (classical + PQC together) where the stakes are highest, starting with your own perimeter.</li>
+          <li><strong>Centralise crypto.</strong> Pull hard-coded cryptography behind services and policy so the next
+            change is a configuration, not a project.</li>
+        </ul>
+
+        <div class="callout"><p><strong>The deadline isn&rsquo;t the quantum computer.</strong> It&rsquo;s the moment your
+          longest-lived secret becomes readable. Subtract your data&rsquo;s sensitivity lifetime from the day Q-Day
+          arrives, that&rsquo;s when you needed to be done.</p></div>
+
+        <h2>The strategic reframe</h2>
+        <p>Handled well, post-quantum readiness is not a tax. The same discovery that maps your cryptography also maps
+          your risk; the same agility that defends against quantum also shrinks the blast radius of every future
+          algorithm break and key compromise. You are not buying insurance against one exotic event, you are
+          building a muscle you will use for the next twenty years.</p>
+
+        <p>The companies that move early will do it calmly, in daylight, on their own timeline. The ones that wait will
+          do it under a regulator&rsquo;s deadline or an incident&rsquo;s glare. We&rsquo;d rather help you do the former.</p>
+      </div>
+
+      <div class="article-byline">
+        <div class="av">CQ</div>
+        <div class="who"><b>CausQ Security Practice</b><span>Quantum-era Security &middot; US &amp; EMEA</span></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- related -->
+  <section class="section warm">
+    <div class="wrap">
+      <div class="split-head"><h2 class="display h-md reveal">Keep reading</h2>
+        <p class="lead reveal" data-delay="1"><a href="what-we-think.html" class="tlink" style="font-size:1rem">All thinking <span class="arr">&rarr;</span></a></p></div>
+      <div class="insights">
+        <article class="insight reveal"><figure class="media"><img src="assets/img/think-5.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">Quantum</span><span>9 min</span></div>
+          <h3>Building a cryptographic bill of materials, the practical way.</h3>
+          <a href="article-cbom.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+        <article class="insight reveal" data-delay="1"><figure class="media"><img src="assets/img/think-2.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">Security</span><span>7 min</span></div>
+          <h3>Zero Trust isn&rsquo;t a product. It&rsquo;s a way of running the network.</h3>
+          <a href="article-zero-trust.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+        <article class="insight reveal" data-delay="2"><figure class="media"><img src="assets/img/think-6.jpg" alt=""></figure>
+          <div class="insight-body"><div class="meta"><span class="cat">EMEA</span><span>4 min</span></div>
+          <h3>NIS2, DORA and the year compliance got real.</h3>
+          <a href="article-nis2-dora.html" class="tlink">Read <span class="arr">&rarr;</span></a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section night cta-band">
+    <div class="wrap"><div style="max-width:760px">
+      <h2 class="display h-lg on-night reveal">Worried about your crypto shelf life?</h2>
+      <p class="lead reveal" data-delay="1" style="margin-top:22px">We&rsquo;ll run a cryptographic discovery and hand you a
+        prioritised, board-ready roadmap.</p>
+      <a href="contact.html" class="btn btn-signal reveal" data-delay="2" style="margin-top:30px">Book a briefing <span class="arr">&rarr;</span></a>
+    </div></div>
+  </section>
+
+  <div id="footer-mount"></div>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
