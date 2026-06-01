@@ -573,6 +573,20 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
 .hero-code .out{ color:#97a1b4; }         /* command output */
 .hero-cursor{ display:inline-block; width:8px; height:1.02em; vertical-align:-2px; background:var(--signal); animation:termBlink 1s steps(1) infinite; }
 @keyframes termBlink{ 50%{ opacity:0; } }
+/* committed lines render as blocks + animated section dividers (XSIAM/XSOAR/network) */
+.hero-code .term-done{ display:block; }
+.hero-code .cl{ display:block; }
+.hero-code .sec{ display:flex; align-items:center; gap:10px; margin:16px 0 7px; padding-top:13px;
+  font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:#e3f5fc; font-weight:500;
+  border-top:1px solid rgba(255,255,255,.13); }
+.hero-code .term-done > .cl:first-child .sec{ margin-top:0; border-top:0; padding-top:0; }
+.hero-code .sec .sb{ flex:none; width:7px; height:7px; border-radius:50%; background:var(--signal); box-shadow:0 0 0 4px var(--signal-glow); }
+.hero-code .cl-sec{ animation:termSecIn .55s var(--ease2) both; }
+.hero-code .cl-sec .sec{ position:relative; overflow:hidden; }
+.hero-code .cl-sec .sec::after{ content:""; position:absolute; left:0; top:0; height:2px; width:60%;
+  background:linear-gradient(90deg, var(--signal), transparent); animation:termSecSweep .75s var(--ease) .06s both; }
+@keyframes termSecIn{ from{ opacity:0; transform:translateY(11px); } to{ opacity:1; transform:none; } }
+@keyframes termSecSweep{ from{ transform:translateX(-110%); } to{ transform:translateX(190%); } }
 @media(max-width:1180px){ .hero-code{ display:none; } }
 @media(prefers-reduced-motion:reduce){ .hero-stars{ display:none; } }
 
@@ -593,4 +607,96 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
   .hero-slide .anim{ opacity:1; transform:none; filter:none; }
   .hero-slide.is-active .slide-bg img{ transform:scale(1.06); }
   .logo-track{ animation:none; }
+  .cmd-line{ opacity:1 !important; transform:none !important; }
+  .cqx-grid::after{ display:none; }
 }
+
+/* ============================================================================
+   XSIAM / XSOAR COMMAND REFERENCE  (xsiam-xsoar.html)
+   Cortex command console — CQL queries, correlation rules, XSOAR playbooks.
+   Each section "ignites" (scan-sweep + line stagger + kicker ping) on reveal.
+============================================================================ */
+
+/* --- dark console hero ------------------------------------------------- */
+.cqx-hero{ background:var(--night); }
+.cqx-hero .phero-bg{ background:
+    radial-gradient(130% 90% at 78% -10%, rgba(6,182,212,.20), transparent 55%),
+    radial-gradient(90% 70% at 8% 115%, rgba(6,182,212,.10), transparent 60%),
+    var(--night); }
+/* faint engineering grid + a drifting teal scan beam */
+.cqx-grid::before{ content:""; position:absolute; inset:-2px; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(120% 95% at 72% 0%, #000 32%, transparent 80%);
+          mask-image:radial-gradient(120% 95% at 72% 0%, #000 32%, transparent 80%); }
+.cqx-grid::after{ content:""; position:absolute; left:0; right:0; top:0; height:34%; z-index:0; pointer-events:none;
+  background:linear-gradient(180deg, transparent, rgba(6,182,212,.12) 50%, transparent);
+  animation:cqxBeam 7.5s var(--ease) infinite; }
+@keyframes cqxBeam{ 0%{ transform:translateY(-50%); opacity:0; } 16%{ opacity:1; } 84%{ opacity:1; } 100%{ transform:translateY(340%); opacity:0; } }
+.cqx-tags{ display:flex; flex-wrap:wrap; gap:10px; margin-top:30px; }
+.cqx-tag{ font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;
+  color:#d3f3fb; padding:.55em 1em; border:1px solid rgba(6,182,212,.45); border-radius:100px; background:rgba(6,182,212,.08); }
+
+/* --- command section + the "ignite" effect ----------------------------- */
+.cmd-section{ position:relative; }
+.cmd-grid{ display:grid; grid-template-columns:.82fr 1.18fr; gap:52px; align-items:start; }
+@media(max-width:980px){ .cmd-grid{ grid-template-columns:1fr; gap:30px; } }
+.cmd-head{ position:relative; padding-top:30px; }
+.cmd-head .rule{ position:absolute; top:0; left:0; height:2px; width:100%; overflow:hidden;
+  background:linear-gradient(90deg, var(--line), transparent); }
+.night .cmd-head .rule{ background:linear-gradient(90deg, var(--night-line), transparent); }
+.cmd-head .rule::after{ content:""; position:absolute; top:0; left:-42%; height:100%; width:42%;
+  background:linear-gradient(90deg, transparent, var(--signal), transparent); opacity:0; }
+.cmd-section.in .cmd-head .rule::after{ animation:cqxSweep 1.15s var(--ease2) .1s both; }
+@keyframes cqxSweep{ 0%{ left:-42%; opacity:1; } 100%{ left:122%; opacity:1; } }
+.cmd-section.in .kicker::before{ animation:cqxPing 1.5s var(--ease) .15s 2; }
+@keyframes cqxPing{ 0%,100%{ box-shadow:0 0 0 4px var(--signal-glow); } 50%{ box-shadow:0 0 0 11px rgba(6,182,212,0); } }
+.cmd-note{ margin-top:18px; }
+.cmd-note .lead{ font-size:1.05rem; }
+
+/* mapping / detail chips */
+.cmd-meta{ display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+.chip{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-soft);
+  background:#fff; border:1px solid var(--line); border-radius:100px; padding:.5em .9em; }
+.chip b{ color:var(--signal); font-weight:600; }
+.warm .chip{ background:#fff; }
+.night .chip{ background:rgba(255,255,255,.05); border-color:var(--night-line); color:#cdd6e4; }
+
+/* --- terminal console card --------------------------------------------- */
+.console{ position:relative; border-radius:var(--r); overflow:hidden; background:#0c1118;
+  border:1px solid #1d2735; box-shadow:var(--shadow); }
+.console + .console{ margin-top:22px; }
+.console-bar{ display:flex; align-items:center; gap:14px; padding:13px 16px; background:#0a0e14; border-bottom:1px solid #1a2331; }
+.console-bar .dots{ display:flex; gap:7px; flex:none; }
+.console-bar .dots i{ width:11px; height:11px; border-radius:50%; background:#26323f; }
+.console-bar .dots i:nth-child(1){ background:#ec6a5e; } .console-bar .dots i:nth-child(2){ background:#f4bf4f; } .console-bar .dots i:nth-child(3){ background:#61c554; }
+.console-bar .title{ font-family:'IBM Plex Mono',monospace; font-size:.74rem; letter-spacing:.04em; color:#7f8da0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.console-bar .plat{ margin-left:auto; flex:none; font-family:'IBM Plex Mono',monospace; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--signal); border:1px solid rgba(6,182,212,.4); border-radius:100px; padding:.32em .7em; }
+.copy-btn{ flex:none; font-family:'IBM Plex Mono',monospace; font-size:.64rem; letter-spacing:.1em; text-transform:uppercase; color:#9fb0c4; background:transparent; border:1px solid #26323f; border-radius:8px; padding:.42em .7em; cursor:pointer; transition:.25s var(--ease); }
+.copy-btn:hover{ color:#fff; border-color:var(--signal); }
+.copy-btn.done{ color:#61c554; border-color:#61c554; }
+.console pre{ margin:0; padding:20px 22px; overflow-x:auto; font-family:'IBM Plex Mono',monospace; font-size:.82rem; line-height:1.72; color:#cdd6e4; -webkit-overflow-scrolling:touch; }
+.cmd-line{ display:block; white-space:pre; opacity:0; transform:translateY(8px); }
+.cmd-section.in .cmd-line{ animation:cqxLine .5s var(--ease2) forwards; animation-delay:calc(var(--i,0) * 55ms); }
+@keyframes cqxLine{ to{ opacity:1; transform:none; } }
+/* syntax tokens */
+.tok-cmt{ color:#5f7088; font-style:italic; }
+.tok-kw{ color:#5ad6ef; }
+.tok-fn{ color:#7ee0c0; }
+.tok-str{ color:#e6c178; }
+.tok-num{ color:#f0966b; }
+.tok-op{ color:#8aa0b6; }
+.tok-field{ color:#b39cff; }
+.tok-ok{ color:#61c554; }
+.tok-prompt{ color:var(--signal); }
+.tok-cmd{ color:#eef2f8; }
+
+/* --- XSOAR playbook flow ----------------------------------------------- */
+.flow{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:28px; }
+.flow .node{ font-family:'IBM Plex Mono',monospace; font-size:.74rem; padding:.7em 1em; border-radius:10px;
+  border:1px solid var(--line); background:#fff; color:var(--ink-soft); transition:.4s var(--ease); }
+.cmd-section.in .flow .node{ animation:cqxLine .55s var(--ease2) both; animation-delay:calc(var(--i,0) * 110ms); }
+.flow .node.trig{ border-color:var(--signal); color:var(--signal); background:var(--signal-soft); }
+.flow .arr-f{ color:var(--ink-faint); font-family:'IBM Plex Mono',monospace; }

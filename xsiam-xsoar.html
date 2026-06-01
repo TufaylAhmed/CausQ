@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cortex XSIAM &amp; XSOAR | CQL, Correlation Rules &amp; Playbooks | CausQ</title>
+  <meta name="description" content="A working reference for Palo Alto Cortex XSIAM and XSOAR: CQL hunting queries, correlation rules that generate alerts, and XSOAR playbook commands and automations, engineered by CausQ." />
+  <link rel="canonical" href="https://causq.com/xsiam-xsoar.html" />
+  <meta name="theme-color" content="#0b0b0d" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="nav-mount"></div>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="phero phero-img cqx-hero">
+    <div class="phero-bg cqx-grid"></div>
+    <div class="wrap">
+      <p class="crumbs reveal"><a href="index.html">CausQ</a> / What we do / Cortex Ops</p>
+      <span class="kicker reveal" data-delay="1">Palo Alto Cortex &middot; XSIAM &amp; XSOAR</span>
+      <h1 class="display h-xl reveal" data-delay="1" style="margin-top:16px">Hunt. Detect.<br>Respond, in code.</h1>
+      <p class="lead reveal" data-delay="2">A live reference from our detection engineers: the queries, correlation rules
+        and playbooks we ship on Cortex XSIAM and XSOAR. Read it like a console, copy what you need.</p>
+      <div class="cqx-tags reveal" data-delay="3">
+        <span class="cqx-tag">CQL hunting</span>
+        <span class="cqx-tag">Correlation rules</span>
+        <span class="cqx-tag">XSOAR playbooks</span>
+        <span class="cqx-tag">Auto-remediation</span>
+      </div>
+    </div>
+    <span class="phero-scroll"></span>
+  </header>
+
+  <!-- ===================== 01 · CQL ===================== -->
+  <section class="section warm cmd-section reveal" id="cql">
+    <div class="wrap">
+      <div class="cmd-grid">
+        <div class="cmd-head reveal">
+          <span class="rule"></span>
+          <span class="kicker">01, CQL</span>
+          <h2 class="display h-md" style="margin-top:16px">Cortex Query Language</h2>
+          <div class="cmd-note">
+            <p class="lead">CQL is how we interrogate the XSIAM data lake, every endpoint, identity,
+              firewall and cloud log in one pipe-and-stage grammar. We start every engagement by hunting,
+              not alerting.</p>
+          </div>
+          <div class="cmd-meta">
+            <span class="chip"><b>dataset</b> xdr_data</span>
+            <span class="chip"><b>stage</b> filter &middot; comp &middot; fields</span>
+            <span class="chip"><b>scope</b> 90-day retention</span>
+          </div>
+        </div>
+
+        <div>
+          <!-- console: encoded powershell -->
+          <div class="console reveal" data-delay="1">
+            <div class="console-bar">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="title">hunt-encoded-powershell.cql</span>
+              <span class="plat">XSIAM</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code><span class="cmd-line tok-cmt" style="--i:0">// Office app spawning encoded PowerShell — classic initial access</span>
+<span class="cmd-line" style="--i:1"><span class="tok-kw">dataset</span> <span class="tok-op">=</span> <span class="tok-fn">xdr_data</span></span>
+<span class="cmd-line" style="--i:2"><span class="tok-op">|</span> <span class="tok-kw">filter</span> event_type <span class="tok-op">=</span> <span class="tok-field">ENUM.PROCESS</span></span>
+<span class="cmd-line" style="--i:3"><span class="tok-op">|</span> <span class="tok-kw">filter</span> action_process_image_name <span class="tok-op">=</span> <span class="tok-str">"powershell.exe"</span></span>
+<span class="cmd-line" style="--i:4"><span class="tok-op">|</span> <span class="tok-kw">filter</span> action_process_image_command_line <span class="tok-kw">contains</span> <span class="tok-str">"-enc"</span></span>
+<span class="cmd-line" style="--i:5"><span class="tok-op">|</span> <span class="tok-kw">filter</span> causality_actor_process_image_name <span class="tok-kw">in</span> (<span class="tok-str">"winword.exe"</span>, <span class="tok-str">"excel.exe"</span>)</span>
+<span class="cmd-line" style="--i:6"><span class="tok-op">|</span> <span class="tok-kw">fields</span> _time, agent_hostname, actor_effective_username, action_process_image_command_line</span>
+<span class="cmd-line" style="--i:7"><span class="tok-op">|</span> <span class="tok-kw">sort</span> <span class="tok-kw">desc</span> _time</span>
+<span class="cmd-line" style="--i:8"><span class="tok-op">|</span> <span class="tok-kw">limit</span> <span class="tok-num">100</span></span></code></pre>
+          </div>
+
+          <!-- console: beaconing -->
+          <div class="console reveal" data-delay="2">
+            <div class="console-bar">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="title">detect-c2-beaconing.cql</span>
+              <span class="plat">XSIAM</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code><span class="cmd-line tok-cmt" style="--i:0">// Low-jitter periodic callbacks = likely C2 beacon</span>
+<span class="cmd-line" style="--i:1"><span class="tok-kw">dataset</span> <span class="tok-op">=</span> <span class="tok-fn">xdr_data</span></span>
+<span class="cmd-line" style="--i:2"><span class="tok-op">|</span> <span class="tok-kw">filter</span> event_type <span class="tok-op">=</span> <span class="tok-field">ENUM.NETWORK</span> <span class="tok-kw">and</span> action_remote_port <span class="tok-kw">not in</span> (<span class="tok-num">80</span>, <span class="tok-num">443</span>)</span>
+<span class="cmd-line" style="--i:3"><span class="tok-op">|</span> <span class="tok-kw">comp</span> <span class="tok-fn">count</span>() <span class="tok-kw">as</span> hits, <span class="tok-fn">stddev</span>(_time) <span class="tok-kw">as</span> jitter <span class="tok-kw">by</span> agent_hostname, action_remote_ip</span>
+<span class="cmd-line" style="--i:4"><span class="tok-op">|</span> <span class="tok-kw">filter</span> hits <span class="tok-op">&gt;</span> <span class="tok-num">50</span> <span class="tok-kw">and</span> jitter <span class="tok-op">&lt;</span> <span class="tok-num">1500</span></span>
+<span class="cmd-line" style="--i:5"><span class="tok-op">|</span> <span class="tok-kw">sort</span> <span class="tok-kw">asc</span> jitter</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 02 · CORRELATION ===================== -->
+  <section class="section cmd-section reveal" id="correlation">
+    <div class="wrap">
+      <div class="cmd-grid">
+        <div class="cmd-head reveal">
+          <span class="rule"></span>
+          <span class="kicker">02, Correlation</span>
+          <h2 class="display h-md" style="margin-top:16px">Correlation Rules</h2>
+          <div class="cmd-note">
+            <p class="lead">A correlation rule is a CQL query on a schedule that promotes a finding into an alert,
+              mapped to MITRE ATT&amp;CK and a severity. This is where hunting becomes a tireless detection
+              that runs every ten minutes.</p>
+          </div>
+          <div class="cmd-meta">
+            <span class="chip"><b>output</b> alert</span>
+            <span class="chip"><b>schedule</b> cron</span>
+            <span class="chip"><b>maps to</b> ATT&amp;CK</span>
+          </div>
+        </div>
+
+        <div>
+          <!-- console: impossible travel -->
+          <div class="console reveal" data-delay="1">
+            <div class="console-bar">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="title">impossible-travel.correlation</span>
+              <span class="plat">XSIAM</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code><span class="cmd-line tok-cmt" style="--i:0"># Generates a HIGH alert on concurrent logins from 2+ countries</span>
+<span class="cmd-line" style="--i:1"><span class="tok-field">[rule]</span>     name          <span class="tok-op">=</span> <span class="tok-str">"Impossible Travel — SSO"</span></span>
+<span class="cmd-line" style="--i:2">          search_window <span class="tok-op">=</span> <span class="tok-num">1h</span></span>
+<span class="cmd-line" style="--i:3">          schedule      <span class="tok-op">=</span> <span class="tok-str">"*/10 * * * *"</span></span>
+<span class="cmd-line" style="--i:4"></span>
+<span class="cmd-line" style="--i:5"><span class="tok-field">[query]</span></span>
+<span class="cmd-line" style="--i:6"><span class="tok-kw">dataset</span> <span class="tok-op">=</span> <span class="tok-fn">okta_sso_raw</span></span>
+<span class="cmd-line" style="--i:7"><span class="tok-op">|</span> <span class="tok-kw">filter</span> eventtype <span class="tok-op">=</span> <span class="tok-str">"user.session.start"</span> <span class="tok-kw">and</span> outcome <span class="tok-op">=</span> <span class="tok-str">"SUCCESS"</span></span>
+<span class="cmd-line" style="--i:8"><span class="tok-op">|</span> <span class="tok-kw">comp</span> <span class="tok-fn">count_distinct</span>(country) <span class="tok-kw">as</span> geos <span class="tok-kw">by</span> actor_alternateid</span>
+<span class="cmd-line" style="--i:9"><span class="tok-op">|</span> <span class="tok-kw">filter</span> geos <span class="tok-op">&gt;</span> <span class="tok-num">1</span></span>
+<span class="cmd-line" style="--i:10"></span>
+<span class="cmd-line" style="--i:11"><span class="tok-field">[mapping]</span> severity <span class="tok-op">=</span> <span class="tok-ok">HIGH</span> &middot; tactic <span class="tok-op">=</span> <span class="tok-str">"Initial Access"</span> &middot; technique <span class="tok-op">=</span> <span class="tok-str">"T1078"</span></span></code></pre>
+          </div>
+          <div class="cmd-meta reveal" data-delay="2">
+            <span class="chip"><b>severity</b> HIGH</span>
+            <span class="chip"><b>T1078</b> Valid Accounts</span>
+            <span class="chip"><b>window</b> 1h</span>
+            <span class="chip"><b>dedup</b> by actor</span>
+          </div>
+
+          <!-- console: domain admin escalation -->
+          <div class="console reveal" data-delay="2">
+            <div class="console-bar">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="title">privilege-escalation.correlation</span>
+              <span class="plat">XSIAM</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code><span class="cmd-line tok-cmt" style="--i:0"># Non-privileged account added to Domain Admins (Event 4728)</span>
+<span class="cmd-line" style="--i:1"><span class="tok-field">[query]</span></span>
+<span class="cmd-line" style="--i:2"><span class="tok-kw">dataset</span> <span class="tok-op">=</span> <span class="tok-fn">xdr_data</span></span>
+<span class="cmd-line" style="--i:3"><span class="tok-op">|</span> <span class="tok-kw">filter</span> event_type <span class="tok-op">=</span> <span class="tok-field">ENUM.AUDIT</span> <span class="tok-kw">and</span> action_evtlog_event_id <span class="tok-op">=</span> <span class="tok-num">4728</span></span>
+<span class="cmd-line" style="--i:4"><span class="tok-op">|</span> <span class="tok-kw">filter</span> action_group_name <span class="tok-op">=</span> <span class="tok-str">"Domain Admins"</span></span>
+<span class="cmd-line" style="--i:5"><span class="tok-op">|</span> <span class="tok-kw">join</span> (<span class="tok-kw">dataset</span> <span class="tok-op">=</span> <span class="tok-fn">hr_directory</span>) <span class="tok-kw">as</span> h h.user <span class="tok-op">=</span> actor_effective_username</span>
+<span class="cmd-line" style="--i:6"><span class="tok-op">|</span> <span class="tok-kw">filter</span> h.is_privileged <span class="tok-op">=</span> <span class="tok-num">false</span></span>
+<span class="cmd-line" style="--i:7"></span>
+<span class="cmd-line" style="--i:8"><span class="tok-field">[mapping]</span> severity <span class="tok-op">=</span> <span class="tok-num">CRITICAL</span> &middot; category <span class="tok-op">=</span> <span class="tok-str">"Privilege Escalation"</span> &middot; technique <span class="tok-op">=</span> <span class="tok-str">"T1098"</span></span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 03 · XSOAR ===================== -->
+  <section class="section warm cmd-section reveal" id="xsoar">
+    <div class="wrap">
+      <div class="cmd-grid">
+        <div class="cmd-head reveal">
+          <span class="rule"></span>
+          <span class="kicker">03, XSOAR</span>
+          <h2 class="display h-md" style="margin-top:16px">Playbooks &amp; Commands</h2>
+          <div class="cmd-note">
+            <p class="lead">When an alert fires, XSOAR takes the wheel. Playbooks call integration commands with
+              <code style="font-family:'IBM Plex Mono',monospace">!verbs</code> and Python automations, enriching,
+              deciding and containing before an analyst even opens the ticket.</p>
+          </div>
+          <div class="flow">
+            <span class="node trig" style="--i:0">trigger</span><span class="arr-f" style="--i:1">&rarr;</span>
+            <span class="node" style="--i:2">enrich</span><span class="arr-f" style="--i:3">&rarr;</span>
+            <span class="node" style="--i:4">verdict</span><span class="arr-f" style="--i:5">&rarr;</span>
+            <span class="node" style="--i:6">contain</span><span class="arr-f" style="--i:7">&rarr;</span>
+            <span class="node" style="--i:8">close</span>
+          </div>
+        </div>
+
+        <div>
+          <!-- console: war room commands -->
+          <div class="console reveal" data-delay="1">
+            <div class="console-bar">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="title">phishing-triage.playbook</span>
+              <span class="plat">XSOAR</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code><span class="cmd-line tok-cmt" style="--i:0"># War Room — phishing triage, command by command</span>
+<span class="cmd-line" style="--i:1"><span class="tok-prompt">!</span><span class="tok-cmd">ip</span> ip<span class="tok-op">=</span><span class="tok-field">${Email.SenderIP}</span> using-brand<span class="tok-op">=</span><span class="tok-str">"VirusTotal"</span></span>
+<span class="cmd-line" style="--i:2"><span class="tok-prompt">!</span><span class="tok-cmd">url</span> url<span class="tok-op">=</span><span class="tok-field">${Email.URLs}</span> using-brand<span class="tok-op">=</span><span class="tok-str">"URLScan"</span></span>
+<span class="cmd-line" style="--i:3"><span class="tok-prompt">!</span><span class="tok-cmd">Set</span> key<span class="tok-op">=</span>Verdict value<span class="tok-op">=</span><span class="tok-field">${DBotScore.Score}</span></span>
+<span class="cmd-line" style="--i:4"><span class="tok-prompt">!</span><span class="tok-cmd">setIncident</span> severity<span class="tok-op">=</span><span class="tok-num">3</span> owner<span class="tok-op">=</span><span class="tok-str">"soc-tier2"</span></span>
+<span class="cmd-line" style="--i:5"><span class="tok-prompt">!</span><span class="tok-cmd">ad-disable-account</span> username<span class="tok-op">=</span><span class="tok-field">${Account.SamAccountName}</span></span>
+<span class="cmd-line" style="--i:6"><span class="tok-prompt">!</span><span class="tok-cmd">closeInvestigation</span> id<span class="tok-op">=</span><span class="tok-field">${incident.id}</span> closeReason<span class="tok-op">=</span><span class="tok-str">"Resolved - Malicious"</span></span></code></pre>
+          </div>
+
+          <!-- console: python automation -->
+          <div class="console reveal" data-delay="2">
+            <div class="console-bar">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="title">enrich-and-contain.py</span>
+              <span class="plat">XSOAR &middot; automation</span>
+              <button class="copy-btn" type="button">Copy</button>
+            </div>
+            <pre><code><span class="cmd-line tok-cmt" style="--i:0"># Auto-contain a malicious indicator, no human in the loop</span>
+<span class="cmd-line" style="--i:1"><span class="tok-kw">def</span> <span class="tok-fn">main</span>():</span>
+<span class="cmd-line" style="--i:2">    ip <span class="tok-op">=</span> demisto.<span class="tok-fn">args</span>().<span class="tok-fn">get</span>(<span class="tok-str">"ip"</span>)</span>
+<span class="cmd-line" style="--i:3">    res <span class="tok-op">=</span> demisto.<span class="tok-fn">executeCommand</span>(<span class="tok-str">"ip"</span>, {<span class="tok-str">"ip"</span>: ip})</span>
+<span class="cmd-line" style="--i:4">    score <span class="tok-op">=</span> demisto.<span class="tok-fn">get</span>(res[<span class="tok-num">0</span>][<span class="tok-str">"EntryContext"</span>], <span class="tok-str">"DBotScore.Score"</span>)</span>
+<span class="cmd-line" style="--i:5">    <span class="tok-kw">if</span> score <span class="tok-op">==</span> <span class="tok-num">3</span>:                       <span class="tok-cmt"># malicious</span></span>
+<span class="cmd-line" style="--i:6">        demisto.<span class="tok-fn">executeCommand</span>(<span class="tok-str">"panorama-block-ip"</span>, {<span class="tok-str">"ip"</span>: ip})</span>
+<span class="cmd-line" style="--i:7">        demisto.<span class="tok-fn">executeCommand</span>(<span class="tok-str">"setIncident"</span>, {<span class="tok-str">"severity"</span>: <span class="tok-num">4</span>})</span>
+<span class="cmd-line" style="--i:8">    <span class="tok-fn">return_results</span>(<span class="tok-str">f"verdict={score}"</span>)</span>
+<span class="cmd-line" style="--i:9"></span>
+<span class="cmd-line" style="--i:10"><span class="tok-kw">if</span> __name__ <span class="tok-kw">in</span> (<span class="tok-str">"__main__"</span>, <span class="tok-str">"builtins"</span>):</span>
+<span class="cmd-line" style="--i:11">    <span class="tok-fn">main</span>()</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section class="section night cta-band">
+    <div class="wrap">
+      <div style="max-width:760px">
+        <span class="kicker reveal">Engineered detections, not shelfware</span>
+        <h2 class="display h-lg on-night reveal" data-delay="1" style="margin-top:18px">We tune Cortex to your estate, then prove it works.</h2>
+        <p class="lead reveal" data-delay="2" style="margin-top:22px">From content packs and correlation tuning to fully
+          automated XSOAR response, our engineers run the build and the validation. Bring us a noisy SOC, we'll bring the signal.</p>
+        <a href="contact.html" class="btn btn-signal reveal" data-delay="3" style="margin-top:30px">Talk to a detection engineer <span class="arr">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-mount"></div>
+  <script src="assets/js/main.js"></script>
+  <script>
+    /* copy-to-clipboard for each console; strips token markup, keeps the code */
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const code = btn.closest('.console').querySelector('pre');
+        const text = code ? code.innerText.replace(/\n{2,}/g, '\n\n').trim() : '';
+        try { await navigator.clipboard.writeText(text); }
+        catch (_) {
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); } catch (e) {} ta.remove();
+        }
+        const label = btn.textContent;
+        btn.textContent = 'Copied'; btn.classList.add('done');
+        setTimeout(() => { btn.textContent = label; btn.classList.remove('done'); }, 1600);
+      });
+    });
+  </script>
+</body>
+</html>

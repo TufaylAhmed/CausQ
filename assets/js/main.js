@@ -54,6 +54,7 @@ function renderFooter(){
           <a href="what-we-do.html#network">Network Modernization</a>
           <a href="what-we-do.html#quantum">Quantum-era Security</a>
           <a href="what-we-do.html#cloud">Cloud &amp; Edge</a>
+          <a href="xsiam-xsoar.html">Cortex XSIAM &amp; XSOAR</a>
         </div>
         <div class="foot-col">
           <h4>Company</h4>
@@ -341,26 +342,48 @@ function initHeroCode(){
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const L = [
-    '# build: AI datacenter fabric — spine/leaf',
+    // ——— security operations first: Cortex XSIAM + XSOAR ———
+    '§ Cortex XSIAM · integrations + onboarding',
+    '$ xsiam broker-vm register --name dc-broker-01 --ha active',
+    '$ xsiam collector add syslog --port 514 --vendor "PAN-OS"',
+    '$ xsiam dataset create panw_ngfw_traffic_raw --type firewall',
+    '$ xsiam integration enable "AWS CloudTrail" "Okta" "Azure AD"',
+    '$ xsiam parsing-rule apply okta_sso_raw --ruleset okta-sso',
+    '$ xsiam content-pack install Core PAN-OS Okta Identity-Analytics',
+    '✓ 312 sources · 1.2 TB/day ingest · 41 datasets live',
+    '',
+    '# CQL — hunt encoded PowerShell spawned by Office',
+    '$ dataset = xdr_data',
+    '$ | filter action_process_image_name = "powershell.exe"',
+    '$ | filter action_process_image_command_line contains "-enc"',
+    '$ | fields _time, agent_hostname, actor_effective_username',
+    '✓ 7 hits · 2 hosts · promoted to correlation rule',
+    '',
+    '§ Cortex XSOAR · integrations + playbook commands',
+    '$ !ip ip=185.220.101.4 using-brand="VirusTotal"',
+    '$ !url url=${Email.URLs} using-brand="URLScan"',
+    '$ !setIncident severity=3 owner="soc-tier2"',
+    '$ !ad-disable-account username="j.doe"',
+    '$ !panorama-block-ip ip=${IP.Address}',
+    '$ !closeInvestigation closeReason="Resolved - Malicious"',
+    '✓ playbook "Phishing Triage v4" · 26 tasks · MTTR 4m12s',
+    '',
+    '§ AI datacenter fabric · spine / leaf',
     '$ nv set interface swp1-32 link speed 400G',
     '$ nv set interface swp1-32 link fec rs',
-    '$ nv set interface swp1-32 link mtu 9216',
     '$ nv set evpn enable on',
-    '$ nv set bridge domain br_default vlan 10-4000',
     '$ nv set nve vxlan source address 10.0.0.1',
     '$ nv set router bgp autonomous-system 65101',
-    '$ nv set vrf default router bgp peer-group fabric remote-as external',
-    '$ nv set router bgp address-family l2vpn-evpn enable on',
     '$ nv config apply -y',
     '✓ applied · 32 links up @ 400G · evpn type-2/5',
     '',
-    '# RoCEv2 — lossless RDMA (PFC + ECN)',
+    '§ RoCEv2 · lossless RDMA (PFC + ECN)',
     '$ nv set qos roce enable on mode lossless',
     '$ nv set interface swp1-32 qos pfc tx enable on rx enable on',
     '$ nv set qos congestion-control ecn enable on',
     '✓ pfc prio 3 · ecn 0xc8 · headroom ok',
     '',
-    '# InfiniBand — NDR 400G',
+    '§ InfiniBand · NDR 400G',
     '$ ibstat | grep -E "State|Rate"',
     '    State: Active        Rate: 400 (4X NDR)',
     '$ opensm -B --routing-engine ar_updn',
@@ -368,29 +391,45 @@ function initHeroCode(){
     '$ ibdiagnet --pc --get_phy_info',
     '✓ 0 symbol-err · 0 link-down · ber < 1e-15',
     '',
-    '# GPU collective — NCCL over fabric',
+    '§ GPU collective · NCCL over fabric',
     '$ all_reduce_perf -b 8 -e 16G -f 2 -g 8',
     '✓ busbw 391.4 GB/s   algbw 48.9 GB/s   (peak 400)',
     '',
-    '# Palo Alto — PAN-OS / Prisma Access',
-    '$ set network interface ethernet1/1 layer3 ip 10.1.1.1/30',
+    '§ Palo Alto · PAN-OS / Prisma Access',
     '$ set zone fabric network layer3 [ ethernet1/1 ethernet1/2 ]',
     '$ set rulebase security rules allow-fabric from fabric to dc',
     '$ set network virtual-router vr1 protocol bgp enable yes',
     '$ set ssl-decrypt forward-trust profile pqc-hybrid',
     '$ commit description "ai-fabric cutover"',
-    '✓ commit ok · threat-prevention + wildfire active',
+    '✓ threat-prevention + wildfire active',
     '✓ tunnel: ML-KEM-768 + X25519 — quantum-safe',
     '',
-    '# fabric ready ▸ 8 spine · 32 leaf · 4096 GPU',
+    '# estate ready ▸ SOC + fabric · 8 spine · 32 leaf · 4096 GPU',
   ];
 
   const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const fmt = t => t.startsWith('$')
-    ? `<span class="kw">$</span><span class="p">${esc(t.slice(1))}</span>`
-    : `<span class="${t.startsWith('#') ? 'cmt' : (t.startsWith('✓') ? 'ok' : 'out')}">${esc(t)}</span>`;
+  const fmt = t => {
+    if (t.startsWith('§')) return `<span class="sec"><span class="sb"></span>${esc(t.slice(1).trim())}</span>`;
+    if (t.startsWith('$')) return `<span class="kw">$</span><span class="p">${esc(t.slice(1))}</span>`;
+    const cls = t.startsWith('#') ? 'cmt' : (t.startsWith('✓') ? 'ok' : 'out');
+    return `<span class="${cls}">${esc(t)}</span>`;
+  };
   const cursor = '<span class="hero-cursor"></span>';
 
+  // Committed lines live in their own block elements. We only ever *append*,
+  // never rewrite — so a freshly-inserted section divider gets to play its
+  // entrance animation exactly once instead of restarting every keystroke.
+  el.innerHTML = '';
+  const doneEl = document.createElement('div'); doneEl.className = 'term-done';
+  const typeEl = document.createElement('div'); typeEl.className = 'cl term-type';
+  el.appendChild(doneEl); el.appendChild(typeEl);
+
+  function commit(line){
+    const div = document.createElement('div');
+    div.className = line.startsWith('§') ? 'cl cl-sec' : 'cl';
+    div.innerHTML = line === '' ? '&nbsp;' : fmt(line);
+    doneEl.appendChild(div);
+  }
   function reflow(){
     const cs = getComputedStyle(root);
     const vis = root.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
@@ -398,26 +437,35 @@ function initHeroCode(){
     inner.style.transform = over > 0 ? `translateY(${-over}px)` : 'none';
   }
 
-  if (reduce){ el.innerHTML = L.map(fmt).join('\n'); reflow(); return; }
+  if (reduce){ L.forEach(commit); typeEl.remove(); reflow(); return; }
 
-  let li = 0, ci = 0, done = '';
-  const paint = p => { el.innerHTML = done + (p != null ? fmt(p) : '') + cursor; };
+  // pause after a line: dividers linger so the sweep reads; ✓ results hold a beat
+  const pause = line => line.startsWith('§') ? 560 : (line.startsWith('✓') ? 170 : (line === '' ? 90 : 80));
+  let li = 0, ci = 0;
   function tick(){
+    if (li >= L.length){ setTimeout(reset, 4200); return; }
     const line = L[li];
-    if (ci <= line.length){
-      paint(line.slice(0, ci));
-      ci++;
-      setTimeout(tick, line === '' ? 16 : 13 + Math.random() * 32);
-    } else {
-      done += fmt(line) + '\n';
-      li++; ci = 0;
-      reflow();
-      if (li >= L.length){
-        setTimeout(() => { done = ''; li = 0; ci = 0; inner.style.transform = 'none'; tick(); }, 4000);
-      } else {
-        setTimeout(tick, line.startsWith('✓') ? 170 : (line === '' ? 90 : 80));
-      }
+    // section dividers + blank separators drop in whole — no character typing
+    if (line.startsWith('§') || line === ''){
+      commit(line); typeEl.innerHTML = cursor;
+      li++; ci = 0; reflow();
+      setTimeout(tick, pause(line));
+      return;
     }
+    if (ci <= line.length){
+      typeEl.innerHTML = fmt(line.slice(0, ci)) + cursor;
+      ci++;
+      setTimeout(tick, 13 + Math.random() * 32);
+    } else {
+      commit(line); typeEl.innerHTML = cursor;
+      li++; ci = 0; reflow();
+      setTimeout(tick, pause(line));
+    }
+  }
+  function reset(){
+    doneEl.innerHTML = ''; typeEl.innerHTML = cursor;
+    inner.style.transform = 'none';
+    li = 0; ci = 0; tick();
   }
   tick();
 }
