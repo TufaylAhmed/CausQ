@@ -71,6 +71,26 @@ function renderFooter(){
           <a href="contact.html">Book a briefing</a>
         </div>
       </div>
+
+      <div class="foot-subscribe">
+        <div class="fs-copy">
+          <h4>The Brief, in your inbox</h4>
+          <p>One considered email a month on AI, networks and quantum-era security. From the engineers doing the work. No noise.</p>
+        </div>
+        <div class="fs-form">
+          <form data-endpoint="/api/subscribe" class="sub-form" novalidate>
+            <label class="sr-only" for="footSubEmail">Work email</label>
+            <input id="footSubEmail" name="email" type="email" placeholder="you@company.com" required>
+            <button type="submit" class="btn btn-signal">Subscribe <span class="arr">&rarr;</span></button>
+            <p class="sub-note" style="flex-basis:100%">No spam. Unsubscribe in one click.</p>
+          </form>
+          <div class="form-success sub-ok">
+            <span class="dot-ok"><svg fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <span>You're on the list. Watch your inbox for The Brief.</span>
+          </div>
+        </div>
+      </div>
+
       <div class="foot-bottom">
         <p>&copy; ${y} CausQ. All rights reserved.</p>
         <div class="links">

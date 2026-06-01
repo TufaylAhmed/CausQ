@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Keep build internals and source assets out of the index
+Disallow: /assets/img/_source/
+Disallow: /backend/
+
+Sitemap: https://causq.com/sitemap.xml
