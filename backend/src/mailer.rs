@@ -58,20 +58,25 @@ impl Mailer {
                     .map(|v| matches!(v.as_str(), "1" | "true" | "TRUE" | "yes"))
                     .unwrap_or(false);
 
-                let mut builder = if insecure {
-                    // Plaintext, no TLS — for a local SMTP debug server only.
-                    AsyncSmtpTransport::<Tokio1Executor>::builder_dangerous(&host)
+                // Pick the right transport for the port:
+                //   insecure  -> plaintext (local debug SMTP only)
+                //   port 465  -> implicit TLS (SMTPS) — Namecheap/cPanel default
+                //   otherwise -> STARTTLS submission (typically 587)
+                let mode = if insecure { "plaintext" } else if port == 465 { "implicit-TLS" } else { "STARTTLS" };
+                let builder_res = if insecure {
+                    Ok(AsyncSmtpTransport::<Tokio1Executor>::builder_dangerous(&host))
+                } else if port == 465 {
+                    AsyncSmtpTransport::<Tokio1Executor>::relay(&host)
                 } else {
-                    // STARTTLS submission with rustls.
-                    match AsyncSmtpTransport::<Tokio1Executor>::starttls_relay(&host) {
-                        Ok(b) => b,
-                        Err(e) => {
-                            tracing::error!("mailer: failed to build TLS relay for {host}: {e}");
-                            return Self { transport: None, from, notify_to };
-                        }
+                    AsyncSmtpTransport::<Tokio1Executor>::starttls_relay(&host)
+                };
+                let mut builder = match builder_res {
+                    Ok(b) => b.port(port),
+                    Err(e) => {
+                        tracing::error!("mailer: failed to build SMTP transport for {host}:{port} ({mode}): {e}");
+                        return Self { transport: None, from, notify_to };
                     }
-                }
-                .port(port);
+                };
 
                 if let (Ok(user), Ok(pass)) = (env::var("SMTP_USER"), env::var("SMTP_PASS")) {
                     if !user.is_empty() {
@@ -79,7 +84,7 @@ impl Mailer {
                     }
                 }
 
-                tracing::info!("mailer: ENABLED via {host}:{port} (insecure={insecure})");
+                tracing::info!("mailer: ENABLED via {host}:{port} ({mode})");
                 Some(builder.build())
             }
             _ => {

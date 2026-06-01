@@ -6,6 +6,11 @@
 
 const API_BASE = (location.protocol === 'file:') ? '' : ''; // same-origin when served by the Rust app
 
+// Cloudflare Turnstile (bot protection). Paste your widget's SITE key here to turn it
+// on; leave empty and forms behave exactly as before. Pair it with the TURNSTILE_SECRET
+// secret on the Worker. Get a key at: Cloudflare dashboard > Turnstile > Add widget.
+const TURNSTILE_SITEKEY = '';
+
 /* ----------------------------------------------------------------- NAV/FOOTER
    Shared markup is injected so every page stays in sync from one source.    */
 const NAV_LINKS = [
@@ -228,6 +233,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---- pages with a cinematic image hero / slider get a light (transparent) nav up top
   if (document.querySelector('.phero-img, .hero-slider')) document.body.classList.add('dark-hero');
 
+  // ---- bot protection on all forms (no-op until TURNSTILE_SITEKEY is set)
+  initTurnstile();
+
   // ---- home hero slider + network build-code stream
   initHeroSlider();
   initHeroCode();
@@ -286,6 +294,31 @@ function showSuccess(form){
   const success = form.parentElement.querySelector('.form-success');
   form.style.display = 'none';
   if (success) success.classList.add('show');
+}
+
+// Inject a Turnstile widget into every API-backed form and load the script.
+// Turnstile adds a hidden `cf-turnstile-response` input to the enclosing form,
+// which then rides along in the JSON payload for the Worker to verify.
+function initTurnstile(){
+  if (!TURNSTILE_SITEKEY) return;
+  const forms = document.querySelectorAll('form[data-endpoint]');
+  if (!forms.length) return;
+  forms.forEach(form => {
+    if (form.querySelector('.cf-turnstile')) return;
+    const w = document.createElement('div');
+    w.className = 'cf-turnstile';
+    w.setAttribute('data-sitekey', TURNSTILE_SITEKEY);
+    w.style.margin = '14px 0 4px';
+    const btn = form.querySelector('button[type=submit]');
+    if (btn) form.insertBefore(w, btn); else form.appendChild(w);
+  });
+  if (!document.getElementById('cf-turnstile-script')){
+    const s = document.createElement('script');
+    s.id = 'cf-turnstile-script';
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    s.async = true; s.defer = true;
+    document.head.appendChild(s);
+  }
 }
 
 function showError(form){
