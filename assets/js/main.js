@@ -202,9 +202,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!res.ok) throw new Error('bad status');
         showSuccess(form);
       } catch (err) {
-        // Offline / API not running (e.g. opened via file://). Degrade gracefully.
-        console.warn('CausQ API unavailable — showing local confirmation.', err);
-        showSuccess(form);
+        if (location.protocol === 'file:') {
+          // Local preview opened from disk — there is no API. Keep the demo confirmation.
+          console.warn('CausQ API unavailable (file:// preview) — showing local confirmation.', err);
+          showSuccess(form);
+        } else {
+          // Live site: do NOT fake success. Surface a real error so submissions
+          // are never silently dropped.
+          console.error('CausQ form submit failed — request not delivered.', err);
+          showError(form);
+        }
       } finally {
         if (btn){ btn.disabled = false; btn.innerHTML = original; }
       }
@@ -279,6 +286,19 @@ function showSuccess(form){
   const success = form.parentElement.querySelector('.form-success');
   form.style.display = 'none';
   if (success) success.classList.add('show');
+}
+
+function showError(form){
+  let el = form.querySelector('.form-error');
+  if (!el){
+    el = document.createElement('p');
+    el.className = 'form-error';
+    el.setAttribute('role', 'alert');
+    form.appendChild(el);
+  }
+  el.innerHTML = 'We couldn&rsquo;t send that just now. Please email ' +
+    '<a href="mailto:hello@causq.com">hello@causq.com</a> and we&rsquo;ll jump right on it.';
+  el.style.display = 'block';
 }
 
 /* ============================================================================

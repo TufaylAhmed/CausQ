@@ -294,6 +294,8 @@ body.menu-open .menu-btn span:nth-child(3){ top:9px; transform:rotate(-45deg); }
 .field select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2363636c' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 15px center; }
 .form .btn{ width:100%; justify-content:center; margin-top:8px; }
 .form-note{ text-align:center; color:var(--ink-faint); font-size:.78rem; margin-top:16px; }
+.form-error{ display:none; text-align:center; color:#e5484d; font-size:.85rem; margin-top:14px; }
+.form-error a{ color:inherit; text-decoration:underline; }
 .form-success{ display:none; text-align:center; padding:24px 6px; }
 .form-success.show{ display:block; }
 .form-success .ck{ width:54px; height:54px; border-radius:50%; background:var(--signal); display:flex; align-items:center; justify-content:center; margin:0 auto 18px; }

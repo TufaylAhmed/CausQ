@@ -9,6 +9,7 @@
 //! Then: http://localhost:8080
 
 mod db;
+mod mailer;
 mod models;
 
 use axum::{
@@ -18,6 +19,8 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
+use lettre::message::Mailbox;
+use mailer::Mailer;
 use models::*;
 use sqlx::SqlitePool;
 use std::{env, net::SocketAddr, path::PathBuf};
@@ -30,6 +33,7 @@ use tower_http::{
 #[derive(Clone)]
 struct AppState {
     pool: SqlitePool,
+    mailer: Mailer,
 }
 
 #[tokio::main]
@@ -48,7 +52,8 @@ async fn main() -> anyhow::Result<()> {
     let static_dir = env::var("STATIC_DIR").unwrap_or_else(|_| "..".into());
 
     let pool = db::init(&database_url).await?;
-    let state = AppState { pool };
+    let mailer = Mailer::from_env();
+    let state = AppState { pool, mailer };
 
     let api = Router::new()
         .route("/health", get(health))
@@ -100,13 +105,43 @@ async fn create_lead(
     )
     .bind(input.name.trim())
     .bind(input.email.trim())
-    .bind(input.company)
-    .bind(input.region)
-    .bind(input.interest)
-    .bind(input.message)
+    .bind(&input.company)
+    .bind(&input.region)
+    .bind(&input.interest)
+    .bind(&input.message)
     .execute(&st.pool)
     .await?
     .last_insert_rowid();
+
+    // Fire the emails. A mail failure must NOT fail the request — the lead is
+    // already safely stored — so we log and carry on.
+    let notify_body = mailer::lead_notification(
+        input.name.trim(),
+        input.email.trim(),
+        input.company.as_deref(),
+        input.region.as_deref(),
+        input.interest.as_deref(),
+        input.message.as_deref(),
+    );
+    let _ = st
+        .mailer
+        .send_text(
+            st.mailer.notify_to.clone(),
+            &format!("New briefing request: {}", input.name.trim()),
+            notify_body,
+        )
+        .await;
+
+    if let Ok(lead_box) = input.email.trim().parse::<Mailbox>() {
+        let _ = st
+            .mailer
+            .send_text(
+                lead_box,
+                "We've got your request",
+                mailer::lead_confirmation(input.name.trim()),
+            )
+            .await;
+    }
 
     Ok((StatusCode::CREATED, Json(Ack::created(id))))
 }
@@ -123,11 +158,32 @@ async fn create_subscriber(
         "INSERT INTO subscribers (name,email) VALUES (?,?)
          ON CONFLICT(email) DO UPDATE SET name = COALESCE(excluded.name, subscribers.name)",
     )
-    .bind(input.name)
+    .bind(&input.name)
     .bind(input.email.trim())
     .execute(&st.pool)
     .await?
     .last_insert_rowid();
+
+    // Send the welcome email (Email 1 of "The Brief"). Log-and-continue on failure.
+    if let Ok(sub_box) = input.email.trim().parse::<Mailbox>() {
+        let _ = st
+            .mailer
+            .send_text(
+                sub_box,
+                "Welcome to The Brief: start here",
+                mailer::subscriber_welcome(input.name.as_deref()),
+            )
+            .await;
+    }
+    // Optional: let the team know someone subscribed.
+    let _ = st
+        .mailer
+        .send_text(
+            st.mailer.notify_to.clone(),
+            "New Brief subscriber",
+            format!("New subscriber: {}\n", input.email.trim()),
+        )
+        .await;
 
     Ok((StatusCode::CREATED, Json(Ack::created(id))))
 }
