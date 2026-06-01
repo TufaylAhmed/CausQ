@@ -1,0 +1,29 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/faazcvhi/causq.com/
+    - /bin/mkdir -p $DEPLOYPATH
+    # HTML pages
+    - /bin/cp -f index.html $DEPLOYPATH
+    - /bin/cp -f what-we-do.html $DEPLOYPATH
+    - /bin/cp -f what-we-think.html $DEPLOYPATH
+    - /bin/cp -f who-we-are.html $DEPLOYPATH
+    - /bin/cp -f careers.html $DEPLOYPATH
+    - /bin/cp -f contact.html $DEPLOYPATH
+    - /bin/cp -f xsiam-xsoar.html $DEPLOYPATH
+    - /bin/cp -f privacy.html $DEPLOYPATH
+    - /bin/cp -f terms.html $DEPLOYPATH
+    - /bin/cp -f cookies.html $DEPLOYPATH
+    - /bin/cp -f responsible-ai.html $DEPLOYPATH
+    - /bin/cp -f security.html $DEPLOYPATH
+    # Article pages
+    - /bin/cp -f article-boxes-to-fabric.html $DEPLOYPATH
+    - /bin/cp -f article-cbom.html $DEPLOYPATH
+    - /bin/cp -f article-harvest-now-decrypt-later.html $DEPLOYPATH
+    - /bin/cp -f article-network-ai-workload.html $DEPLOYPATH
+    - /bin/cp -f article-nis2-dora.html $DEPLOYPATH
+    - /bin/cp -f article-three-programs.html $DEPLOYPATH
+    - /bin/cp -f article-zero-trust.html $DEPLOYPATH
+    # Static assets and images
+    - /bin/cp -fR assets $DEPLOYPATH
+    - /bin/cp -f Logo-website-white-.webp $DEPLOYPATH
