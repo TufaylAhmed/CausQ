@@ -180,7 +180,7 @@ body.menu-open .menu-btn span:nth-child(3){ top:9px; transform:rotate(-45deg); }
 .partners{ padding:46px 0; }
 .partners .lbl{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:30px; }
 .logo-row{ display:flex; flex-wrap:wrap; gap:18px 56px; align-items:center; justify-content:center; }
-.logo{ height:30px; display:flex; align-items:center; opacity:.62; filter:grayscale(1); transition:.35s var(--ease); }
+.logo{ height:30px; flex-shrink:0; display:flex; align-items:center; opacity:.62; filter:grayscale(1); transition:.35s var(--ease); }
 .logo:hover{ opacity:1; filter:grayscale(0); transform:translateY(-2px); }
 .logo img{ height:100%; width:auto; object-fit:contain; }
 .logo .wm{ font-family:'Albert Sans',sans-serif; font-weight:700; font-size:1.15rem; letter-spacing:-.02em; color:#7c7c85; }
@@ -422,6 +422,14 @@ body.dark-hero .nav:not(.scrolled) .brand .qmark{ color:#fff; }
 body.dark-hero .nav:not(.scrolled) .btn-dark{ background:#fff; color:var(--ink); }
 body.dark-hero .nav:not(.scrolled) .menu-btn span{ background:#fff; }
 
+/* when the mobile menu overlay is open the panel turns white, so the
+   dark-hero white text/icon would vanish into it. force them back to ink. */
+body.menu-open.dark-hero .nav:not(.scrolled) .nav-links a:not(.btn){ color:var(--ink); }
+body.menu-open.dark-hero .nav:not(.scrolled) .nav-links a:not(.btn)::after{ background:var(--signal); }
+body.menu-open.dark-hero .nav:not(.scrolled) .nav-links a.active{ color:var(--ink); }
+body.menu-open.dark-hero .nav:not(.scrolled) .menu-btn span{ background:var(--ink); }
+body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); color:#fff; }
+
 /* ============================================================================
    CINEMATIC IMAGE HERO (interior pages)
 ============================================================================ */
@@ -573,7 +581,9 @@ body.dark-hero .nav:not(.scrolled) .menu-btn span{ background:#fff; }
 ============================================================================ */
 .logo-marquee{ overflow:hidden; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
 .logo-track{ display:flex; align-items:center; gap:72px; width:max-content; animation:marquee 42s linear infinite; }
-.logo-marquee:hover .logo-track{ animation-play-state:paused; }
+/* pause on hover only on real pointers — on touch, scrolling a finger over
+   the strip would latch :hover and freeze the marquee permanently */
+@media (hover:hover){ .logo-marquee:hover .logo-track{ animation-play-state:paused; } }
 @keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
 
 @media(prefers-reduced-motion:reduce){
