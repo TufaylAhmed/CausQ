@@ -593,8 +593,12 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
 /* ============================================================================
    LOGO MARQUEE — auto-scrolling partner strip
 ============================================================================ */
-.logo-marquee{ overflow:hidden; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+/* overflow:hidden is needed horizontally for the marquee, but it also clips
+   vertically — so the hover lift (translateY) on a logo would cut its top edge.
+   Vertical padding gives the track breathing room so nothing gets clipped. */
+.logo-marquee{ overflow:hidden; padding:18px 0; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
 .logo-track{ display:flex; align-items:center; gap:72px; width:max-content; animation:marquee 42s linear infinite; }
+.logo-track .logo{ will-change:transform; }
 /* pause on hover only on real pointers — on touch, scrolling a finger over
    the strip would latch :hover and freeze the marquee permanently */
 @media (hover:hover){ .logo-marquee:hover .logo-track{ animation-play-state:paused; } }
