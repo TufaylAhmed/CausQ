@@ -66,9 +66,20 @@ async function handleSubscribe(body, env) {
   if (!validEmail(email)) return json({ ok: false, error: "a valid email is required" }, 400);
   const name = clean(body.name);
 
-  await mlUpsert(env, email, { name }, env.ML_GROUP_BRIEF);
-  // MailerLite's welcome automation (triggered by joining the Brief group) sends
-  // the actual welcome email, so nothing more to do here.
+  // Store the contact in MailerLite, and send the welcome email ourselves via
+  // MailerSend (full control of the HTML — no reliance on MailerLite automations).
+  const wb = welcomeEmail(name);
+  const results = await Promise.allSettled([
+    mlUpsert(env, email, { name }, env.ML_GROUP_BRIEF),
+    msSend(env, { to: { email, name }, subject: wb.subject, html: wb.html, text: wb.text }),
+  ]);
+  const captured = results[0].status === "fulfilled";
+  const sent = results[1].status === "fulfilled" && !results[1].value?.skipped;
+  if (!captured && !sent) {
+    results.forEach((r) => r.status === "rejected" && console.error("subscribe step failed:", r.reason));
+    return json({ ok: false, error: "could not subscribe" }, 502);
+  }
+  results.forEach((r) => r.status === "rejected" && console.error("subscribe step (non-fatal):", r.reason));
   return json({ ok: true, message: "subscribed" }, 201);
 }
 
@@ -83,14 +94,14 @@ async function handleContact(body, env) {
   const interest = clean(body.interest);
   const message = clean(body.message);
 
-  // Record the lead in MailerLite (Leads group). Joining that group triggers the
-  // "Briefing Request — Instant Confirmation" automation, which sends the lead
-  // their confirmation email — so the Worker does NOT send a confirmation itself.
-  // The only thing left for the Worker is the internal team alert (optional: it
-  // needs MailerSend; if MAILERSEND_API_KEY is unset it's skipped and the lead is
-  // still captured + confirmed by MailerLite).
+  // Store the lead in MailerLite, send the prospect an instant confirmation, and
+  // alert the team — both emails via MailerSend (full HTML control, no reliance
+  // on MailerLite automations).
+  const cb = leadConfirmEmail(name);
   const results = await Promise.allSettled([
     mlUpsert(env, email, { name, company, region, interest, message }, env.ML_GROUP_LEADS),
+    // Confirmation to the prospect.
+    msSend(env, { to: { email, name }, subject: cb.subject, html: cb.html, text: cb.text }),
     // Instant internal alert so you follow up fast (speed-to-lead).
     msSend(env, {
       to: { email: env.NOTIFY_EMAIL || env.FROM_EMAIL, name: "CausQ" },
@@ -108,13 +119,12 @@ async function handleContact(body, env) {
     }),
   ]);
 
-  // results[0] = MailerLite capture (also triggers the lead's confirmation email),
-  // results[1] = team alert. The lead is "safe" if it was captured in MailerLite,
-  // OR (failing that) the team was alerted by a real send. A *skipped* alert
-  // (MailerSend not configured) does not count as delivery.
+  // results[0] = MailerLite capture, [1] = confirmation to lead, [2] = team alert.
+  // The lead is "safe" if captured in MailerLite OR any real email send succeeded.
+  // A *skipped* send (MailerSend not configured) does not count as delivery.
   const captured = results[0].status === "fulfilled";
-  const alerted = results[1].status === "fulfilled" && !results[1].value?.skipped;
-  if (!captured && !alerted) {
+  const realSend = results.slice(1).some((r) => r.status === "fulfilled" && !r.value?.skipped);
+  if (!captured && !realSend) {
     results.forEach((r) => r.status === "rejected" && console.error("contact step failed:", r.reason));
     return json({ ok: false, error: "could not deliver request" }, 502);
   }
@@ -166,7 +176,7 @@ async function mlUpsert(env, email, fields, groupId) {
 }
 
 /* ----------------------------------------------------------------- MailerSend */
-async function msSend(env, { to, subject, text, reply_to }) {
+async function msSend(env, { to, subject, text, html, reply_to }) {
   if (!env.MAILERSEND_API_KEY) {
     // Email sending not configured yet — skip cleanly rather than fail the lead.
     console.warn(`MailerSend not configured — skipped '${subject}' to ${to.email}`);
@@ -178,6 +188,7 @@ async function msSend(env, { to, subject, text, reply_to }) {
     subject,
     text,
   };
+  if (html) payload.html = html;
   if (reply_to) payload.reply_to = reply_to;
 
   const res = await fetch(`${MS_API}/email`, {
