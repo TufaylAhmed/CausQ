@@ -144,6 +144,12 @@ body.menu-open .menu-btn span:nth-child(3){ top:9px; transform:rotate(-45deg); }
   .nav-links{ position:fixed; inset:0; flex-direction:column; justify-content:center; gap:26px; background:rgba(255,255,255,.97); -webkit-backdrop-filter:blur(24px); backdrop-filter:blur(24px); opacity:0; pointer-events:none; transform:scale(1.04); transition:.45s var(--ease); }
   .nav-links a:not(.btn){ font-size:1.5rem; }
   body.menu-open .nav-links{ opacity:1; pointer-events:auto; transform:scale(1); }
+  /* When scrolled, .nav gains a backdrop-filter — that makes .nav the containing
+     block for its fixed children, so the full-screen overlay collapses into the
+     74px bar and looks skewed. Drop the filter while the menu is open so the
+     overlay resolves against the viewport again. */
+  body.menu-open .nav,
+  body.menu-open .nav.scrolled{ -webkit-backdrop-filter:none; backdrop-filter:none; background:transparent; box-shadow:none; border-bottom-color:transparent; }
 }
 
 /* -------------------------------------------------------------- MEDIA placeholder
@@ -593,10 +599,13 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
 /* ============================================================================
    LOGO MARQUEE — auto-scrolling partner strip
 ============================================================================ */
-/* overflow:hidden is needed horizontally for the marquee, but it also clips
-   vertically — so the hover lift (translateY) on a logo would cut its top edge.
-   Vertical padding gives the track breathing room so nothing gets clipped. */
-.logo-marquee{ overflow:hidden; padding:18px 0; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+/* The marquee must clip HORIZONTALLY (so the looping track doesn't spill past the
+   edges) but never VERTICALLY — otherwise the hover lift on a logo, once the
+   browser promotes it to its own layer (will-change + mask), gets hard-clipped at
+   the box edge and the logo's top is shaved off. overflow:clip lets us clip one
+   axis while leaving the other visible (plain overflow:hidden can't). The
+   overflow:hidden line is a fallback for engines without overflow:clip. */
+.logo-marquee{ overflow:hidden; overflow:clip; overflow-x:clip; overflow-y:visible; padding:24px 0; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
 .logo-track{ display:flex; align-items:center; gap:72px; width:max-content; animation:marquee 42s linear infinite; }
 .logo-track .logo{ will-change:transform; }
 /* pause on hover only on real pointers — on touch, scrolling a finger over
