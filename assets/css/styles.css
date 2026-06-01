@@ -341,6 +341,36 @@ body.menu-open .menu-btn span:nth-child(3){ top:9px; transform:rotate(-45deg); }
 .foot-bottom .links a{ color:#8c8c97; font-size:.85rem; }
 .foot-bottom .links a:hover{ color:#fff; }
 
+/* -------------------------------------------------- subscribe (email capture) */
+.foot-subscribe{ display:grid; grid-template-columns:1.7fr 2fr; gap:48px; align-items:center;
+  margin-top:56px; padding-top:40px; border-top:1px solid var(--night-line); }
+@media(max-width:860px){ .foot-subscribe{ grid-template-columns:1fr; gap:22px; } }
+.foot-subscribe h4{ font-family:'Albert Sans',sans-serif; font-weight:700; font-size:1.18rem; letter-spacing:-.02em; color:#fff; margin-bottom:8px; }
+.foot-subscribe .fs-copy p{ color:#8c8c97; font-size:.93rem; max-width:340px; }
+.sub-form{ display:flex; gap:10px; flex-wrap:wrap; }
+.sub-form input{ flex:1; min-width:200px; padding:.95em 1.1em; border-radius:12px; font:inherit;
+  background:rgba(255,255,255,.04); border:1px solid var(--night-line); color:#fff; transition:.25s var(--ease); }
+.sub-form input::placeholder{ color:#6c6c77; }
+.sub-form input:focus{ outline:none; border-color:var(--signal); box-shadow:0 0 0 4px var(--signal-soft); }
+.sub-form .btn{ white-space:nowrap; }
+.sub-note{ color:#6c6c77; font-size:.78rem; margin-top:12px; }
+.sub-ok{ display:none; }
+.sub-ok.show{ display:flex; align-items:center; gap:10px; color:#fff; font-size:.95rem; padding:4px 0; }
+.sub-ok .dot-ok{ width:22px; height:22px; border-radius:50%; background:var(--signal); display:inline-flex;
+  align-items:center; justify-content:center; flex:none; }
+.sub-ok .dot-ok svg{ width:12px; height:12px; stroke:#fff; }
+
+/* light variant for in-page subscribe blocks (e.g. insights hub) */
+.subscribe-band{ background:var(--signal-soft); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:clamp(28px,4vw,52px); display:grid; grid-template-columns:1.4fr 1.6fr; gap:40px; align-items:center; }
+@media(max-width:760px){ .subscribe-band{ grid-template-columns:1fr; gap:22px; } }
+.subscribe-band h2{ margin-bottom:10px; }
+.subscribe-band .sb-copy p{ color:var(--ink-mute); }
+.subscribe-band .sub-form input{ background:#fff; border-color:var(--line); color:var(--ink); }
+.subscribe-band .sub-note{ color:var(--ink-faint); }
+.subscribe-band .sub-ok.show{ color:var(--ink); }
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
 /* -------------------------------------------------------------- reveal */
 .reveal{ opacity:0; transform:translateY(26px); transition:opacity .9s var(--ease2), transform .9s var(--ease2); }
 .reveal.in{ opacity:1; transform:none; }
