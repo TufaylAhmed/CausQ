@@ -208,7 +208,72 @@ async function msSend(env, { to, subject, text, html, reply_to }) {
   return { ok: true };
 }
 
+/* ----------------------------------------------------------------- email bodies */
+function shell(inner) {
+  return (
+    `<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;` +
+    `font-size:15px;line-height:1.6;color:#1a1a1f;max-width:560px;margin:0 auto">${inner}` +
+    `<p style="color:#8a8a94;font-size:13px;margin-top:28px">CausQ &middot; ` +
+    `<a href="https://causq.com" style="color:#0891b2">causq.com</a></p></div>`
+  );
+}
+const firstName = (name) => (name ? String(name).split(/\s+/)[0] : "");
+
+// Welcome email (Email 1 of "The Brief"), with the featured article link.
+function welcomeEmail(name) {
+  const fn = firstName(name);
+  const hi = fn ? `Hi ${esc(fn)},` : "Welcome to The Brief,";
+  const html = shell(
+    `<p>${hi}</p>` +
+    `<p>You're in. You'll get one considered email a month on the three forces reshaping the ` +
+    `enterprise: AI, the networks it runs on, and security in the quantum era. Written by the ` +
+    `engineers doing the work, not the marketing team.</p>` +
+    `<p>Start here, the piece our readers forward most:</p>` +
+    `<div style="margin:22px 0;padding:18px 20px;background:#f3fbfc;border-left:3px solid #06B6D4;border-radius:6px">` +
+    `<strong style="font-size:16px">Harvest now, decrypt later: the breach you won't see for a decade.</strong><br>` +
+    `<span style="color:#52525b">Adversaries are already storing your encrypted data to crack once quantum ` +
+    `computers mature. Here's a pragmatic plan to become crypto-agile before the deadline finds you.</span><br>` +
+    `<a href="https://causq.com/article-harvest-now-decrypt-later.html" ` +
+    `style="display:inline-block;margin-top:12px;color:#0891b2;font-weight:700;text-decoration:none">Read the essay &rarr;</a>` +
+    `</div>` +
+    `<p>No noise, and you can unsubscribe anytime by replying to this email. Glad you're here.</p>` +
+    `<p style="color:#71717a">- The CausQ team</p>`
+  );
+  const text =
+    `${fn ? `Hi ${fn},` : "Welcome to The Brief,"}\n\n` +
+    `You're in. You'll get one considered email a month on AI, the networks it runs on, and ` +
+    `security in the quantum era. Written by the engineers doing the work.\n\n` +
+    `Start here, the piece our readers forward most:\n` +
+    `"Harvest now, decrypt later: the breach you won't see for a decade."\n` +
+    `https://causq.com/article-harvest-now-decrypt-later.html\n\n` +
+    `No noise, and you can unsubscribe anytime by replying to this email.\n\n` +
+    `- The CausQ team\nhttps://causq.com\n`;
+  return { subject: "Welcome to The Brief: start here", html, text };
+}
+
+// Instant confirmation to someone who submitted the briefing form.
+function leadConfirmEmail(name) {
+  const fn = firstName(name) || "there";
+  const html = shell(
+    `<p>Hi ${esc(fn)},</p>` +
+    `<p>Thanks for reaching out to CausQ. We've got your briefing request and a senior engineer ` +
+    `will be in touch within one business day to set it up.</p>` +
+    `<p>If anything's urgent, just reply to this email and it'll reach us directly.</p>` +
+    `<p style="color:#71717a">- The CausQ team</p>`
+  );
+  const text =
+    `Hi ${fn},\n\n` +
+    `Thanks for reaching out to CausQ. We've got your briefing request and a senior engineer ` +
+    `will be in touch within one business day to set it up.\n\n` +
+    `If anything's urgent, just reply to this email and it'll reach us directly.\n\n` +
+    `- The CausQ team\nhttps://causq.com\n`;
+  return { subject: "We've got your request", html, text };
+}
+
 /* ----------------------------------------------------------------- helpers */
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
 function clean(v) {
   const s = (v == null ? "" : String(v)).trim();
   return s.length ? s : undefined;

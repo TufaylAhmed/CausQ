@@ -7,11 +7,22 @@ It runs on the route `causq.com/api/*`, so the site's existing `/api/contact` an
 ```
 Visitor submits form
    │
-   ├─ /api/subscribe ─→ MailerLite "The Brief" group ─→ welcome automation (5 emails)
+   ├─ /api/subscribe ─→ MailerLite "The Brief" group   (stores the contact)
+   │                 └─→ MailerSend: welcome email with the featured article  → subscriber
    │
-   └─ /api/contact   ─→ MailerLite "Leads" group ─→ instant confirmation automation (to the lead)
-                      └─→ MailerSend: "new lead" alert to your team   (OPTIONAL)
+   └─ /api/contact   ─→ MailerLite "Leads" group       (stores the lead + fields)
+                     ├─→ MailerSend: instant confirmation → the prospect
+                     └─→ MailerSend: "new lead" alert     → your team
 ```
+
+**Why the Worker sends the emails (not MailerLite automations):** MailerLite's API
+can store contacts and scaffold automations, but it cannot set an automation email's
+HTML body — that's UI-only, and picking a template there wiped the copy. So the Worker
+sends the welcome + confirmation itself via MailerSend, where we control the HTML
+exactly. MailerLite is the contact store (and can run a longer drip later, by hand).
+
+> If you previously turned the two MailerLite automations ON, **turn them OFF** now
+> (otherwise subscribers get a second, blank email). Dashboard → Automations → toggle off.
 
 The Rust backend in `../backend/` is now **optional / local-dev only**. The Worker is
 the production path — nothing to host, no server to keep running.
@@ -37,27 +48,35 @@ In account `tufayl@causq.com` (ID 2397439):
 
 ## What you still need to do
 
-### 1. MailerLite: confirm sender + get an API token  (~5 min)
-1. **Settings → Sending / Domains:** make sure a `@causq.com` sender is authenticated
-   (MailerLite walks you through the DNS records; add them in Cloudflare, DNS-only/grey cloud).
-   Automations won't send until a verified sender exists.
-2. **Integrations → API → Generate token.** Copy it — this is `MAILERLITE_API_KEY`.
+Status so far: MailerLite groups/fields exist, `MAILERLITE_API_KEY` is set, and the
+Worker is deployed and verified (contacts land in MailerLite). The remaining work is
+turning on email **sending** via MailerSend.
 
-### 2. Review + activate the two automations  (~5 min)
-Open the two dashboard links above. The copy is already written; tweak styling/branding
-in the visual editor if you like, set the sender, then **toggle each automation ON**.
-(They can't send to anyone until the Worker starts adding subscribers, so it's safe.)
+### 1. Set up MailerSend — REQUIRED (it sends the welcome + confirmation)  (~10 min)
+1. Go to <https://www.mailersend.com> and **sign in with your MailerLite account** (same login).
+2. **Domains → Add domain → `causq.com`.** It shows SPF/DKIM/Return-Path DNS records.
+3. Add each record in **Cloudflare → causq.com → DNS** (DNS-only / grey cloud). This does
+   not affect your Cloudflare email forwarding.
+4. Wait for the domain to show **Verified**.
+5. **API tokens → Create token**, copy it, then from this `worker/` folder:
+   ```bash
+   wrangler secret put MAILERSEND_API_KEY   # paste the token at the prompt
+   wrangler deploy
+   ```
+6. `FROM_EMAIL` / `NOTIFY_EMAIL` default to `hello@causq.com` in `wrangler.toml` — change if
+   you want a different sender or alert inbox (must be on the verified domain).
 
-### 3. Deploy the Worker  (~5 min)
-From this `worker/` folder:
-```bash
-npm install -g wrangler
-wrangler login                          # authorize your Cloudflare account
-wrangler secret put MAILERLITE_API_KEY  # paste the MailerLite token
-wrangler deploy                         # binds to causq.com/api/*
-```
+Until `MAILERSEND_API_KEY` is set, contacts are still captured but no email goes out.
 
-### 4. (Optional) Bot protection with Turnstile
+### 2. Turn OFF the two MailerLite automations
+The Worker now sends the welcome + confirmation. If the MailerLite automations are ON they'd
+send a second (blank) email, so disable them:
+- Dashboard → Automations → toggle **off** "The Brief — Welcome & Nurture" and
+  "Briefing Request — Instant Confirmation".
+
+(They can stay as drafts for a future hand-built drip; just not active.)
+
+### 3. (Optional) Bot protection with Turnstile
 The `/api/*` endpoint is public. To stop bots stuffing your list:
 1. Cloudflare dashboard → **Turnstile → Add widget** (domain `causq.com`). Copy the **Site key** and **Secret key**.
 2. Put the **Site key** in `assets/js/main.js` → `const TURNSTILE_SITEKEY = '...'` and deploy the site. A widget auto-appears on every form. (Do this first, so real users get a token.)
@@ -67,19 +86,6 @@ The `/api/*` endpoint is public. To stop bots stuffing your list:
    wrangler deploy
    ```
 Until both are set, the Worker skips the check and forms work normally.
-
-### 5. (Optional) Internal "new lead" alerts via MailerSend
-Leads are already captured in MailerLite and auto-confirmed, so this is just for an instant
-heads-up to your inbox (great for fast follow-up). If you skip it, nothing breaks — you'll
-just see new leads in MailerLite's "Leads" group instead of getting pinged.
-
-To enable: sign up at <https://www.mailersend.com>, verify `causq.com` (add the DNS records in
-Cloudflare), create an API token, then:
-```bash
-wrangler secret put MAILERSEND_API_KEY
-wrangler deploy
-```
-Set `NOTIFY_EMAIL` in `wrangler.toml` to where alerts should land (defaults to hello@causq.com).
 
 ---
 
