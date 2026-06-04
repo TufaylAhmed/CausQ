@@ -3,59 +3,499 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cortex XSIAM &amp; XSOAR | CQL, Correlation Rules &amp; Playbooks | CausQ</title>
-  <meta name="description" content="A working reference for Palo Alto Cortex XSIAM and XSOAR: CQL hunting queries, correlation rules that generate alerts, and XSOAR playbook commands and automations, engineered by CausQ." />
+  <title>Cortex XSIAM &amp; XSOAR Deployment Experts | Features, vs Splunk, From-Scratch Build | CausQ</title>
+  <meta name="description" content="What Cortex XSIAM is, the core features that set it apart from Splunk and legacy SIEMs, and how CausQ deploys it from scratch: playbook automation, correlation rules, integrations and scripts, engineered and validated end to end." />
   <link rel="canonical" href="https://causq.com/xsiam-xsoar.html" />
   <meta name="theme-color" content="#0b0b0d" />
-  <meta property="og:type" content="article" />
+  <meta property="og:type" content="website" />
   <meta property="og:site_name" content="CausQ" />
   <meta property="og:url" content="https://causq.com/xsiam-xsoar.html" />
-  <meta property="og:title" content="Cortex XSIAM & XSOAR | CQL, Correlation Rules & Playbooks | CausQ" />
-  <meta property="og:description" content="A working reference for Palo Alto Cortex XSIAM and XSOAR: CQL hunting queries, correlation rules and XSOAR playbook automations." />
+  <meta property="og:title" content="Cortex XSIAM &amp; XSOAR Deployment Experts | CausQ" />
+  <meta property="og:description" content="Core XSIAM features, how it beats Splunk and legacy SIEM, and how CausQ builds a self-driving SOC from scratch: content, automation and validation." />
   <meta property="og:image" content="https://causq.com/assets/img/og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Cortex XSIAM & XSOAR reference | CausQ" />
-  <meta name="twitter:description" content="CQL hunting queries, correlation rules and XSOAR playbook automations, engineered by CausQ." />
+  <meta name="twitter:title" content="Cortex XSIAM &amp; XSOAR Deployment Experts | CausQ" />
+  <meta name="twitter:description" content="Core XSIAM features, XSIAM vs Splunk, and a from-scratch deployment built by detection engineers." />
   <meta name="twitter:image" content="https://causq.com/assets/img/og.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Cortex XSIAM & XSOAR Deployment and Engineering",
+    "serviceType": "Security operations platform deployment, detection engineering and SOAR automation",
+    "provider": { "@type": "Organization", "name": "CausQ", "url": "https://causq.com" },
+    "areaServed": ["United States", "EMEA"],
+    "description": "End-to-end Cortex XSIAM deployment from scratch: data onboarding, parsing and datasets, ML-analytics tuning, correlation rules mapped to MITRE ATT&CK, XSOAR playbook automation, integrations and custom Python scripts, plus detection validation and hypercare."
+  }
+  </script>
 </head>
 <body>
   <div id="nav-mount"></div>
 
   <!-- ===================== HERO ===================== -->
   <header class="phero phero-img cqx-hero">
-    <div class="phero-bg cqx-grid"></div>
+    <!-- hand-built animated XSIAM telemetry board (sources -> alerts -> incident core -> outcomes) -->
+    <div class="phero-bg cqx-stage">
+      <svg class="cqx-viz" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <radialGradient id="cqxCoreG" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#06B6D4" stop-opacity=".85"/>
+            <stop offset="55%" stop-color="#06B6D4" stop-opacity=".16"/>
+            <stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- ingest: sources funnelling into the alerts node -->
+        <g>
+          <path class="flow"   d="M140 150 C 360 150 470 355 610 355"/>
+          <path class="flow b" d="M140 208 C 360 208 470 355 610 355"/>
+          <path class="flow"   d="M140 266 C 360 266 480 355 610 355"/>
+          <path class="flow c" d="M140 324 C 360 324 500 355 610 355"/>
+          <path class="flow"   d="M140 382 C 360 382 500 355 610 355"/>
+          <path class="flow b" d="M140 440 C 360 440 480 355 610 355"/>
+          <path class="flow"   d="M140 498 C 360 498 470 355 610 355"/>
+          <path class="flow c" d="M140 556 C 360 556 470 355 610 355"/>
+        </g>
+        <g>
+          <circle class="src" cx="140" cy="150" r="4"/>
+          <circle class="src" cx="140" cy="208" r="4" style="animation-delay:.4s"/>
+          <circle class="src" cx="140" cy="266" r="4" style="animation-delay:.8s"/>
+          <circle class="src" cx="140" cy="324" r="4" style="animation-delay:1.2s"/>
+          <circle class="src" cx="140" cy="382" r="4" style="animation-delay:1.6s"/>
+          <circle class="src" cx="140" cy="440" r="4" style="animation-delay:2s"/>
+          <circle class="src" cx="140" cy="498" r="4" style="animation-delay:2.4s"/>
+          <circle class="src" cx="140" cy="556" r="4" style="animation-delay:2.8s"/>
+        </g>
+
+        <!-- alerts -> incident core -->
+        <path class="flow b" d="M610 355 L800 355"/>
+        <g transform="translate(820,355)">
+          <circle r="62" fill="url(#cqxCoreG)"/>
+          <circle class="ring"    r="30" stroke-width="1.4"/>
+          <circle class="ring r2" r="44" stroke-width="1.2"/>
+          <g class="core-spin">
+            <circle class="core-dot" cx="20"    cy="0"     r="3"/>
+            <circle class="core-dot" cx="16.18" cy="11.76" r="3"/>
+            <circle class="core-dot" cx="6.18"  cy="19.02" r="3"/>
+            <circle class="core-dot" cx="-6.18" cy="19.02" r="3"/>
+            <circle class="core-dot" cx="-16.18" cy="11.76" r="3"/>
+            <circle class="core-dot" cx="-20"   cy="0"     r="3"/>
+            <circle class="core-dot" cx="-16.18" cy="-11.76" r="3"/>
+            <circle class="core-dot" cx="-6.18" cy="-19.02" r="3"/>
+            <circle class="core-dot" cx="6.18"  cy="-19.02" r="3"/>
+            <circle class="core-dot" cx="16.18" cy="-11.76" r="3"/>
+          </g>
+          <circle class="core-mid" r="5"/>
+        </g>
+
+        <!-- incident core -> outcomes -->
+        <path class="flow"   d="M820 355 C 960 355 980 210 1080 210"/>
+        <path class="flow c" d="M820 355 L1080 355"/>
+        <path class="flow b" d="M820 355 C 960 355 980 500 1080 500"/>
+        <circle class="out" cx="1080" cy="210" r="5"/>
+        <circle class="out" cx="1080" cy="355" r="5"/>
+        <circle class="out" cx="1080" cy="500" r="5"/>
+
+        <!-- labels -->
+        <text class="big" x="556" y="312">2,422</text>
+        <text class="tl"  x="558" y="330">ALERTS</text>
+        <text class="big" x="800" y="452">93</text>
+        <text class="tl"  x="800" y="470">INCIDENTS</text>
+        <text x="1062" y="200" text-anchor="end">77 AUTOMATED</text>
+        <text x="1062" y="360" text-anchor="end">16 MANUAL</text>
+        <text x="1062" y="520" text-anchor="end">10 OPEN</text>
+      </svg>
+      <span class="cqx-mesh" aria-hidden="true"></span>
+      <span class="cqx-scan" aria-hidden="true"></span>
+    </div>
     <div class="wrap">
-      <p class="crumbs reveal"><a href="index.html">CausQ</a> / What we do / Cortex Ops</p>
-      <span class="kicker reveal" data-delay="1">Palo Alto Cortex &middot; XSIAM &amp; XSOAR</span>
-      <h1 class="display h-xl reveal" data-delay="1" style="margin-top:16px">Hunt. Detect.<br>Respond, in code.</h1>
-      <p class="lead reveal" data-delay="2">A live reference from our detection engineers: the queries, correlation rules
-        and playbooks we ship on Cortex XSIAM and XSOAR. Read it like a console, copy what you need.</p>
+      <p class="crumbs reveal"><a href="index.html">CausQ</a> / What we do / Cortex security operations</p>
+      <span class="kicker reveal" data-delay="1">Palo Alto Cortex &middot; XSIAM &amp; XSOAR &middot; Deployment partner</span>
+      <h1 class="display h-xl reveal" data-delay="1" style="margin-top:16px">Build a self&#8209;driving<br>SOC on Cortex XSIAM.</h1>
+      <p class="lead reveal" data-delay="2">XSIAM folds SIEM, XDR, SOAR, threat intel and attack&#8209;surface management into one
+        AI&#8209;driven platform. We stand it up from scratch: data onboarding, ML&#8209;analytics tuning,
+        correlation rules, XSOAR playbooks, integrations and scripts, then prove every detection fires.</p>
       <div class="cqx-tags reveal" data-delay="3">
-        <span class="cqx-tag">CQL hunting</span>
+        <span class="cqx-tag">Deploy from zero</span>
         <span class="cqx-tag">Correlation rules</span>
         <span class="cqx-tag">XSOAR playbooks</span>
-        <span class="cqx-tag">Auto-remediation</span>
+        <span class="cqx-tag">Integrations &amp; scripts</span>
+        <span class="cqx-tag">Detection validation</span>
+      </div>
+      <div class="cqx-ticker reveal" data-delay="4">
+        <div class="tk"><b>SIEM<span class="u">+</span>XDR<span class="u">+</span>SOAR</b><span>One platform, not three tools</span></div>
+        <div class="tk"><b><span data-count="98" data-suffix="%">0</span></b><span>Fewer alerts via smart grouping</span></div>
+        <div class="tk"><b>Mins<span class="u">,</span> not days</b><span>Mean time to respond</span></div>
+        <div class="tk"><b><span data-count="1000" data-suffix="+">0</span></b><span>Supported data sources</span></div>
       </div>
     </div>
     <span class="phero-scroll"></span>
   </header>
 
-  <!-- ===================== 01 · CQL ===================== -->
-  <section class="section warm cmd-section reveal" id="cql">
+  <!-- ===================== WHAT IS XSIAM (platform + fabric graphic) ===================== -->
+  <section class="section night cmd-section reveal" id="platform">
     <div class="wrap">
       <div class="cmd-grid">
         <div class="cmd-head reveal">
           <span class="rule"></span>
-          <span class="kicker">01, CQL</span>
+          <span class="kicker">00, The platform</span>
+          <h2 class="display h-md on-night" style="margin-top:16px">The SOC, re&#8209;architected around the machine.</h2>
+          <div class="cmd-note">
+            <p class="lead">Cortex XSIAM, Extended Security Intelligence &amp; Automation Management, was built
+              to retire the bolt&#8209;together SIEM stack. Every endpoint, identity, firewall, cloud and SaaS log
+              lands in one normalized data lake, where machine&#8209;learning analytics surface real attacks and
+              automation contains them before an analyst opens a ticket.</p>
+          </div>
+          <div class="cmd-meta">
+            <span class="chip"><b>ingest</b> any source, normalized (XDM)</span>
+            <span class="chip"><b>detect</b> ML analytics + your rules</span>
+            <span class="chip"><b>respond</b> XSOAR, built in</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="fabric reveal" data-delay="1">
+            <p class="fab-lbl">Telemetry in</p>
+            <div class="fab-tier">
+              <span class="fab-chip">Endpoints / XDR</span>
+              <span class="fab-chip">Firewalls (PAN&#8209;OS)</span>
+              <span class="fab-chip">Identity (Okta / AD)</span>
+              <span class="fab-chip">Cloud (AWS / Azure / GCP)</span>
+              <span class="fab-chip">SaaS &amp; Email</span>
+              <span class="fab-chip">Network &amp; DNS</span>
+              <span class="fab-chip">OT / IoT</span>
+            </div>
+            <div class="fab-link" aria-hidden="true"></div>
+            <div class="fab-core">
+              <span class="fc-k">Cortex XSIAM core</span>
+              <b>Normalized data lake &middot; AI analytics &middot; causality engine</b>
+              <span class="sub">Stitches raw events into incidents, scores behavior, maps to MITRE ATT&amp;CK</span>
+            </div>
+            <div class="fab-link" aria-hidden="true"></div>
+            <p class="fab-lbl">Outcomes out</p>
+            <div class="fab-tier">
+              <span class="fab-chip">Grouped incidents</span>
+              <span class="fab-chip">ATT&amp;CK&#8209;mapped alerts</span>
+              <span class="fab-chip">XSOAR auto&#8209;response</span>
+              <span class="fab-chip">Analyst war room</span>
+              <span class="fab-chip">Closed &amp; contained</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CORE XSIAM FEATURES ===================== -->
+  <section class="section warm reveal" id="features">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker reveal">01, Core capabilities</span>
+        <h2 class="display h-lg reveal" data-delay="1" style="margin-top:16px">Eight engines, one console.</h2>
+        <p class="lead reveal" data-delay="2">XSIAM replaces a shelf of point products. These are the capabilities
+          we configure, tune and operationalize on day one, each one native, sharing the same data and the same
+          automation fabric.</p>
+      </div>
+
+      <div class="feat-grid reveal" data-delay="1">
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5"/><path d="m3 18 9 5 9-5"/></svg></div>
+          <p class="fn">01</p><h3>Limitless data ingestion</h3>
+          <p>1,000+ sources normalized into the Cortex Data Model, endpoint, cloud, identity, firewall and SaaS in one schema, decoupled from per&#8209;GB pricing.</p>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+          <p class="fn">02</p><h3>AI &amp; behavioral analytics</h3>
+          <p>Machine&#8209;learning models profile every user, host and entity (UEBA) and flag anomalies no static correlation search would catch.</p>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
+          <p class="fn">03</p><h3>Native XDR endpoint</h3>
+          <p>The Cortex agent ships in the box, prevention, detection and live response, so you aren't bolting a third&#8209;party EDR onto your SIEM.</p>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="12" r="3"/><path d="M9 6h6a3 3 0 0 1 3 3M9 18h6a3 3 0 0 0 3-3"/></svg></div>
+          <p class="fn">04</p><h3>Causality &amp; smart grouping</h3>
+          <p>The Causality Analysis Engine stitches thousands of raw events into a handful of full&#8209;story incidents, the source of that 98% alert reduction.</p>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
+          <p class="fn">05</p><h3>Automation &amp; SOAR, built in</h3>
+          <p>XSOAR is part of the platform, not a separate license. Playbooks trigger on alerts and run enrichment, decisioning and containment automatically.</p>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></svg></div>
+          <p class="fn">06</p><h3>Attack surface management</h3>
+          <p>Cortex ASM continuously discovers your internet&#8209;facing estate, surfaces exposures and feeds them straight into the same incident queue.</p>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <p class="fn">07</p><h3>Threat intel management</h3>
+          <p>Native TIM ingests feeds, de&#8209;dupes indicators and auto&#8209;enriches every alert with reputation and context, no swivel&#8209;chair lookups.</p>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg></div>
+          <p class="fn">08</p><h3>Identity threat detection</h3>
+          <p>ITDR watches authentication and privilege across SSO, AD and cloud IAM, impossible travel, token theft and escalation, scored in context.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== XSIAM vs LEGACY SIEM (Splunk) ===================== -->
+  <section class="section reveal" id="vs">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker reveal">02, What sets it apart</span>
+        <h2 class="display h-lg reveal" data-delay="1" style="margin-top:16px">XSIAM vs. the legacy SIEM stack.</h2>
+        <p class="lead reveal" data-delay="2">Splunk and the classic SIEMs are brilliant data platforms, but security is an
+          add&#8209;on, automation is a separate product, and the bill scales with every gigabyte you index. XSIAM was
+          designed the other way around: outcomes first, automation native, data ingestion that doesn't punish you.</p>
+      </div>
+
+      <div class="vs reveal" data-delay="1">
+        <div class="vs-row vs-head">
+          <div class="vs-dim">Dimension</div>
+          <div class="vs-x">Cortex XSIAM</div>
+          <div class="vs-leg">Splunk / legacy SIEM</div>
+        </div>
+
+        <div class="vs-row">
+          <div class="vs-dim">Architecture</div>
+          <div class="vs-cell vs-x"><svg class="ic" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg><span><span class="vs-lbl">Cortex XSIAM</span>One unified platform, SIEM, XDR, SOAR, TIM, ASM and ITDR share data and automation.</span></div>
+          <div class="vs-cell vs-leg"><svg class="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg><span><span class="vs-lbl">Splunk / legacy</span>Data platform plus separately licensed ES, SOAR and a third&#8209;party EDR, integrated by you.</span></div>
+        </div>
+
+        <div class="vs-row">
+          <div class="vs-dim">Detection model</div>
+          <div class="vs-cell vs-x"><svg class="ic" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg><span><span class="vs-lbl">Cortex XSIAM</span>Out&#8209;of&#8209;the&#8209;box ML/behavioral analytics, plus your correlation rules on top.</span></div>
+          <div class="vs-cell vs-leg"><svg class="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg><span><span class="vs-lbl">Splunk / legacy</span>You author and maintain every correlation search by hand; ML is an extra module.</span></div>
+        </div>
+
+        <div class="vs-row">
+          <div class="vs-dim">Automation</div>
+          <div class="vs-cell vs-x"><svg class="ic" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg><span><span class="vs-lbl">Cortex XSIAM</span>XSOAR native and automation&#8209;first, playbooks run on every incident by default.</span></div>
+          <div class="vs-cell vs-leg"><svg class="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg><span><span class="vs-lbl">Splunk / legacy</span>SOAR is a separate purchase and integration project; most response stays manual.</span></div>
+        </div>
+
+        <div class="vs-row">
+          <div class="vs-dim">Data &amp; pricing</div>
+          <div class="vs-cell vs-x"><svg class="ic" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg><span><span class="vs-lbl">Cortex XSIAM</span>Normalized common schema; ingest&#8209;friendly tiering, so logging more doesn't break the budget.</span></div>
+          <div class="vs-cell vs-leg"><svg class="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg><span><span class="vs-lbl">Splunk / legacy</span>Schema&#8209;on&#8209;read SPL you normalize yourself; cost climbs with every GB indexed.</span></div>
+        </div>
+
+        <div class="vs-row">
+          <div class="vs-dim">Analyst load</div>
+          <div class="vs-cell vs-x"><svg class="ic" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg><span><span class="vs-lbl">Cortex XSIAM</span>Causality grouping collapses noise into whole&#8209;story incidents, up to 98% fewer alerts.</span></div>
+          <div class="vs-cell vs-leg"><svg class="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg><span><span class="vs-lbl">Splunk / legacy</span>Alert fatigue is the default; tuning noisy searches is a permanent job.</span></div>
+        </div>
+
+        <div class="vs-row">
+          <div class="vs-dim">Time to value</div>
+          <div class="vs-cell vs-x"><svg class="ic" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg><span><span class="vs-lbl">Cortex XSIAM</span>Prebuilt content packs and analytics deliver detections in weeks, not quarters.</span></div>
+          <div class="vs-cell vs-leg"><svg class="ic" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg><span><span class="vs-lbl">Splunk / legacy</span>Months of content engineering before the SIEM earns its keep.</span></div>
+        </div>
+      </div>
+      <p class="lead reveal" data-delay="2" style="margin-top:26px; max-width:720px; font-size:1rem;">
+        Already on Splunk, QRadar or Sentinel? We run the migration too, mapping use cases, porting the detections
+        worth keeping, and retiring the noise.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== CINEMATIC PARALLAX BAND ===================== -->
+  <section class="feature-x flip" aria-label="From zero to a self-driving SOC">
+    <div class="fx-grid">
+      <div class="fx-media">
+        <img src="assets/img/feature-ai.jpg" alt="" data-parallax="0.10" onerror="this.closest('.fx-media').style.background='linear-gradient(135deg,#0b0b0d,#131318)'" />
+      </div>
+      <div class="fx-copy night" style="background:var(--night)">
+        <div class="inner">
+          <span class="kicker reveal">03, How we work</span>
+          <h2 class="display h-lg on-night reveal" data-delay="1" style="margin-top:16px">From a blank tenant to a SOC that runs itself.</h2>
+          <p class="lead reveal" data-delay="2" style="margin-top:22px">We don't hand you a platform and a login. Our detection
+            engineers own the build, onboarding sources, writing the content, automating the response, and proving it
+            all works against real attacker behavior before we hand over the keys.</p>
+          <a href="#deploy" class="tlink reveal" data-delay="3" style="margin-top:26px; color:#fff">See the deployment path <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DEPLOYMENT JOURNEY ===================== -->
+  <section class="section night cmd-section reveal" id="deploy">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker reveal">04, Deploy from scratch</span>
+        <h2 class="display h-lg on-night reveal" data-delay="1" style="margin-top:16px">Seven phases. One self&#8209;driving SOC.</h2>
+        <p class="lead reveal" data-delay="2" style="margin-top:18px">This is the path we run on every greenfield XSIAM
+          engagement, from a discovery workshop to a fully automated, validated platform with your team trained on it.</p>
+      </div>
+
+      <div class="journey">
+        <div class="jstep reveal">
+          <div class="jrail"><span class="badge">0</span><span class="line"></span></div>
+          <div class="jbody">
+            <p class="ph">Phase 00 &middot; Discovery</p>
+            <h3>Architecture &amp; use&#8209;case workshop</h3>
+            <p>We inventory every log source, map your crown&#8209;jewel assets and priority threats, size the tenant,
+              and agree the detection and automation backlog before a single byte is ingested.</p>
+            <div class="cmd-meta"><span class="chip"><b>output</b> data source map</span><span class="chip"><b>output</b> use&#8209;case backlog</span><span class="chip"><b>output</b> sizing</span></div>
+          </div>
+        </div>
+
+        <div class="jstep reveal">
+          <div class="jrail"><span class="badge">1</span><span class="line"></span></div>
+          <div class="jbody">
+            <p class="ph">Phase 01 &middot; Foundation</p>
+            <h3>Tenant, broker VMs &amp; collectors</h3>
+            <p>We stand up the XSIAM tenant, deploy Broker VMs in HA, and wire collectors, syslog, APIs and agents,
+              so telemetry starts flowing reliably from day one.</p>
+            <div class="cmd-meta"><span class="chip"><b>broker</b> HA active/active</span><span class="chip"><b>agents</b> XDR rollout</span></div>
+          </div>
+        </div>
+
+        <div class="jstep reveal">
+          <div class="jrail"><span class="badge">2</span><span class="line"></span></div>
+          <div class="jbody">
+            <p class="ph">Phase 02 &middot; Data onboarding</p>
+            <h3>Integrations, parsing &amp; datasets</h3>
+            <p>Each source is connected, parsed and normalized into the Cortex Data Model. We validate field mapping
+              and ingest health so detections fire on clean, queryable data, not half&#8209;parsed logs.</p>
+            <div class="cmd-meta"><span class="chip"><b>schema</b> XDM normalized</span><span class="chip"><b>check</b> ingest validation</span></div>
+          </div>
+        </div>
+
+        <div class="jstep reveal">
+          <div class="jrail"><span class="badge">3</span><span class="line"></span></div>
+          <div class="jbody">
+            <p class="ph">Phase 03 &middot; Detection engineering</p>
+            <h3>Analytics tuning &amp; correlation rules</h3>
+            <p>We enable and tune the ML analytics, then layer your bespoke correlation rules, CQL on a schedule,
+              mapped to MITRE ATT&amp;CK and severity. Hunting becomes tireless, scheduled detection.</p>
+            <div class="cmd-meta"><span class="chip"><b>maps to</b> ATT&amp;CK</span><span class="chip"><b>tuned</b> low false&#8209;positive</span></div>
+          </div>
+        </div>
+
+        <div class="jstep reveal">
+          <div class="jrail"><span class="badge">4</span><span class="line"></span></div>
+          <div class="jbody">
+            <p class="ph">Phase 04 &middot; Automation</p>
+            <h3>XSOAR playbooks, integrations &amp; scripts</h3>
+            <p>We build the response: playbooks that enrich, decide and contain, integration commands across your
+              stack, and custom Python automations for everything off the shelf can't reach.</p>
+            <div class="cmd-meta"><span class="chip"><b>playbooks</b> auto&#8209;triage</span><span class="chip"><b>scripts</b> custom Python</span></div>
+          </div>
+        </div>
+
+        <div class="jstep reveal">
+          <div class="jrail"><span class="badge">5</span><span class="line"></span></div>
+          <div class="jbody">
+            <p class="ph">Phase 05 &middot; Validation</p>
+            <h3>Purple&#8209;team &amp; detection proof</h3>
+            <p>We run real attacker techniques against the platform, confirm each detection and playbook fires as
+              designed, measure MTTR, and tune until the signal is clean. No shelfware leaves our hands.</p>
+            <div class="cmd-meta"><span class="chip"><b>proven</b> end&#8209;to&#8209;end</span><span class="chip"><b>metric</b> MTTR baseline</span></div>
+          </div>
+        </div>
+
+        <div class="jstep reveal">
+          <div class="jrail"><span class="badge">6</span><span class="line"></span></div>
+          <div class="jbody">
+            <p class="ph">Phase 06 &middot; Hypercare</p>
+            <h3>Handover, runbooks &amp; ongoing tuning</h3>
+            <p>We train your analysts, document every playbook and rule, and stay on through hypercare, with optional
+              managed tuning as your estate and the threat landscape change.</p>
+            <div class="cmd-meta"><span class="chip"><b>docs</b> full runbooks</span><span class="chip"><b>option</b> managed tuning</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHAT WE DELIVER (4 competencies) ===================== -->
+  <section class="section warm reveal" id="deliver">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker reveal">05, What we deliver</span>
+        <h2 class="display h-lg reveal" data-delay="1" style="margin-top:16px">Four things we do better than anyone.</h2>
+        <p class="lead reveal" data-delay="2">Engineers, not resellers. The work below is hand&#8209;built for your estate
+          and validated before it goes live. See the real artefacts in the console reference further down.</p>
+      </div>
+
+      <div class="feat-grid reveal" data-delay="1" style="grid-template-columns:repeat(4,1fr)">
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
+          <p class="fn">Service 01</p><h3>Playbook automation</h3>
+          <p>XSOAR playbooks that triage, enrich, decide and contain, auto&#8209;remediation with the human kept in the loop only where it matters.</p>
+          <a href="#xsoar" class="tlink" style="margin-top:16px; font-size:.9rem">See a playbook <span class="arr">&rarr;</span></a>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/><circle cx="19" cy="16" r="3"/></svg></div>
+          <p class="fn">Service 02</p><h3>Correlation rules</h3>
+          <p>Scheduled CQL that promotes hunts into alerts, mapped to ATT&amp;CK and severity, dedup'd and tuned to keep false positives near zero.</p>
+          <a href="#correlation" class="tlink" style="margin-top:16px; font-size:.9rem">See a rule <span class="arr">&rarr;</span></a>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="M6 3v12"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></div>
+          <p class="fn">Service 03</p><h3>Integrations</h3>
+          <p>We connect XSIAM and XSOAR to your whole stack, firewall, identity, cloud, EDR, ticketing and intel, and build the ones that don't exist yet.</p>
+          <a href="#integrations" class="tlink" style="margin-top:16px; font-size:.9rem">See the stack <span class="arr">&rarr;</span></a>
+        </div>
+        <div class="feat">
+          <div class="fi"><svg viewBox="0 0 24 24"><path d="m8 6-6 6 6 6"/><path d="m16 6 6 6-6 6"/></svg></div>
+          <p class="fn">Service 04</p><h3>Scripts &amp; automations</h3>
+          <p>Custom Python automations for the long tail, bespoke enrichment, containment and integration logic that off&#8209;the&#8209;shelf content can't reach.</p>
+          <a href="#xsoar" class="tlink" style="margin-top:16px; font-size:.9rem">See the code <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+
+      <!-- integrations cloud -->
+      <div id="integrations" style="margin-top:54px">
+        <p class="kicker reveal" style="margin-bottom:20px">200+ integrations, and counting</p>
+        <div class="intg reveal" data-delay="1">
+          <span class="chip"><b>Palo Alto</b> Panorama / NGFW</span>
+          <span class="chip"><b>CrowdStrike</b> Falcon</span>
+          <span class="chip"><b>Microsoft</b> Defender / Entra ID</span>
+          <span class="chip"><b>Okta</b></span>
+          <span class="chip"><b>Active Directory</b></span>
+          <span class="chip"><b>AWS</b> CloudTrail / GuardDuty</span>
+          <span class="chip"><b>Azure</b></span>
+          <span class="chip"><b>Google Cloud</b></span>
+          <span class="chip"><b>ServiceNow</b></span>
+          <span class="chip"><b>Jira</b></span>
+          <span class="chip"><b>VirusTotal</b></span>
+          <span class="chip"><b>URLScan</b></span>
+          <span class="chip"><b>Splunk</b> migration</span>
+          <span class="chip"><b>Proofpoint</b></span>
+          <span class="chip"><b>Zscaler</b></span>
+          <span class="chip"><b>Slack</b> / Teams</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 01 · CQL (console proof) ===================== -->
+  <section class="section cmd-section reveal" id="cql">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker reveal">06, In code</span>
+        <h2 class="display h-lg reveal" data-delay="1" style="margin-top:16px">The work, not the pitch.</h2>
+        <p class="lead reveal" data-delay="2">A live reference from our detection engineers, the queries, correlation
+          rules and playbooks we actually ship on XSIAM and XSOAR. Read it like a console; copy what you need.</p>
+      </div>
+      <div class="cmd-grid" style="margin-top:50px">
+        <div class="cmd-head reveal">
+          <span class="rule"></span>
+          <span class="kicker">CQL</span>
           <h2 class="display h-md" style="margin-top:16px">Cortex Query Language</h2>
           <div class="cmd-note">
-            <p class="lead">CQL is how we interrogate the XSIAM data lake, every endpoint, identity,
-              firewall and cloud log in one pipe-and-stage grammar. We start every engagement by hunting,
-              not alerting.</p>
+            <p class="lead">CQL is how we interrogate the XSIAM data lake, every endpoint, identity, firewall and
+              cloud log in one pipe&#8209;and&#8209;stage grammar. We start every engagement by hunting, not alerting.</p>
           </div>
           <div class="cmd-meta">
             <span class="chip"><b>dataset</b> xdr_data</span>
@@ -73,7 +513,7 @@
               <span class="plat">XSIAM</span>
               <button class="copy-btn" type="button">Copy</button>
             </div>
-            <pre><code><span class="cmd-line tok-cmt" style="--i:0">// Office app spawning encoded PowerShell — classic initial access</span>
+            <pre><code><span class="cmd-line tok-cmt" style="--i:0">// Office app spawning encoded PowerShell, classic initial access</span>
 <span class="cmd-line" style="--i:1"><span class="tok-kw">dataset</span> <span class="tok-op">=</span> <span class="tok-fn">xdr_data</span></span>
 <span class="cmd-line" style="--i:2"><span class="tok-op">|</span> <span class="tok-kw">filter</span> event_type <span class="tok-op">=</span> <span class="tok-field">ENUM.PROCESS</span></span>
 <span class="cmd-line" style="--i:3"><span class="tok-op">|</span> <span class="tok-kw">filter</span> action_process_image_name <span class="tok-op">=</span> <span class="tok-str">"powershell.exe"</span></span>
@@ -105,12 +545,12 @@
   </section>
 
   <!-- ===================== 02 · CORRELATION ===================== -->
-  <section class="section cmd-section reveal" id="correlation">
+  <section class="section warm cmd-section reveal" id="correlation">
     <div class="wrap">
       <div class="cmd-grid">
         <div class="cmd-head reveal">
           <span class="rule"></span>
-          <span class="kicker">02, Correlation</span>
+          <span class="kicker">Correlation</span>
           <h2 class="display h-md" style="margin-top:16px">Correlation Rules</h2>
           <div class="cmd-note">
             <p class="lead">A correlation rule is a CQL query on a schedule that promotes a finding into an alert,
@@ -134,7 +574,7 @@
               <button class="copy-btn" type="button">Copy</button>
             </div>
             <pre><code><span class="cmd-line tok-cmt" style="--i:0"># Generates a HIGH alert on concurrent logins from 2+ countries</span>
-<span class="cmd-line" style="--i:1"><span class="tok-field">[rule]</span>     name          <span class="tok-op">=</span> <span class="tok-str">"Impossible Travel — SSO"</span></span>
+<span class="cmd-line" style="--i:1"><span class="tok-field">[rule]</span>     name          <span class="tok-op">=</span> <span class="tok-str">"Impossible Travel - SSO"</span></span>
 <span class="cmd-line" style="--i:2">          search_window <span class="tok-op">=</span> <span class="tok-num">1h</span></span>
 <span class="cmd-line" style="--i:3">          schedule      <span class="tok-op">=</span> <span class="tok-str">"*/10 * * * *"</span></span>
 <span class="cmd-line" style="--i:4"></span>
@@ -177,12 +617,12 @@
   </section>
 
   <!-- ===================== 03 · XSOAR ===================== -->
-  <section class="section warm cmd-section reveal" id="xsoar">
+  <section class="section cmd-section reveal" id="xsoar">
     <div class="wrap">
       <div class="cmd-grid">
         <div class="cmd-head reveal">
           <span class="rule"></span>
-          <span class="kicker">03, XSOAR</span>
+          <span class="kicker">XSOAR</span>
           <h2 class="display h-md" style="margin-top:16px">Playbooks &amp; Commands</h2>
           <div class="cmd-note">
             <p class="lead">When an alert fires, XSOAR takes the wheel. Playbooks call integration commands with
@@ -207,7 +647,7 @@
               <span class="plat">XSOAR</span>
               <button class="copy-btn" type="button">Copy</button>
             </div>
-            <pre><code><span class="cmd-line tok-cmt" style="--i:0"># War Room — phishing triage, command by command</span>
+            <pre><code><span class="cmd-line tok-cmt" style="--i:0"># War Room, phishing triage, command by command</span>
 <span class="cmd-line" style="--i:1"><span class="tok-prompt">!</span><span class="tok-cmd">ip</span> ip<span class="tok-op">=</span><span class="tok-field">${Email.SenderIP}</span> using-brand<span class="tok-op">=</span><span class="tok-str">"VirusTotal"</span></span>
 <span class="cmd-line" style="--i:2"><span class="tok-prompt">!</span><span class="tok-cmd">url</span> url<span class="tok-op">=</span><span class="tok-field">${Email.URLs}</span> using-brand<span class="tok-op">=</span><span class="tok-str">"URLScan"</span></span>
 <span class="cmd-line" style="--i:3"><span class="tok-prompt">!</span><span class="tok-cmd">Set</span> key<span class="tok-op">=</span>Verdict value<span class="tok-op">=</span><span class="tok-field">${DBotScore.Score}</span></span>
@@ -239,6 +679,131 @@
           </div>
         </div>
       </div>
+
+      <!-- a deployed playbook, executing top to bottom -->
+      <figure class="pb-canvas reveal" data-delay="1">
+        <figcaption class="pb-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="title">auto-block-malicious-ip.playbook</span>
+          <span class="run">Running</span>
+        </figcaption>
+        <div class="pbx">
+          <span class="pbx-spine" aria-hidden="true"><span class="pbx-token"></span></span>
+          <ol class="pbx-list">
+            <li class="pbx-node" style="--i:0">
+              <span class="pbx-mark"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></span>
+              <div class="pbx-card">
+                <span class="pbx-type">Trigger</span>
+                <b>Malicious indicator alert</b>
+                <p>An XSIAM correlation rule promotes the finding and hands the incident to XSOAR.</p>
+              </div>
+            </li>
+            <li class="pbx-node" style="--i:1">
+              <span class="pbx-mark"><svg viewBox="0 0 24 24"><path d="M6 3v12"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></span>
+              <div class="pbx-card pbx-cond">
+                <span class="pbx-type">Condition</span>
+                <b>Is PAN-OS containment available?</b>
+                <div class="pbx-branch"><span class="yes">YES, continue</span><span class="no">ELSE, manual task</span></div>
+              </div>
+            </li>
+            <li class="pbx-node" style="--i:2">
+              <span class="pbx-mark"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+              <div class="pbx-card">
+                <span class="pbx-type">Enrich</span>
+                <b>Reputation lookup</b>
+                <p>VirusTotal, URLScan and native Threat Intel score the indicator in parallel.</p>
+              </div>
+            </li>
+            <li class="pbx-node" style="--i:3">
+              <span class="pbx-mark"><svg viewBox="0 0 24 24"><path d="M6 3v12"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></span>
+              <div class="pbx-card pbx-cond">
+                <span class="pbx-type">Condition</span>
+                <b>Verdict: malicious?</b>
+                <div class="pbx-branch"><span class="yes">YES, contain</span><span class="no">ELSE, close benign</span></div>
+              </div>
+            </li>
+            <li class="pbx-node" style="--i:4">
+              <span class="pbx-mark"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></span>
+              <div class="pbx-card">
+                <span class="pbx-type">Action</span>
+                <b>PAN-OS, block the indicator</b>
+                <p>Create the address object, add it to the block group, and commit the configuration.</p>
+              </div>
+            </li>
+            <li class="pbx-node" style="--i:5">
+              <span class="pbx-mark"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 11 2 2 4-4"/></svg></span>
+              <div class="pbx-card">
+                <span class="pbx-type">Action</span>
+                <b>Disable account, notify SOC</b>
+                <p>Suspend the affected identity, raise severity, and post the case to the SOC channel.</p>
+              </div>
+            </li>
+            <li class="pbx-node" style="--i:6">
+              <span class="pbx-mark done"><svg viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></svg></span>
+              <div class="pbx-card">
+                <span class="pbx-type">Done</span>
+                <b>Incident closed, resolved-malicious</b>
+                <p>Contained before an analyst opened the ticket. Mean time to respond: minutes.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== OUTCOMES STAT BAND ===================== -->
+  <section class="section night reveal" id="outcomes">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker reveal">07, What changes</span>
+        <h2 class="display h-lg on-night reveal" data-delay="1" style="margin-top:16px">A SOC that does more with less.</h2>
+      </div>
+      <div class="stat-grid">
+        <div class="stat reveal">
+          <div class="v"><span data-count="98" data-suffix="%">0</span></div>
+          <div class="l">Fewer alerts once causality grouping collapses noise into incidents.</div>
+        </div>
+        <div class="stat reveal" data-delay="1">
+          <div class="v"><span data-count="1000" data-suffix="+">0</span></div>
+          <div class="l">Data sources supported natively, normalized into one schema.</div>
+        </div>
+        <div class="stat reveal" data-delay="2">
+          <div class="v">Mins<span class="u">.</span></div>
+          <div class="l">Mean time to respond when playbooks run the first response.</div>
+        </div>
+        <div class="stat reveal" data-delay="3">
+          <div class="v"><span data-count="24" data-suffix="/7">0</span></div>
+          <div class="l">Automated triage and containment, awake when your analysts aren't.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHY CAUSQ ===================== -->
+  <section class="section reveal" id="why">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker reveal">08, Why CausQ</span>
+        <h2 class="display h-lg reveal" data-delay="1" style="margin-top:16px">Detection engineers who own the outcome.</h2>
+      </div>
+      <div class="values reveal" data-delay="1">
+        <div class="value">
+          <div class="ico"><svg fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M9 4H4v16h16v-5"/></svg></div>
+          <h3>Engineers, not resellers</h3>
+          <p>We don't drop off a license and a quickstart. Our team writes the CQL, builds the playbooks and ships the integrations, for your estate, your threats, your stack.</p>
+        </div>
+        <div class="value">
+          <div class="ico"><svg fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3>Detections we validate</h3>
+          <p>Every rule and playbook is proven against real attacker techniques before handover. We measure MTTR and tune the noise out. No shelfware leaves our hands.</p>
+        </div>
+        <div class="value">
+          <div class="ico"><svg fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
+          <h3>Automation&#8209;first</h3>
+          <p>We design so the platform handles the repetitive response itself, freeing your analysts for the judgment calls that actually need a human.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -247,9 +812,10 @@
     <div class="wrap">
       <div style="max-width:760px">
         <span class="kicker reveal">Engineered detections, not shelfware</span>
-        <h2 class="display h-lg on-night reveal" data-delay="1" style="margin-top:18px">We tune Cortex to your estate, then prove it works.</h2>
-        <p class="lead reveal" data-delay="2" style="margin-top:22px">From content packs and correlation tuning to fully
-          automated XSOAR response, our engineers run the build and the validation. Bring us a noisy SOC, we'll bring the signal.</p>
+        <h2 class="display h-lg on-night reveal" data-delay="1" style="margin-top:18px">Bring us a noisy SOC. We'll bring the signal.</h2>
+        <p class="lead reveal" data-delay="2" style="margin-top:22px">From a greenfield XSIAM build to correlation tuning and
+          fully automated XSOAR response, our engineers run the deployment and the validation end to end. Greenfield or a
+          migration off Splunk, let's scope it.</p>
         <a href="contact.html" class="btn btn-signal reveal" data-delay="3" style="margin-top:30px">Talk to a detection engineer <span class="arr">&rarr;</span></a>
       </div>
     </div>

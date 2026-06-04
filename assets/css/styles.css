@@ -745,3 +745,213 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
 .cmd-section.in .flow .node{ animation:cqxLine .55s var(--ease2) both; animation-delay:calc(var(--i,0) * 110ms); }
 .flow .node.trig{ border-color:var(--signal); color:var(--signal); background:var(--signal-soft); }
 .flow .arr-f{ color:var(--ink-faint); font-family:'IBM Plex Mono',monospace; }
+
+/* ============================================================================
+   XSIAM PLATFORM & DEPLOYMENT PAGE  (xsiam-xsoar.html, extended)
+   Capability grid · XSIAM-vs-legacy comparison · data-fabric graphic ·
+   deploy journey · integrations cloud. Reuses tokens + reveal/parallax JS.
+============================================================================ */
+
+/* --- hero: hand-built animated XSIAM telemetry board ------------------- */
+.cqx-stage{ background:
+    radial-gradient(120% 90% at 78% -10%, rgba(6,182,212,.18), transparent 55%),
+    radial-gradient(90% 70% at 8% 115%, rgba(6,182,212,.08), transparent 60%),
+    var(--night); }
+.cqx-viz{ position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:.95; }
+/* ingest + outcome flow lines: moving teal packets */
+.cqx-viz .flow{ fill:none; stroke:rgba(6,182,212,.55); stroke-width:1.5; stroke-linecap:round;
+  stroke-dasharray:4 12; filter:drop-shadow(0 0 5px rgba(6,182,212,.45)); animation:cqxVizFlow 1.7s linear infinite; }
+.cqx-viz .flow.b{ animation-duration:2.4s; stroke-opacity:.7; }
+.cqx-viz .flow.c{ animation-duration:1.3s; stroke-opacity:.5; }
+@keyframes cqxVizFlow{ to{ stroke-dashoffset:-160; } }
+/* source + outcome nodes */
+.cqx-viz .src{ fill:#06B6D4; animation:cqxVizBlip 3s var(--ease) infinite; }
+.cqx-viz .out{ fill:#06B6D4; filter:drop-shadow(0 0 6px rgba(6,182,212,.7)); }
+@keyframes cqxVizBlip{ 0%,100%{ opacity:.3; } 50%{ opacity:1; } }
+/* incident core */
+.cqx-viz .ring{ fill:none; stroke:rgba(6,182,212,.6); transform-box:fill-box; transform-origin:center;
+  animation:cqxVizPulse 3.4s var(--ease) infinite; }
+.cqx-viz .ring.r2{ animation-delay:1.1s; stroke:rgba(6,182,212,.38); }
+@keyframes cqxVizPulse{ 0%{ transform:scale(.55); opacity:.9; } 70%{ opacity:0; } 100%{ transform:scale(1.5); opacity:0; } }
+.cqx-viz .core-spin{ transform-box:fill-box; transform-origin:center; animation:cqxVizSpin 16s linear infinite; }
+@keyframes cqxVizSpin{ to{ transform:rotate(360deg); } }
+.cqx-viz .core-dot{ fill:#7ee0c0; }
+.cqx-viz .core-mid{ fill:#bdf3ff; filter:drop-shadow(0 0 8px rgba(6,182,212,.9)); animation:cqxVizBlip 2.2s var(--ease) infinite; }
+/* labels */
+.cqx-viz text{ font-family:'IBM Plex Mono',monospace; fill:rgba(255,255,255,.5); font-size:13px; letter-spacing:1px; }
+.cqx-viz text.big{ fill:rgba(255,255,255,.85); font-family:'Albert Sans',sans-serif; font-weight:800; font-size:26px; letter-spacing:-.5px; }
+.cqx-viz text.tl{ fill:var(--signal); font-size:11px; letter-spacing:2px; }
+@media(max-width:760px){ .cqx-viz{ opacity:.7; } }
+/* faint engineering grid adds brand texture over the board */
+.cqx-mesh{ position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.5;
+  background-image:linear-gradient(rgba(6,182,212,.06) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(6,182,212,.06) 1px, transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 80%);
+          mask-image:radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 80%); }
+/* teal sweep that reads as live telemetry flowing across the board */
+.cqx-scan{ position:absolute; inset:0; z-index:2; pointer-events:none; mix-blend-mode:screen; opacity:.7;
+  background:linear-gradient(100deg, transparent 38%, rgba(6,182,212,.22) 50%, transparent 62%);
+  background-size:260% 100%; animation:cqxFlow 6.5s linear infinite; }
+@keyframes cqxFlow{ from{ background-position:150% 0; } to{ background-position:-70% 0; } }
+
+.cqx-ticker{ display:flex; flex-wrap:wrap; gap:16px 40px; margin-top:36px; padding-top:28px;
+  border-top:1px solid var(--night-line); }
+.cqx-ticker .tk{ display:flex; flex-direction:column; gap:5px; }
+.cqx-ticker .tk b{ font-family:'Albert Sans',sans-serif; font-weight:800; font-size:1.7rem;
+  color:#fff; letter-spacing:-.035em; line-height:1; }
+.cqx-ticker .tk b .u{ color:var(--signal); }
+.cqx-ticker .tk span{ font-family:'IBM Plex Mono',monospace; font-size:.64rem; letter-spacing:.14em;
+  text-transform:uppercase; color:#8aa0b6; }
+
+/* --- data-fabric pipeline graphic (sources -> XSIAM core -> outcomes) -- */
+.fabric{ position:relative; border:1px solid var(--night-line); border-radius:var(--r-lg);
+  background:radial-gradient(120% 90% at 50% -10%, rgba(6,182,212,.12), transparent 60%), rgba(255,255,255,.02);
+  padding:clamp(24px,3.4vw,38px); overflow:hidden; }
+.fab-lbl{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:.62rem; letter-spacing:.18em;
+  text-transform:uppercase; color:#7f8da0; margin:0 0 16px; }
+.fab-tier{ display:flex; flex-wrap:wrap; gap:9px; justify-content:center; }
+.fab-chip{ font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.03em;
+  color:#cdd6e4; background:rgba(255,255,255,.04); border:1px solid var(--night-line);
+  border-radius:9px; padding:.55em .85em; transition:.35s var(--ease); }
+.fab-chip:hover{ border-color:rgba(6,182,212,.55); color:#fff; background:rgba(6,182,212,.08); }
+.fab-link{ width:2px; height:30px; margin:14px auto; background:rgba(6,182,212,.18); position:relative; overflow:hidden; border-radius:2px; }
+.fab-link::after{ content:""; position:absolute; left:0; top:-60%; width:100%; height:60%;
+  background:linear-gradient(var(--signal), transparent); animation:fabFlow 1.7s linear infinite; }
+@keyframes fabFlow{ to{ transform:translateY(280%); } }
+.fab-core{ max-width:560px; margin:0 auto; text-align:center; border:1px solid rgba(6,182,212,.5);
+  border-radius:var(--r); background:rgba(6,182,212,.08); padding:22px 26px; position:relative; overflow:hidden; }
+.fab-core::after{ content:""; position:absolute; left:0; right:0; top:0; height:100%;
+  background:radial-gradient(80% 120% at 50% 0%, rgba(6,182,212,.18), transparent 70%); pointer-events:none; }
+.fab-core .fc-k{ font-family:'IBM Plex Mono',monospace; font-size:.64rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--signal); position:relative; z-index:1; }
+.fab-core b{ display:block; font-family:'Albert Sans',sans-serif; font-weight:700; color:#fff;
+  font-size:1.2rem; letter-spacing:-.02em; margin-top:6px; position:relative; z-index:1; }
+.fab-core span.sub{ display:block; color:#aeaeb8; font-size:.9rem; margin-top:6px; position:relative; z-index:1; }
+
+/* --- core capability grid --------------------------------------------- */
+.feat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; }
+@media(max-width:1080px){ .feat-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:540px){ .feat-grid{ grid-template-columns:1fr; } }
+.feat{ background:#fff; padding:32px 28px 36px; position:relative; transition:background .4s var(--ease); }
+.feat:hover{ background:var(--paper-2); }
+.feat .fi{ width:44px; height:44px; border-radius:12px; background:var(--ink); display:flex;
+  align-items:center; justify-content:center; margin-bottom:22px; transition:.45s var(--ease); }
+.feat:hover .fi{ background:var(--signal); transform:rotate(-6deg); }
+.feat .fi svg{ width:21px; height:21px; stroke:#fff; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.feat .fn{ font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.14em; color:var(--signal); }
+.feat h3{ font-family:'Albert Sans',sans-serif; font-weight:700; font-size:1.12rem; letter-spacing:-.02em;
+  color:var(--ink); margin:8px 0 10px; }
+.feat p{ color:var(--ink-mute); font-size:.93rem; line-height:1.5; }
+
+/* --- XSIAM vs legacy SIEM comparison ---------------------------------- */
+.vs{ border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:#fff; box-shadow:var(--shadow-sm); }
+.vs-row{ display:grid; grid-template-columns:1.15fr 1fr 1fr; align-items:stretch; }
+.vs-row + .vs-row{ border-top:1px solid var(--line); }
+.vs-row > div{ padding:18px 22px; }
+.vs-dim{ display:flex; align-items:center; font-family:'Albert Sans',sans-serif; font-weight:600;
+  color:var(--ink); font-size:.98rem; }
+.vs-cell{ display:flex; gap:11px; font-size:.92rem; color:var(--ink-soft); line-height:1.45; align-items:flex-start; }
+.vs-cell .ic{ flex:none; width:18px; height:18px; margin-top:1px; stroke-width:2.2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.vs-x{ background:var(--signal-soft); border-left:1px solid var(--line); border-right:1px solid var(--line); }
+.vs-x .ic{ stroke:var(--signal); }
+.vs-leg{ color:var(--ink-mute); }
+.vs-leg .ic{ stroke:var(--ink-faint); }
+.vs-head{ background:var(--ink); }
+.vs-head > div{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.14em;
+  text-transform:uppercase; color:#fff; }
+.vs-head .vs-dim{ color:#fff; }
+.vs-head .vs-x{ background:var(--signal); border-color:var(--signal-deep); color:#fff; }
+.vs-head .vs-leg{ color:#cfd3da; }
+.vs-lbl{ display:none; }
+@media(max-width:760px){
+  .vs-head{ display:none; }
+  .vs-row{ grid-template-columns:1fr 1fr; }
+  .vs-row .vs-dim{ grid-column:1 / -1; background:var(--paper-warm); border-bottom:1px solid var(--line); }
+  .vs-cell{ flex-direction:column; gap:7px; }
+  .vs-lbl{ display:block; font-family:'IBM Plex Mono',monospace; font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-faint); }
+}
+
+/* --- deployment journey (night, vertical spine timeline) -------------- */
+.journey{ position:relative; max-width:900px; }
+.jstep{ display:grid; grid-template-columns:auto 1fr; gap:30px; padding-bottom:44px; position:relative; }
+.jstep:last-child{ padding-bottom:0; }
+.jrail{ display:flex; flex-direction:column; align-items:center; }
+.jrail .badge{ width:54px; height:54px; border-radius:50%; flex:none; display:flex; align-items:center;
+  justify-content:center; font-family:'Albert Sans',sans-serif; font-weight:800; font-size:1.05rem;
+  color:#fff; background:var(--night-2); border:1px solid var(--night-line); position:relative; z-index:2;
+  transition:border-color .6s var(--ease), box-shadow .6s var(--ease); }
+.jstep.in .badge{ border-color:var(--signal); box-shadow:0 0 0 5px var(--signal-glow); }
+.jrail .line{ flex:1; width:2px; margin-top:8px; background:linear-gradient(var(--signal), rgba(6,182,212,.12)); }
+.jstep:last-child .jrail .line{ display:none; }
+.jbody{ padding-top:5px; }
+.jbody .ph{ font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--signal); }
+.jbody h3{ font-family:'Albert Sans',sans-serif; font-weight:700; font-size:1.32rem; letter-spacing:-.02em;
+  color:#fff; margin:9px 0 11px; }
+.jbody p{ color:#aeaeb8; font-size:1.02rem; line-height:1.55; max-width:580px; }
+.jbody .cmd-meta{ margin-top:16px; }
+@media(max-width:560px){ .jstep{ gap:18px; } .jrail .badge{ width:46px; height:46px; font-size:.95rem; } }
+
+/* --- integrations chip cloud ------------------------------------------ */
+.intg{ display:flex; flex-wrap:wrap; gap:10px; }
+.intg .chip{ font-size:.76rem; padding:.6em 1em; }
+.intg .chip b{ color:var(--ink); }
+.night .intg .chip b{ color:#fff; }
+
+/* --- XSOAR playbook: a "running" canvas (execution scan + travelling token) */
+.pb-canvas{ max-width:760px; margin:54px auto 0; border-radius:var(--r); overflow:hidden; border:1px solid #1d2735;
+  background:#0c1118; box-shadow:var(--shadow); }
+.pb-bar{ display:flex; align-items:center; gap:14px; padding:13px 16px; background:#0a0e14; border-bottom:1px solid #1a2331; }
+.pb-bar .dots{ display:flex; gap:7px; flex:none; }
+.pb-bar .dots i{ width:11px; height:11px; border-radius:50%; background:#26323f; }
+.pb-bar .dots i:nth-child(1){ background:#ec6a5e; } .pb-bar .dots i:nth-child(2){ background:#f4bf4f; } .pb-bar .dots i:nth-child(3){ background:#61c554; }
+.pb-bar .title{ font-family:'IBM Plex Mono',monospace; font-size:.74rem; letter-spacing:.04em; color:#7f8da0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pb-bar .run{ margin-left:auto; flex:none; display:inline-flex; align-items:center; gap:.55em;
+  font-family:'IBM Plex Mono',monospace; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--signal); border:1px solid rgba(6,182,212,.4); border-radius:100px; padding:.36em .8em; }
+.pb-bar .run::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--signal);
+  box-shadow:0 0 0 0 var(--signal-glow); animation:pbBlink 1.4s var(--ease) infinite; }
+@keyframes pbBlink{ 0%,100%{ box-shadow:0 0 0 0 var(--signal-glow); opacity:1; } 50%{ box-shadow:0 0 0 6px transparent; opacity:.45; } }
+/* the playbook is a hand-built flow that executes top to bottom on a loop */
+.pbx{ position:relative; padding:30px 30px 30px 28px; background:#0c1118; }
+.pbx-list{ display:flex; flex-direction:column; gap:14px; position:relative; z-index:1; }
+.pbx-node{ display:grid; grid-template-columns:32px 1fr; gap:18px; align-items:start; }
+.pbx-mark{ width:32px; height:32px; border-radius:50%; background:#0a0e14; border:1px solid #1d2735;
+  display:flex; align-items:center; justify-content:center; position:relative; z-index:2;
+  animation:pbxMark 7s linear infinite; animation-delay:calc(var(--i) * .7s); }
+.pbx-mark svg{ width:15px; height:15px; fill:none; stroke:#7f8da0; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.pbx-mark.done svg{ stroke:#61c554; }
+@keyframes pbxMark{
+  0%{ border-color:#1d2735; background:#0a0e14; box-shadow:none; }
+  3%{ border-color:var(--signal); background:var(--signal-soft); box-shadow:0 0 0 5px var(--signal-glow); }
+  18%{ border-color:var(--signal); box-shadow:0 0 0 0 var(--signal-glow); }
+  26%{ border-color:#1d2735; background:#0a0e14; box-shadow:none; }
+  100%{ border-color:#1d2735; background:#0a0e14; box-shadow:none; } }
+.pbx-card{ border:1px solid #1d2735; border-radius:12px; background:#0e141d; padding:14px 18px;
+  animation:pbxCard 7s linear infinite; animation-delay:calc(var(--i) * .7s); }
+@keyframes pbxCard{
+  0%{ border-color:#1d2735; box-shadow:none; }
+  3%{ border-color:rgba(6,182,212,.6); box-shadow:0 12px 30px -12px var(--signal-glow); }
+  20%{ border-color:rgba(6,182,212,.4); }
+  28%{ border-color:#1d2735; box-shadow:none; }
+  100%{ border-color:#1d2735; box-shadow:none; } }
+.pbx-type{ font-family:'IBM Plex Mono',monospace; font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:var(--signal); }
+.pbx-card b{ display:block; font-family:'Albert Sans',sans-serif; font-weight:600; font-size:1.02rem; letter-spacing:-.01em; color:#eef2f8; margin:5px 0 0; }
+.pbx-card p{ color:#9fb0c4; font-size:.88rem; line-height:1.5; margin:6px 0 0; }
+.pbx-cond{ background:#0e1622; }
+.pbx-branch{ display:flex; flex-wrap:wrap; gap:8px; margin-top:11px; }
+.pbx-branch span{ font-family:'IBM Plex Mono',monospace; font-size:.64rem; letter-spacing:.03em; padding:.42em .72em; border-radius:7px; border:1px solid #26323f; }
+.pbx-branch .yes{ color:#7ee0c0; border-color:rgba(126,224,192,.4); background:rgba(126,224,192,.07); }
+.pbx-branch .no{ color:#8aa0b6; }
+/* execution spine + travelling token down the left rail */
+.pbx-spine{ position:absolute; left:44px; top:46px; bottom:56px; width:2px; background:#1a2331; z-index:0; }
+.pbx-spine::before{ content:""; position:absolute; inset:0 0 auto 0; width:100%; height:0;
+  background:linear-gradient(var(--signal), rgba(6,182,212,.25)); animation:pbxFill 7s var(--ease) infinite; }
+@keyframes pbxFill{ 0%{ height:0; opacity:1; } 80%{ height:100%; } 94%{ height:100%; opacity:1; } 100%{ height:100%; opacity:0; } }
+.pbx-token{ position:absolute; left:50%; top:0; transform:translate(-50%,-50%); width:13px; height:13px; border-radius:50%;
+  background:var(--signal); box-shadow:0 0 14px 4px var(--signal-glow); animation:pbxToken 7s var(--ease) infinite; }
+@keyframes pbxToken{ 0%{ top:0; opacity:0; } 5%{ opacity:1; } 80%{ top:100%; } 92%{ top:100%; opacity:1; } 100%{ top:100%; opacity:0; } }
+@media(max-width:560px){ .pbx{ padding:24px 18px 24px 18px; } .pbx-spine{ left:34px; } .pbx-node{ gap:14px; } }
