@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/styles.css?v=20260609" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260610" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -375,7 +375,7 @@
           <div class="jbody">
             <p class="ph">Phase 03 &middot; Detection engineering</p>
             <h3>Analytics tuning &amp; correlation rules</h3>
-            <p>We enable and tune the ML analytics, then layer your bespoke correlation rules, CQL on a schedule,
+            <p>We enable and tune the ML analytics, then layer your bespoke correlation rules, XQL on a schedule,
               mapped to MITRE ATT&amp;CK and severity. Hunting becomes tireless, scheduled detection.</p>
             <div class="cmd-meta"><span class="chip"><b>maps to</b> ATT&amp;CK</span><span class="chip"><b>tuned</b> low false&#8209;positive</span></div>
           </div>
@@ -427,7 +427,7 @@
           and validated before it goes live. See the real artefacts in the console reference further down.</p>
       </div>
 
-      <div class="feat-grid reveal" data-delay="1" style="grid-template-columns:repeat(4,1fr)">
+      <div class="feat-grid reveal" data-delay="1">
         <div class="feat">
           <div class="fi"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
           <p class="fn">Service 01</p><h3>Playbook automation</h3>
@@ -437,7 +437,7 @@
         <div class="feat">
           <div class="fi"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/><circle cx="19" cy="16" r="3"/></svg></div>
           <p class="fn">Service 02</p><h3>Correlation rules</h3>
-          <p>Scheduled CQL that promotes hunts into alerts, mapped to ATT&amp;CK and severity, dedup'd and tuned to keep false positives near zero.</p>
+          <p>Scheduled XQL that promotes hunts into alerts, mapped to ATT&amp;CK and severity, dedup'd and tuned to keep false positives near zero.</p>
           <a href="#correlation" class="tlink" style="margin-top:16px; font-size:.9rem">See a rule <span class="arr">&rarr;</span></a>
         </div>
         <div class="feat">
@@ -479,8 +479,8 @@
     </div>
   </section>
 
-  <!-- ===================== 01 · CQL (console proof) ===================== -->
-  <section class="section cmd-section reveal" id="cql">
+  <!-- ===================== 01 · XQL (console proof) ===================== -->
+  <section class="section cmd-section reveal" id="xql">
     <div class="wrap">
       <div class="head">
         <span class="kicker reveal">06, In code</span>
@@ -491,10 +491,10 @@
       <div class="cmd-grid" style="margin-top:50px">
         <div class="cmd-head reveal">
           <span class="rule"></span>
-          <span class="kicker">CQL</span>
+          <span class="kicker">XQL</span>
           <h2 class="display h-md" style="margin-top:16px">Cortex Query Language</h2>
           <div class="cmd-note">
-            <p class="lead">CQL is how we interrogate the XSIAM data lake, every endpoint, identity, firewall and
+            <p class="lead">XQL is how we interrogate the XSIAM data lake, every endpoint, identity, firewall and
               cloud log in one pipe&#8209;and&#8209;stage grammar. We start every engagement by hunting, not alerting.</p>
           </div>
           <div class="cmd-meta">
@@ -509,7 +509,7 @@
           <div class="console reveal" data-delay="1">
             <div class="console-bar">
               <span class="dots"><i></i><i></i><i></i></span>
-              <span class="title">hunt-encoded-powershell.cql</span>
+              <span class="title">hunt-encoded-powershell.xql</span>
               <span class="plat">XSIAM</span>
               <button class="copy-btn" type="button">Copy</button>
             </div>
@@ -528,7 +528,7 @@
           <div class="console reveal" data-delay="2">
             <div class="console-bar">
               <span class="dots"><i></i><i></i><i></i></span>
-              <span class="title">detect-c2-beaconing.cql</span>
+              <span class="title">detect-c2-beaconing.xql</span>
               <span class="plat">XSIAM</span>
               <button class="copy-btn" type="button">Copy</button>
             </div>
@@ -553,7 +553,7 @@
           <span class="kicker">Correlation</span>
           <h2 class="display h-md" style="margin-top:16px">Correlation Rules</h2>
           <div class="cmd-note">
-            <p class="lead">A correlation rule is a CQL query on a schedule that promotes a finding into an alert,
+            <p class="lead">A correlation rule is a XQL query on a schedule that promotes a finding into an alert,
               mapped to MITRE ATT&amp;CK and a severity. This is where hunting becomes a tireless detection
               that runs every ten minutes.</p>
           </div>
@@ -791,7 +791,7 @@
         <div class="value">
           <div class="ico"><svg fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M9 4H4v16h16v-5"/></svg></div>
           <h3>Engineers, not resellers</h3>
-          <p>We don't drop off a license and a quickstart. Our team writes the CQL, builds the playbooks and ships the integrations, for your estate, your threats, your stack.</p>
+          <p>We don't drop off a license and a quickstart. Our team writes the XQL, builds the playbooks and ships the integrations, for your estate, your threats, your stack.</p>
         </div>
         <div class="value">
           <div class="ico"><svg fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></div>
@@ -822,7 +822,7 @@
   </section>
 
   <div id="footer-mount"></div>
-  <script src="assets/js/main.js?v=20260609"></script>
+  <script src="assets/js/main.js?v=20260610"></script>
   <script>
     /* copy-to-clipboard for each console; strips token markup, keeps the code */
     document.querySelectorAll('.copy-btn').forEach(btn => {

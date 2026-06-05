@@ -480,7 +480,7 @@ function initHeroCode(){
     '$ xsiam content-pack install Core PAN-OS Okta Identity-Analytics',
     '✓ 312 sources · 1.2 TB/day ingest · 41 datasets live',
     '',
-    '# CQL — hunt encoded PowerShell spawned by Office',
+    '# XQL — hunt encoded PowerShell spawned by Office',
     '$ dataset = xdr_data',
     '$ | filter action_process_image_name = "powershell.exe"',
     '$ | filter action_process_image_command_line contains "-enc"',
