@@ -23,10 +23,16 @@ const NAV = [
       ['what-we-do.html#quantum', 'Quantum-era Security',             'Crypto-agility &amp; Zero Trust'],
       ['what-we-do.html#cloud',   'Cloud, Edge &amp; Managed',        'Run it, follow-the-sun'],
     ]},
-    { group:'Products &amp; platforms', items:[
-      ['xsiam-xsoar.html',        'Cortex XSIAM &amp; XSOAR',         'SecOps platform &amp; automation'],
+    { group:'Specialised', items:[
+      ['what-we-do.html#soc',              'Cybersecurity &amp; SOC',      'SIEM, SOAR, detection engineering'],
+      ['what-we-do.html#network-security', 'Network Security',             'NGFW, segmentation, IPS'],
+      ['what-we-do.html#sase',             'SASE &amp; Secure Access',     'SD-WAN, ZTNA, SWG, CASB'],
+      ['what-we-do.html#wireless',         'Wireless &amp; Mobility',      'Wi-Fi 6/7, private 5G, surveys'],
+      ['what-we-do.html#datacenter',       'Data Center &amp; AI Fabric',  'Spine-leaf, lossless RDMA'],
+      ['what-we-do.html#identity',         'Identity &amp; Zero Trust',    'IAM, MFA, PAM, verification'],
     ]},
-    { group:'Services', items:[
+    { group:'Products &amp; services', items:[
+      ['xsiam-xsoar.html',                  'Cortex XSIAM &amp; XSOAR',      'SecOps platform &amp; automation'],
       ['consulting-advisory.html',          'Consulting &amp; Advisory',     'Strategy, surveys, migrations'],
       ['consulting-advisory.html#assess',   'Assessments &amp; Site Surveys','See the estate before you touch it'],
       ['consulting-advisory.html#migrate',  'Upgrades &amp; Migrations',     'Move and modernize, no outage'],
@@ -94,7 +100,7 @@ function renderFooter(){
         <div>
           <img src="assets/img/causq-word-white.png" alt="CausQ" class="foot-logo" />
           <p class="blurb">Engineering AI, modern networks and quantum-era security for enterprises that
-            can't afford for the infrastructure to blink. United States &amp; EMEA.</p>
+            can't afford for the infrastructure to blink. Worldwide.</p>
         </div>
         <div class="foot-col">
           <h4>What we do</h4>
@@ -104,6 +110,7 @@ function renderFooter(){
           <a href="what-we-do.html#cloud">Cloud &amp; Edge</a>
           <a href="xsiam-xsoar.html">Cortex XSIAM &amp; XSOAR</a>
           <a href="consulting-advisory.html">Consulting &amp; Advisory</a>
+          <a href="what-we-do.html#specialised">Cybersecurity, SASE &amp; more</a>
         </div>
         <div class="foot-col">
           <h4>Company</h4>
@@ -115,8 +122,7 @@ function renderFooter(){
         <div class="foot-col">
           <h4>Reach us</h4>
           <a href="mailto:hello@causq.com">hello@causq.com</a>
-          <a href="#">United States</a>
-          <a href="#">EMEA</a>
+          <a href="#">Global, remote-first</a>
           <a href="contact.html">Book a briefing</a>
         </div>
       </div>
