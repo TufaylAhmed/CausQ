@@ -12,23 +12,66 @@ const API_BASE = (location.protocol === 'file:') ? '' : ''; // same-origin when 
 const TURNSTILE_SITEKEY = '';
 
 /* ----------------------------------------------------------------- NAV/FOOTER
-   Shared markup is injected so every page stays in sync from one source.    */
-const NAV_LINKS = [
-  ['what-we-do.html',    'What we do'],
-  ['what-we-think.html', 'What we think'],
-  ['who-we-are.html',    'Who we are'],
-  ['careers.html',       'Careers'],
+   Shared markup is injected so every page stays in sync from one source.
+   "What we do" is a Products & Services mega-menu: a hover panel on desktop,
+   an inline expanded list inside the full-screen overlay on mobile.          */
+const NAV = [
+  { label:'What we do', href:'what-we-do.html', menu:[
+    { group:'Capabilities', items:[
+      ['what-we-do.html#ai',      'AI &amp; Intelligent Operations',  'Strategy to running systems'],
+      ['what-we-do.html#network', 'Network Modernization',            'Software-defined, AI-ready fabric'],
+      ['what-we-do.html#quantum', 'Quantum-era Security',             'Crypto-agility &amp; Zero Trust'],
+      ['what-we-do.html#cloud',   'Cloud, Edge &amp; Managed',        'Run it, follow-the-sun'],
+    ]},
+    { group:'Products &amp; platforms', items:[
+      ['xsiam-xsoar.html',        'Cortex XSIAM &amp; XSOAR',         'SecOps platform &amp; automation'],
+    ]},
+    { group:'Services', items:[
+      ['consulting-advisory.html',          'Consulting &amp; Advisory',     'Strategy, surveys, migrations'],
+      ['consulting-advisory.html#assess',   'Assessments &amp; Site Surveys','See the estate before you touch it'],
+      ['consulting-advisory.html#migrate',  'Upgrades &amp; Migrations',     'Move and modernize, no outage'],
+    ]},
+  ]},
+  { label:'What we think', href:'what-we-think.html' },
+  { label:'Who we are',    href:'who-we-are.html' },
+  { label:'Careers',       href:'careers.html' },
 ];
+
+// pages that should light up the "What we do" parent as active
+const WHAT_WE_DO_PAGES = ['what-we-do.html', 'xsiam-xsoar.html', 'consulting-advisory.html'];
 
 function currentPage(){
   const p = location.pathname.split('/').pop();
   return p === '' ? 'index.html' : p;
 }
 
+const CHEVRON = '<svg class="nav-chev" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
 function renderNav(){
   const here = currentPage();
-  const links = NAV_LINKS.map(([href, label]) =>
-    `<a href="${href}" class="${here === href ? 'active' : ''}">${label}</a>`).join('');
+  const links = NAV.map(item => {
+    if (!item.menu){
+      return `<a href="${item.href}" class="${here === item.href ? 'active' : ''}">${item.label}</a>`;
+    }
+    const active = WHAT_WE_DO_PAGES.includes(here) ? ' active' : '';
+    const cols = item.menu.map(col => `
+        <div class="nm-col">
+          <span class="nm-h">${col.group}</span>
+          ${col.items.map(([href, label, desc]) => `
+          <a href="${href}" class="nm-link">
+            <span class="nm-t">${label}</span>
+            <span class="nm-d">${desc}</span>
+          </a>`).join('')}
+        </div>`).join('');
+    return `
+      <div class="nav-item has-menu">
+        <a href="${item.href}" class="nav-top${active}" aria-haspopup="true">${item.label} ${CHEVRON}</a>
+        <div class="nav-menu" role="menu">
+          <div class="nm-inner">${cols}</div>
+          <a href="${item.href}" class="nm-all">See all capabilities <span class="arr">&rarr;</span></a>
+        </div>
+      </div>`;
+  }).join('');
   return `
   <nav class="nav" id="nav">
     <div class="nav-inner">
@@ -60,6 +103,7 @@ function renderFooter(){
           <a href="what-we-do.html#quantum">Quantum-era Security</a>
           <a href="what-we-do.html#cloud">Cloud &amp; Edge</a>
           <a href="xsiam-xsoar.html">Cortex XSIAM &amp; XSOAR</a>
+          <a href="consulting-advisory.html">Consulting &amp; Advisory</a>
         </div>
         <div class="foot-col">
           <h4>Company</h4>
@@ -159,9 +203,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuBtn = document.getElementById('menuBtn');
   if (menuBtn){
     menuBtn.addEventListener('click', () => document.body.classList.toggle('menu-open'));
-    document.querySelectorAll('#navLinks a').forEach(a =>
+    // close the overlay when a real destination link is tapped (but not the
+    // "What we do" trigger, which only expands its submenu on mobile)
+    document.querySelectorAll('#navLinks a:not(.nav-top)').forEach(a =>
       a.addEventListener('click', () => document.body.classList.remove('menu-open')));
   }
+
+  // mega-menu: on mobile the "What we do" trigger expands its submenu inline
+  // instead of navigating; on desktop it's a normal link with a hover panel.
+  const megaMq = window.matchMedia('(max-width:940px)');
+  document.querySelectorAll('.nav-item.has-menu > .nav-top').forEach(top => {
+    top.addEventListener('click', (e) => {
+      if (megaMq.matches){ e.preventDefault(); top.parentElement.classList.toggle('open'); }
+    });
+  });
 
   // reveal on scroll
   const io = new IntersectionObserver((entries) => {
@@ -230,8 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- pages with a cinematic image hero / slider get a light (transparent) nav up top
-  if (document.querySelector('.phero-img, .hero-slider')) document.body.classList.add('dark-hero');
+  // ---- pages with a cinematic image hero / slider / dark stage get a light (transparent) nav up top
+  if (document.querySelector('.phero-img, .hero-slider, .adv-hero')) document.body.classList.add('dark-hero');
 
   // ---- bot protection on all forms (no-op until TURNSTILE_SITEKEY is set)
   initTurnstile();
