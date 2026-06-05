@@ -1021,6 +1021,9 @@ body.dark-hero .nav:not(.scrolled) .nav-menu .nm-all{ color:var(--ink); }
     background:none; -webkit-backdrop-filter:none; backdrop-filter:none; border:none; box-shadow:none;
     padding:0; display:none; }
   .nav-item.open .nav-menu{ display:block; margin-top:16px; }
+  /* the desktop hover/focus rule centres the absolute panel with a -50% shift;
+     on mobile the panel is static, so that shift would push it off the left edge */
+  .has-menu:hover .nav-menu, .has-menu:focus-within .nav-menu{ transform:none; }
   .nm-inner{ grid-template-columns:1fr; gap:16px; text-align:center; justify-items:center; width:100%; }
   .nm-col{ width:100%; align-items:center; }
   .nm-link{ text-align:center; }
