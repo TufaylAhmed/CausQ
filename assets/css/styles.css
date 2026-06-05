@@ -1005,8 +1005,10 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
 
 /* dark-hero (transparent nav over a dark stage): keep the panel itself light + readable */
 body.dark-hero .nav:not(.scrolled) .nav-top{ color:rgba(255,255,255,.92); }
+/* the panel is a light surface in every nav state, so its links stay ink even
+   when the transparent dark-hero nav turns its other links white */
 body.dark-hero .nav:not(.scrolled) .nav-menu .nm-t{ color:var(--ink); }
-body.dark-hero .nav:not(.scrolled) .nav-menu .nm-all{ color:var(--ink); }
+body.dark-hero .nav:not(.scrolled) .nav-menu a:not(.btn){ color:var(--ink); }
 
 @media(max-width:940px){
   /* the full-screen overlay centres every item, top-level links and the
