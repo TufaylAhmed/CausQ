@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/styles.css?v=20260606" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607" />
 </head>
 <body>
   <div id="nav-mount"></div>
@@ -75,18 +75,43 @@
     </div>
   </section>
 
-  <!-- leadership -->
-  <section class="section">
+  <!-- team / disciplines -->
+  <section class="section" id="team">
     <div class="wrap">
       <div class="head reveal">
-        <span class="kicker">Leadership</span>
-        <h2 class="display h-lg" style="margin-top:18px">The people accountable to you.</h2>
-        <p class="lead">Replace these slots with your real leadership photos and bios.</p>
+        <span class="kicker">The team you&rsquo;ll work with</span>
+        <h2 class="display h-lg" style="margin-top:18px">Senior engineers,<br>accountable to you.</h2>
+        <p class="lead" style="margin-top:18px">No account managers and no bait-and-switch. The people who scope your
+          work are the ones who deliver it, organised around the disciplines your program actually needs.</p>
       </div>
       <div class="pillars">
-        <article class="pillar reveal"><figure class="media" style="--ar:1/1"><img loading="lazy" decoding="async" src="assets/img/person-1.svg" alt="Leadership portrait placeholder"></figure><div class="pillar-body"><h3 class="display h-sm">Full Name</h3><p style="color:var(--signal); font-family:'IBM Plex Mono',monospace; font-size:.78rem; letter-spacing:.1em; margin-bottom:10px">FOUNDER &amp; CEO</p><p>One or two lines of background, the credibility that makes a buyer feel safe. Swap this tile for a real headshot.</p></div></article>
-        <article class="pillar reveal" data-delay="1"><figure class="media" style="--ar:1/1"><img loading="lazy" decoding="async" src="assets/img/person-2.svg" alt="Leadership portrait placeholder"></figure><div class="pillar-body"><h3 class="display h-sm">Full Name</h3><p style="color:var(--signal); font-family:'IBM Plex Mono',monospace; font-size:.78rem; letter-spacing:.1em; margin-bottom:10px">CHIEF TECHNOLOGY OFFICER</p><p>Deep platform credentials across AI, networking and security.</p></div></article>
-        <article class="pillar reveal" data-delay="2"><figure class="media" style="--ar:1/1"><img loading="lazy" decoding="async" src="assets/img/person-3.svg" alt="Leadership portrait placeholder"></figure><div class="pillar-body"><h3 class="display h-sm">Full Name</h3><p style="color:var(--signal); font-family:'IBM Plex Mono',monospace; font-size:.78rem; letter-spacing:.1em; margin-bottom:10px">HEAD OF EMEA</p><p>Regional leadership and regulatory fluency for European clients.</p></div></article>
+        <article class="pillar reveal" style="text-decoration:none">
+          <div class="pillar-body">
+            <span class="no">01 / Practice</span>
+            <h3 class="display h-sm">AI &amp; Intelligent Operations</h3>
+            <p>Applied-AI and AIOps engineers who put models and agents into production, and into the network&rsquo;s
+              own control plane, with the governance to do it responsibly.</p>
+            <a href="what-we-do.html#ai" class="tlink" style="margin-top:auto; padding-top:22px">What they do <span class="arr">&rarr;</span></a>
+          </div>
+        </article>
+        <article class="pillar reveal" data-delay="1" style="text-decoration:none">
+          <div class="pillar-body">
+            <span class="no">02 / Practice</span>
+            <h3 class="display h-sm">Network &amp; Fabric Engineering</h3>
+            <p>Architects and field engineers for campus, data-center, AI fabric and SASE, the people who run the
+              surveys, the cutovers and the 2am bridge calls.</p>
+            <a href="what-we-do.html#network" class="tlink" style="margin-top:auto; padding-top:22px">What they do <span class="arr">&rarr;</span></a>
+          </div>
+        </article>
+        <article class="pillar reveal" data-delay="2" style="text-decoration:none">
+          <div class="pillar-body">
+            <span class="no">03 / Practice</span>
+            <h3 class="display h-sm">Security &amp; Quantum</h3>
+            <p>Zero Trust, threat-detection and post-quantum specialists who secure the estate for today&rsquo;s threats
+              and tomorrow&rsquo;s cryptographic break.</p>
+            <a href="what-we-do.html#quantum" class="tlink" style="margin-top:auto; padding-top:22px">What they do <span class="arr">&rarr;</span></a>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -123,6 +148,6 @@
   </section>
 
   <div id="footer-mount"></div>
-  <script src="assets/js/main.js?v=20260606"></script>
+  <script src="assets/js/main.js?v=20260607"></script>
 </body>
 </html>
