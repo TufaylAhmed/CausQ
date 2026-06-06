@@ -10,6 +10,9 @@
                                              + MailerSend notification to team
      POST /api/subscribe  "The Brief" signup -> MailerLite (Brief group)
                                              -> MailerLite welcome automation
+     POST /api/apply      careers application -> MailerLite (Careers group, if set)
+                                             + MailerSend confirmation to applicant
+                                             + MailerSend notification to team
 
    Secrets (wrangler secret put ...):
      MAILERLITE_API_KEY   MailerLite API token
@@ -18,6 +21,7 @@
    Vars (wrangler.toml [vars]):
      ML_GROUP_BRIEF   MailerLite group id for "The Brief"
      ML_GROUP_LEADS   MailerLite group id for "Leads — Briefing Requests"
+     ML_GROUP_CAREERS MailerLite group id for "Careers — Applicants" (optional)
      FROM_EMAIL       e.g. hello@causq.com   (must be a verified domain in MailerSend)
      FROM_NAME        e.g. CausQ
      NOTIFY_EMAIL     where new-lead alerts go (e.g. hello@causq.com)
@@ -50,6 +54,7 @@ export default {
       }
       if (path.endsWith("/api/contact")) return await handleContact(body, env);
       if (path.endsWith("/api/subscribe")) return await handleSubscribe(body, env);
+      if (path.endsWith("/api/apply")) return await handleApply(body, env);
       return json({ ok: false, error: "not found" }, 404);
     } catch (err) {
       // Unexpected error — log and surface a 502 so the frontend shows its error state.
@@ -129,6 +134,56 @@ async function handleContact(body, env) {
     return json({ ok: false, error: "could not deliver request" }, 502);
   }
   results.forEach((r) => r.status === "rejected" && console.error("contact step (non-fatal):", r.reason));
+  return json({ ok: true, message: "received" }, 201);
+}
+
+async function handleApply(body, env) {
+  const email = String(body.email || "").trim();
+  const name = clean(body.name);
+  if (!name || !validEmail(email)) {
+    return json({ ok: false, error: "name and a valid email are required" }, 400);
+  }
+  const role = clean(body.role);
+  const region = clean(body.region);
+  const link = clean(body.link);
+  const message = clean(body.message);
+
+  // Store the applicant in MailerLite (its own Careers group if configured, so it
+  // never triggers the Brief or Leads automations), confirm receipt to the
+  // applicant, and alert the team with the application details. Emails via
+  // MailerSend (full HTML control, no reliance on MailerLite automations).
+  const cb = applyConfirmEmail(name, role);
+  const results = await Promise.allSettled([
+    mlUpsert(env, email, { name, role, region, link, message }, env.ML_GROUP_CAREERS),
+    // Confirmation to the applicant.
+    msSend(env, { to: { email, name }, subject: cb.subject, html: cb.html, text: cb.text }),
+    // Internal alert with the full application so the team can follow up.
+    msSend(env, {
+      to: { email: env.NOTIFY_EMAIL || env.FROM_EMAIL, name: "CausQ" },
+      reply_to: { email, name },
+      subject: `New application: ${name}${role ? ` — ${role}` : ""}`,
+      text:
+        `New careers application from causq.com\n` +
+        `--------------------------------------\n` +
+        `Name:     ${name}\n` +
+        `Email:    ${email}\n` +
+        `Role:     ${role || "-"}\n` +
+        `Work pref:${region ? ` ${region}` : " -"}\n` +
+        `Link:     ${link || "-"}\n\n` +
+        `What they'd love to work on:\n${message || "(none)"}\n`,
+    }),
+  ]);
+
+  // results[0] = MailerLite capture, [1] = confirmation to applicant, [2] = team alert.
+  // The application is "safe" if captured in MailerLite OR any real email send succeeded.
+  // A *skipped* send (MailerSend not configured) does not count as delivery.
+  const captured = results[0].status === "fulfilled";
+  const realSend = results.slice(1).some((r) => r.status === "fulfilled" && !r.value?.skipped);
+  if (!captured && !realSend) {
+    results.forEach((r) => r.status === "rejected" && console.error("apply step failed:", r.reason));
+    return json({ ok: false, error: "could not deliver application" }, 502);
+  }
+  results.forEach((r) => r.status === "rejected" && console.error("apply step (non-fatal):", r.reason));
   return json({ ok: true, message: "received" }, 201);
 }
 
@@ -268,6 +323,29 @@ function leadConfirmEmail(name) {
     `If anything's urgent, just reply to this email and it'll reach us directly.\n\n` +
     `- The CausQ team\nhttps://causq.com\n`;
   return { subject: "We've got your request", html, text };
+}
+
+// Instant confirmation to someone who submitted a careers application.
+function applyConfirmEmail(name, role) {
+  const fn = firstName(name) || "there";
+  const forRole = role ? ` for the <strong>${esc(role)}</strong> role` : "";
+  const forRoleTxt = role ? ` for the ${role} role` : "";
+  const html = shell(
+    `<p>Hi ${esc(fn)},</p>` +
+    `<p>Thanks for applying to CausQ${forRole}. Your application has reached us, and the team ` +
+    `will review it and get back to you if there's a fit.</p>` +
+    `<p>We're engineer-led and read every application properly, so it may take a few days. If you ` +
+    `want to add anything, just reply to this email and it'll reach us directly.</p>` +
+    `<p style="color:#71717a">- The CausQ team</p>`
+  );
+  const text =
+    `Hi ${fn},\n\n` +
+    `Thanks for applying to CausQ${forRoleTxt}. Your application has reached us, and the team ` +
+    `will review it and get back to you if there's a fit.\n\n` +
+    `We read every application properly, so it may take a few days. If you want to add ` +
+    `anything, just reply to this email and it'll reach us directly.\n\n` +
+    `- The CausQ team\nhttps://causq.com\n`;
+  return { subject: "We've got your application", html, text };
 }
 
 /* ----------------------------------------------------------------- helpers */

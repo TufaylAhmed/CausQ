@@ -7,6 +7,8 @@ compatibility_date = "2025-01-01"
 [vars]
 ML_GROUP_BRIEF = "189100009366488366"   # MailerLite group "The Brief"
 ML_GROUP_LEADS = "189100011485660699"   # MailerLite group "Leads — Briefing Requests"
+# ML_GROUP_CAREERS = "..."              # optional: MailerLite group "Careers — Applicants".
+                                        # If unset, applicants are still captured (no group) and emailed.
 FROM_EMAIL    = "hello@causq.com"
 FROM_NAME     = "CausQ"
 NOTIFY_EMAIL  = "hello@causq.com"
