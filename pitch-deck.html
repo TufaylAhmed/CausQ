@@ -254,6 +254,27 @@
       .tbtn--cta span.lbl{ display:inline; }
       .deck-stage{ width:96vw; }
     }
+
+    /* keyboard focus — visible on dark, on-brand */
+    .tbtn:focus-visible, .arrow:focus-visible, .dot:focus-visible{
+      outline:2px solid var(--signal); outline-offset:3px; }
+    .deck-stage:focus-visible{ outline:2px solid var(--signal); outline-offset:-2px; }
+    .tbtn:active, .arrow:active{ transform:translateY(0) scale(.97); }
+
+    /* gentle life on the active section indicator */
+    @keyframes kickerPulse{
+      0%,100%{ box-shadow:0 0 0 .45cqh var(--signal-glow); }
+      50%    { box-shadow:0 0 0 .95cqh rgba(6,182,212,.05); }
+    }
+    .slide.is-active .dk-kicker::before{ animation:kickerPulse 2.8s var(--e) infinite; }
+
+    /* respect the OS reduce-motion preference */
+    @media (prefers-reduced-motion: reduce){
+      .slide, .slide .r, .slide.is-active .r, .progress, .dot, .arrow, .tbtn, .toast{
+        transition-duration:.01ms !important; }
+      .slide .r{ opacity:1 !important; transform:none !important; }
+      .slide.is-active .dk-kicker::before{ animation:none; }
+    }
   </style>
 </head>
 <body>
@@ -547,7 +568,7 @@
     cta: s => `
       <div class="slide slide--cta" data-type="cta">
         ${kickerEl(s.no,s.section)}
-        <h2 class="dk-title r" style="--i:1" style="margin-top:2.2cqh">${s.titleHTML}</h2>
+        <h2 class="dk-title r" style="--i:1;margin-top:2.2cqh">${s.titleHTML}</h2>
         <p class="dk-lead r" style="--i:2">${s.lead}</p>
         <div class="dk-ctarow r" style="--i:3">
           ${s.pills.map(p=>`<span class="dk-pill ${p.solid?'solid':'ghost'}">${p.t}${p.solid?' →':''}</span>`).join('')}
@@ -669,14 +690,10 @@
     pptx.layout = 'CQ';
     pptx.author = 'CausQ'; pptx.company = 'CausQ'; pptx.title = 'CausQ — Capabilities & Partnership Overview';
 
-    const bg = () => ({ fill:{ color:C.night } });
-
     DECK.forEach(s => {
       const sl = pptx.addSlide(); sl.background = { color:C.night };
 
       if (s.type === 'cover'){
-        sl.addShape('rect', { x:0, y:0, w:13.333, h:7.5, fill:{ type:'solid', color:'0A1418' } });
-        sl.addShape('rect', { x:0, y:0, w:13.333, h:7.5, fill:{ color:C.night } });
         sl.addText(s.conf.toUpperCase(), { x:0, y:0.7, w:13.333, h:0.3, align:'center', fontFace:F.mono, fontSize:10, color:C.faint, charSpacing:2 });
         sl.addText(s.kicker.toUpperCase(), { x:0, y:1.45, w:13.333, h:0.3, align:'center', fontFace:F.mono, fontSize:12, color:C.teal, bold:true, charSpacing:3 });
         sl.addText(s.title, { x:0.8, y:1.9, w:11.73, h:2.9, align:'center', fontFace:F.display, fontSize:58, bold:true, color:'FFFFFF', charSpacing:-1.5, lineSpacingMultiple:0.95 });
