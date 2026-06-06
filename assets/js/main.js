@@ -351,6 +351,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+/* Print / PDF: reveal everything and settle count-ups so a saved PDF is
+   complete even for sections that were never scrolled into view. */
+window.addEventListener('beforeprint', () => {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const t = parseFloat(el.dataset.count);
+    const dec = parseInt(el.dataset.dec || '0', 10);
+    el.textContent = (dec ? t.toFixed(dec) : Math.round(t).toLocaleString()) + (el.dataset.suffix || '');
+  });
+});
+
 function showSuccess(form){
   const success = form.parentElement.querySelector('.form-success');
   form.style.display = 'none';
