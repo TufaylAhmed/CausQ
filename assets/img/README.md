@@ -15,6 +15,11 @@ sharp but compressed (~150–400 KB each).
 
 `_source/` holds your original uploads (AVIF/PNG) and the moodboard, untouched.
 
+> Provenance: `article-network-datacenter.jpg` (hero of
+> `article-network-ai-workload.html`) is the Cray-2 supercomputer photo, **public
+> domain** (NASA/US federal work), via Wikimedia Commons. Full-res original kept
+> at `_source/cray2-supercomputer-nasa-pd.jpg`. No attribution required.
+
 | File                     | Where it appears              | Suggested size |
 |--------------------------|-------------------------------|----------------|
 | `hero.jpg`               | Home hero (portrait)          | 1200 × 1500    |
