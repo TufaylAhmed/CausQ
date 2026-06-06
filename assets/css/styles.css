@@ -1148,3 +1148,48 @@ body.dark-hero .nav:not(.scrolled) .nav-menu a:not(.btn){ color:var(--ink); }
 .faq .ans p{ color:var(--ink-mute); font-size:1.02rem; line-height:1.6; max-width:720px; }
 .faq details[open] .ans{ animation:faqIn .4s var(--ease2) both; }
 @keyframes faqIn{ from{ opacity:0; transform:translateY(-6px); } to{ opacity:1; transform:none; } }
+
+/* ============================================================================
+   PITCH DECK (pitch.html) — unlisted client / partner overview
+============================================================================ */
+.pd-cover{ text-align:center; }
+.pd-cover-inner{ position:relative; z-index:2; }
+.pd-conf{ display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:.66rem; letter-spacing:.2em;
+  text-transform:uppercase; color:#cfe9f2; border:1px solid rgba(6,182,212,.4); background:rgba(6,182,212,.08);
+  border-radius:100px; padding:.55em 1.1em; }
+.pd-cover h1{ color:#fff; }
+.pd-cover .kicker{ color:#fff; }
+.pd-cover .lead{ color:rgba(255,255,255,.86); }
+.pd-prepared{ margin-top:30px; font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.14em;
+  text-transform:uppercase; color:rgba(255,255,255,.5); }
+
+/* footnote markers in stats / market cards */
+.stat sup, .pd-mkt sup{ color:var(--signal); font-size:.62em; font-weight:500; }
+
+/* market cards */
+.pd-mkts{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; }
+@media(max-width:920px){ .pd-mkts{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){ .pd-mkts{ grid-template-columns:1fr; } }
+.pd-mkt{ background:#fff; padding:30px 28px 32px; transition:background .4s var(--ease); }
+.pd-mkt:hover{ background:var(--paper-2); }
+.pd-mkt-k{ font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.13em; text-transform:uppercase; color:var(--signal); }
+.pd-mkt-v{ display:flex; align-items:baseline; gap:.45em; flex-wrap:wrap; font-family:'Albert Sans',sans-serif;
+  font-weight:800; font-size:clamp(2rem,3.4vw,2.7rem); letter-spacing:-.04em; color:var(--ink); line-height:1; margin:14px 0 0; }
+.pd-mkt-v span{ font-family:'Hanken Grotesk',sans-serif; font-weight:500; font-size:.8rem; letter-spacing:0; color:var(--ink-mute); }
+.pd-mkt-c{ display:inline-block; margin-top:11px; font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-soft); }
+.pd-mkt p{ margin-top:14px; color:var(--ink-mute); font-size:.94rem; line-height:1.5; }
+.pd-mkt-accent{ background:var(--ink); }
+.pd-mkt-accent .pd-mkt-v{ color:#fff; }
+.pd-mkt-accent .pd-mkt-c{ color:#cfe9f2; }
+.pd-mkt-accent p{ color:#aeaeb8; }
+.pd-srcline{ margin-top:22px; color:var(--ink-faint); font-size:.82rem; }
+.pd-reach{ margin-top:24px; font-family:'IBM Plex Mono',monospace; font-size:.82rem; letter-spacing:.1em; color:#aeaeb8; }
+
+/* sources / notes */
+.pd-sources{ background:var(--paper-2); border-top:1px solid var(--line); }
+.pd-src-h{ font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-mute); margin-bottom:18px; }
+.pd-src-list{ list-style:none; padding:0; max-width:860px; display:grid; gap:8px; }
+.pd-src-list li{ color:var(--ink-mute); font-size:.85rem; line-height:1.5; }
+.pd-src-list sup{ color:var(--signal); margin-right:.35em; }
+.pd-src-note{ margin-top:18px; color:var(--ink-faint); font-size:.8rem; max-width:860px; line-height:1.55; }
