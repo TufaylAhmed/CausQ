@@ -1,0 +1,121 @@
+# CLAUDE.md — CausQ project memory
+
+This file is the durable brief for working on the CausQ website. Read it first.
+It records the project, its conventions, the stack, and the running log of what
+the user has asked for so context survives across sessions.
+
+---
+
+## What this project is
+
+CausQ is a consulting/services brand: it helps technology and security leaders
+make the enterprise **AI-native**, **modernize the network** it runs on, and stay
+**secure for the quantum era** — pitched as *one integrated system, not three
+disconnected programs*. The repo is the marketing **website** (`causq.com`).
+
+Positioning pillars:
+- **AI & Intelligent Operations**
+- **Network Modernization**
+- **Quantum-era Security**
+Plus a bench of specialised capabilities (Cybersecurity & SOC, SASE, Identity &
+Zero Trust, Data Center & AI Fabric, etc.) and Consulting & Advisory.
+
+Brand voice: engineer-led, vendor-agnostic, senior-led, "built to hand over",
+global / remote-first. Substance over slideware.
+
+---
+
+## Tech stack & architecture
+
+- **Static site**, hand-written HTML + a shared CSS file + a small JS file.
+  No build step, no framework.
+- Pages live at repo root as `*.html` (e.g. `index.html`, `what-we-do.html`,
+  `xsiam-xsoar.html`, `consulting-advisory.html`, `pitch.html`, `pitch-deck.html`).
+- Styles: `assets/css/styles.css` — single global stylesheet, CSS-variable driven.
+- Scripts: `assets/js/main.js` — nav/footer mounts, reveal-on-scroll, counters.
+- Shared chrome injected via `<div id="nav-mount"></div>` and
+  `<div id="footer-mount"></div>` (populated by `main.js`).
+- Images: `assets/img/` (optimized) with `_source/` holding original uploads.
+  See `assets/img/README.md`. NOTE: a few images were cropped from watermarked
+  comps and must be replaced with licensed versions before launch.
+
+### Hosting / deployment (see also the `causq-deployment` skill + memory)
+- Static site served from **cPanel**, fronted by **Cloudflare** CDN.
+- **Forms/email** handled by a **Cloudflare Worker** ("CausQ Forms Worker") +
+  **MailerSend** (transactional) and **MailerLite** (nurture/automation).
+  Turnstile CAPTCHA protects the forms.
+- Deploy path: push to **GitHub `main`**; the live cPanel site is updated from
+  there. No working SMTP on the host — email goes through the Worker.
+
+### Cache-busting (important, learned the hard way)
+Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
+`main.js`, **bump the version query** on the `<link>`/`<script>` (e.g.
+`styles.css?v=20260613`) in the HTML, or the live site renders stale/unstyled.
+
+---
+
+## Conventions & house rules
+
+- **NO em dashes** in any written content (copy or prose). Use commas, colons,
+  or periods. This is a standing copy rule. (Also recorded in auto-memory.)
+- **Go global**: no geographic targeting (no US/EMEA framing). Forms use
+  work-style / company-size fields, not region.
+- Match the surrounding code's idiom, comment density, and naming.
+- Fonts: **Albert Sans** (display), **Hanken Grotesk** (body),
+  **IBM Plex Mono** (kickers/labels). Loaded from Google Fonts.
+- Brand palette (CSS vars in `styles.css`):
+  - `--signal` teal `#06B6D4` (logo accent; `--signal-deep` `#0891b2`)
+  - `--night` `#0b0b0d` (dark sections), `--paper` `#fff`, `--paper-warm` `#f5f3ee`
+  - `--ink` `#0c0c0e` headlines, `--ink-mute` `#63636c` secondary
+- Kicker pattern: mono, uppercase, teal, with a small dot before it.
+- Unlisted pages (e.g. the pitch) carry `<meta name="robots" content="noindex,
+  nofollow">` and are shared by link, kept out of search and the sitemap.
+
+---
+
+## Key marketing assets
+
+- `pitch.html` — unlisted **one-page** client/partner pitch ("The CausQ pitch").
+  Has a print/PDF leave-behind mode (one section per page).
+- `pitch-deck.html` — unlisted **16:9 slideshow** version of the pitch with a
+  **"Download PPT" button** that generates a real `.pptx` client-side via
+  **PptxGenJS** (CDN). Content is driven from a single `DECK` array so the
+  on-screen slides and the downloaded PowerPoint stay in sync. Keyboard nav
+  (arrows/space/Home/End), dot nav, swipe, fullscreen (F).
+- `marketing/the-brief-welcome-sequence.md` — 5-email nurture sequence for
+  "The Brief".
+- `xsiam-xsoar.html` — Cortex XSIAM/XSOAR capability page (uses XQL, not CQL;
+  hand-built SVG visuals + CSS animations, no screenshot images).
+
+---
+
+## Running log of user requests (most recent first)
+
+Dates use the project's clock (mid-2026).
+
+- **Create this `CLAUDE.md`** to remember everything asked.
+- **Recreate the pitch as a downloadable slideshow** → built `pitch-deck.html`
+  (16:9 deck + "Download PPT" button via PptxGenJS, single source of truth).
+- **Pitch deck print/PDF leave-behind** (one section per page) on `pitch.html`.
+- **Add unlisted client/partner pitch deck** → `pitch.html`.
+- **Go global**: removed all geography (US/EMEA) sitewide; added specialised
+  capabilities; refactored form fields from geographic to work-style/company-size.
+- **XSIAM page**: CQL→XQL, fixed mobile feature grid + terminal alignment;
+  rebuilt hero + XSOAR playbook visuals as hand-built SVG/CSS (removed image deps);
+  fixed stale-cache unstyled render via CSS versioning + cache-bust.
+- **Consulting & Advisory page**: created page w/ SEO + parallax hero; added FAQ
+  accordion; fixed invisible "see all capabilities" link in dark-hero nav.
+- **Forms/email stack**: deployed Cloudflare Worker + MailerSend/MailerLite +
+  Turnstile; documented in the `causq-deployment` skill.
+- **Standing rule established**: never use em dashes in copy.
+
+---
+
+## Gotchas / things to remember
+
+- Bump `?v=` on CSS/JS links after edits, or Cloudflare serves stale assets.
+- Email cannot be sent via host SMTP; it routes through the Worker.
+- Some `assets/img/*` are watermarked comps pending licensed replacements.
+- Keep the pitch pages `noindex,nofollow` and out of the sitemap.
+- There is an auto-memory index at the user's memory dir (`MEMORY.md`); this
+  `CLAUDE.md` is the in-repo, project-scoped counterpart.
