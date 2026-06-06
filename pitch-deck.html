@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CausQ | Pitch Deck</title>
+  <meta name="description" content="CausQ capabilities & partnership overview, as a presentable slideshow with a downloadable PowerPoint." />
+  <!-- Unlisted deck: share by link, keep out of search -->
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0b0b0d" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+  <style>
+    :root{
+      --night:#0b0b0d; --night-2:#121218; --panel:#16161c; --panel-2:#1c1c24;
+      --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.07);
+      --ink:#f4f4f6; --mute:#a6a6b2; --faint:#74747f;
+      --signal:#06B6D4; --signal-deep:#0891b2; --signal-soft:rgba(6,182,212,.12); --signal-glow:rgba(6,182,212,.22);
+      --e:cubic-bezier(.22,1,.36,1);
+    }
+    *{ margin:0; padding:0; box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      font-family:'Hanken Grotesk',-apple-system,sans-serif;
+      background:#050507; color:var(--ink);
+      overflow:hidden; -webkit-font-smoothing:antialiased;
+    }
+    ::selection{ background:var(--signal); color:#fff; }
+
+    /* ---------------------------------------------------------- shell */
+    .deck-shell{
+      position:fixed; inset:0; display:grid; grid-template-rows:auto 1fr auto;
+      background:
+        radial-gradient(120% 90% at 85% -10%, rgba(6,182,212,.10), transparent 55%),
+        radial-gradient(90% 80% at 0% 110%, rgba(6,182,212,.06), transparent 50%),
+        #060608;
+    }
+
+    /* topbar */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px; padding:14px clamp(16px,3vw,34px);
+      border-bottom:1px solid var(--line-soft);
+      backdrop-filter:blur(6px);
+    }
+    .brand{ display:flex; align-items:center; gap:11px; }
+    .brand-mark{ width:26px; height:26px; display:block; }
+    .brand-name{ font-family:'Albert Sans',sans-serif; font-weight:800; letter-spacing:-.02em; font-size:1.06rem; }
+    .brand-name b{ color:var(--signal); }
+    .brand-sub{ font-family:'IBM Plex Mono',monospace; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--faint); margin-left:4px; }
+    .topbar-actions{ display:flex; align-items:center; gap:10px; }
+
+    .tbtn{
+      display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+      font-family:'Hanken Grotesk',sans-serif; font-weight:600; font-size:.85rem;
+      color:var(--ink); background:transparent; border:1px solid var(--line);
+      border-radius:999px; padding:9px 15px; line-height:1;
+      transition:border-color .3s var(--e), background .3s var(--e), transform .3s var(--e), color .3s var(--e);
+    }
+    .tbtn:hover{ border-color:rgba(255,255,255,.4); transform:translateY(-1px); }
+    .tbtn svg{ width:15px; height:15px; }
+    .tbtn--cta{ background:var(--signal); border-color:var(--signal); color:#04171c; }
+    .tbtn--cta:hover{ background:var(--signal-deep); border-color:var(--signal-deep); color:#fff; }
+    .tbtn--cta[disabled]{ opacity:.55; pointer-events:none; }
+    .tbtn .spin{ width:14px; height:14px; border:2px solid rgba(4,23,28,.35); border-top-color:#04171c; border-radius:50%; animation:sp .7s linear infinite; }
+    @keyframes sp{ to{ transform:rotate(360deg); } }
+    .icon-only{ padding:9px; }
+
+    /* ---------------------------------------------------------- stage */
+    .stage-wrap{ position:relative; display:grid; place-items:center; padding:clamp(12px,2.2vh,26px); min-height:0; }
+    .deck-stage{
+      position:relative; width:min(95vw, calc((100vh - 168px) * 16 / 9));
+      aspect-ratio:16/9; container-type:size;
+      background:linear-gradient(180deg,#0c0c11,#08080b);
+      border:1px solid var(--line); border-radius:14px; overflow:hidden;
+      box-shadow:0 40px 120px -50px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .grain{ position:absolute; inset:0; pointer-events:none; opacity:.5; mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
+    .mesh{ position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(60% 80% at 80% 10%, rgba(6,182,212,.16), transparent 60%),
+        radial-gradient(50% 70% at 10% 95%, rgba(6,182,212,.10), transparent 55%); }
+
+    /* slides */
+    .slide{
+      position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
+      padding:7cqh 7cqw; opacity:0; visibility:hidden; pointer-events:none;
+      transition:opacity .5s var(--e); z-index:1;
+    }
+    .slide.is-active{ opacity:1; visibility:visible; pointer-events:auto; z-index:2; }
+    .slide .r{ opacity:0; transform:translateY(2.4cqh); }
+    .slide.is-active .r{ opacity:1; transform:none;
+      transition:opacity .6s var(--e), transform .7s var(--e);
+      transition-delay:calc(var(--i,0) * 75ms); }
+
+    /* shared type */
+    .dk-kicker{ display:inline-flex; align-items:center; gap:.7em; font-family:'IBM Plex Mono',monospace;
+      font-size:1.55cqh; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--signal); }
+    .dk-kicker::before{ content:""; width:.62cqh; height:.62cqh; border-radius:50%; background:var(--signal);
+      box-shadow:0 0 0 .5cqh var(--signal-glow); }
+    .dk-title{ font-family:'Albert Sans',sans-serif; font-weight:800; letter-spacing:-.03em; line-height:1.02;
+      color:#fff; font-size:6.4cqh; margin-top:2.2cqh; }
+    .dk-title.sm{ font-size:5cqh; }
+    .dk-lead{ font-size:2.35cqh; line-height:1.45; color:var(--mute); font-weight:400; letter-spacing:-.01em; max-width:62ch; margin-top:2.2cqh; }
+    .dk-head{ margin-bottom:5cqh; }
+    .dk-splithead{ display:grid; grid-template-columns:1.05fr .95fr; gap:5cqw; align-items:end; margin-bottom:5cqh; }
+    @container (max-aspect-ratio:13/9){ .dk-splithead{ grid-template-columns:1fr; gap:2.4cqh; } }
+
+    /* cover */
+    .slide--cover{ align-items:center; text-align:center; }
+    .dk-conf{ font-family:'IBM Plex Mono',monospace; font-size:1.45cqh; letter-spacing:.2em; text-transform:uppercase;
+      color:var(--faint); border:1px solid var(--line); border-radius:999px; padding:1cqh 1.8cqw; }
+    .slide--cover .dk-kicker{ margin-top:3.4cqh; }
+    .dk-cover-title{ font-family:'Albert Sans',sans-serif; font-weight:900; letter-spacing:-.035em; line-height:.98;
+      font-size:10.5cqh; color:#fff; margin-top:2.4cqh; }
+    .slide--cover .dk-lead{ margin-left:auto; margin-right:auto; text-align:center; font-size:2.5cqh; }
+    .dk-prepared{ font-family:'IBM Plex Mono',monospace; font-size:1.5cqh; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--faint); margin-top:4cqh; }
+
+    /* stats */
+    .dk-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:2.4cqw; }
+    .dk-stat{ border-top:1px solid var(--line); padding-top:2cqh; }
+    .dk-stat .v{ font-family:'Albert Sans',sans-serif; font-weight:800; letter-spacing:-.03em; color:#fff;
+      font-size:7.4cqh; line-height:1; }
+    .dk-stat .v .u{ color:var(--signal); }
+    .dk-stat .l{ font-size:1.9cqh; line-height:1.35; color:var(--mute); margin-top:1.4cqh; }
+
+    /* card grids */
+    .dk-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:2.2cqw 2.2cqw; }
+    .dk-card{ background:var(--panel); border:1px solid var(--line); border-radius:1.6cqh; padding:2.6cqh 2.4cqh; }
+    .dk-card .tag{ font-family:'IBM Plex Mono',monospace; font-size:1.4cqh; letter-spacing:.16em; text-transform:uppercase; color:var(--signal); }
+    .dk-card h3{ font-family:'Albert Sans',sans-serif; font-weight:700; letter-spacing:-.02em; color:#fff; font-size:2.7cqh; margin:1cqh 0 1cqh; line-height:1.1; }
+    .dk-card p{ font-size:1.75cqh; line-height:1.4; color:var(--mute); }
+
+    /* markets */
+    .dk-mkts{ display:grid; grid-template-columns:repeat(3,1fr); gap:2cqw; }
+    .dk-mkt{ background:var(--panel); border:1px solid var(--line); border-radius:1.6cqh; padding:2.4cqh; display:flex; flex-direction:column; }
+    .dk-mkt .k{ font-family:'IBM Plex Mono',monospace; font-size:1.35cqh; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); }
+    .dk-mkt .v{ font-family:'Albert Sans',sans-serif; font-weight:800; letter-spacing:-.03em; color:#fff; font-size:4.4cqh; margin-top:.8cqh; line-height:1; }
+    .dk-mkt .v span{ display:block; font-size:1.5cqh; font-weight:500; color:var(--faint); letter-spacing:0; margin-top:.5cqh; }
+    .dk-mkt .c{ font-family:'IBM Plex Mono',monospace; font-size:1.45cqh; color:var(--signal); margin-top:1cqh; }
+    .dk-mkt p{ font-size:1.6cqh; line-height:1.35; color:var(--mute); margin-top:1cqh; }
+    .dk-mkt.accent{ background:linear-gradient(160deg, rgba(6,182,212,.16), rgba(6,182,212,.04)); border-color:rgba(6,182,212,.5); }
+    .dk-mkt.accent .k{ color:var(--signal); }
+
+    /* pillars + chips */
+    .dk-pillars{ display:grid; grid-template-columns:repeat(3,1fr); gap:2.2cqw; }
+    .dk-pillar{ background:var(--panel); border:1px solid var(--line); border-radius:1.6cqh; padding:3cqh 2.6cqh; }
+    .dk-pillar .no{ font-family:'IBM Plex Mono',monospace; font-size:1.5cqh; letter-spacing:.16em; text-transform:uppercase; color:var(--signal); }
+    .dk-pillar h3{ font-family:'Albert Sans',sans-serif; font-weight:700; letter-spacing:-.02em; color:#fff; font-size:3cqh; margin:1.6cqh 0 1.2cqh; line-height:1.05; }
+    .dk-pillar p{ font-size:1.85cqh; line-height:1.4; color:var(--mute); }
+    .dk-chips{ display:flex; flex-wrap:wrap; gap:1.1cqh 1cqw; margin-top:3.4cqh; }
+    .dk-chip{ font-family:'IBM Plex Mono',monospace; font-size:1.45cqh; letter-spacing:.06em; color:var(--ink);
+      border:1px solid var(--line); border-radius:999px; padding:.9cqh 1.4cqw; background:rgba(255,255,255,.02); }
+
+    /* values */
+    .dk-values{ display:grid; grid-template-columns:repeat(3,1fr); gap:3cqh 2.4cqw; }
+    .dk-value{ padding-left:2.2cqw; border-left:2px solid var(--signal); }
+    .dk-value h3{ font-family:'Albert Sans',sans-serif; font-weight:700; letter-spacing:-.02em; color:#fff; font-size:2.5cqh; line-height:1.1; }
+    .dk-value p{ font-size:1.75cqh; line-height:1.4; color:var(--mute); margin-top:1cqh; }
+
+    /* moves */
+    .dk-moves{ display:grid; grid-template-columns:repeat(4,1fr); gap:2.2cqw; }
+    .dk-move{ border-top:2px solid var(--line); padding-top:2cqh; }
+    .dk-move .n{ font-family:'IBM Plex Mono',monospace; font-size:1.4cqh; letter-spacing:.16em; text-transform:uppercase; color:var(--signal); }
+    .dk-move h3{ font-family:'Albert Sans',sans-serif; font-weight:800; letter-spacing:-.02em; color:#fff; font-size:3.4cqh; margin:1cqh 0 1.2cqh; }
+    .dk-move p{ font-size:1.75cqh; line-height:1.4; color:var(--mute); }
+
+    /* journey */
+    .dk-journey{ display:grid; grid-template-columns:repeat(5,1fr); gap:1.6cqw; }
+    .dk-jstep{ position:relative; }
+    .dk-jrail{ display:flex; align-items:center; gap:.8cqw; margin-bottom:1.6cqh; }
+    .dk-badge{ width:3.4cqh; height:3.4cqh; flex:none; border-radius:50%; background:var(--signal); color:#04171c;
+      display:grid; place-items:center; font-family:'Albert Sans',sans-serif; font-weight:800; font-size:1.7cqh; }
+    .dk-jline{ flex:1; height:1px; background:linear-gradient(90deg,var(--signal),var(--line)); }
+    .dk-jstep .ph{ font-family:'IBM Plex Mono',monospace; font-size:1.25cqh; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); }
+    .dk-jstep h3{ font-family:'Albert Sans',sans-serif; font-weight:700; letter-spacing:-.02em; color:#fff; font-size:2.3cqh; margin:.7cqh 0 1cqh; line-height:1.05; }
+    .dk-jstep p{ font-size:1.5cqh; line-height:1.38; color:var(--mute); }
+
+    /* proof */
+    .dk-proof{ display:grid; grid-template-columns:.9fr 1.1fr; gap:5cqw; align-items:center; }
+    @container (max-aspect-ratio:13/9){ .dk-proof{ grid-template-columns:1fr; gap:2.4cqh; } }
+    .dk-prooflist{ display:flex; flex-direction:column; gap:2.2cqh; list-style:none; }
+    .dk-prooflist li{ display:flex; gap:1.6cqw; align-items:flex-start; }
+    .dk-prooflist .n{ flex:none; width:3.6cqh; height:3.6cqh; border-radius:50%; border:1px solid var(--signal);
+      color:var(--signal); display:grid; place-items:center; font-family:'Albert Sans',sans-serif; font-weight:700; font-size:1.8cqh; }
+    .dk-prooflist b{ display:block; font-family:'Albert Sans',sans-serif; font-weight:700; color:#fff; font-size:2.2cqh; letter-spacing:-.01em; }
+    .dk-prooflist span.t span{ display:block; font-size:1.7cqh; color:var(--mute); margin-top:.5cqh; line-height:1.4; }
+
+    /* cta */
+    .slide--cta{ align-items:flex-start; }
+    .dk-contact{ display:inline-flex; align-items:center; gap:.7em; margin-top:3.4cqh; font-family:'Albert Sans',sans-serif;
+      font-weight:700; color:#fff; font-size:3cqh; letter-spacing:-.02em; }
+    .dk-contact::before{ content:""; width:2.4cqh; height:2.4cqh; border-radius:50%; background:var(--signal-soft);
+      border:1px solid var(--signal); }
+    .dk-ctarow{ display:flex; gap:1.4cqw; margin-top:3.6cqh; }
+    .dk-pill{ font-family:'Hanken Grotesk',sans-serif; font-weight:600; font-size:1.9cqh; border-radius:999px; padding:1.5cqh 2.2cqw; }
+    .dk-pill.solid{ background:var(--signal); color:#04171c; }
+    .dk-pill.ghost{ border:1px solid var(--line); color:var(--ink); }
+
+    /* sources */
+    .slide--sources{ justify-content:flex-start; padding-top:6cqh; }
+    .dk-srch{ font-family:'IBM Plex Mono',monospace; font-size:1.5cqh; letter-spacing:.2em; text-transform:uppercase; color:var(--signal); margin-bottom:2.4cqh; }
+    .dk-srclist{ columns:2; column-gap:5cqw; list-style:none; }
+    .dk-srclist li{ font-size:1.55cqh; line-height:1.5; color:var(--mute); margin-bottom:1.2cqh; break-inside:avoid; }
+    .dk-srclist sup{ color:var(--signal); }
+    .dk-srcnote{ font-size:1.4cqh; line-height:1.45; color:var(--faint); margin-top:2cqh; max-width:90ch; }
+
+    /* slide footer tag */
+    .dk-foot{ position:absolute; left:7cqw; bottom:3.4cqh; display:flex; align-items:center; gap:.7em;
+      font-family:'IBM Plex Mono',monospace; font-size:1.25cqh; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); }
+    .dk-foot b{ color:var(--signal); font-weight:600; }
+
+    /* ---------------------------------------------------------- controls */
+    .controls{
+      display:flex; align-items:center; justify-content:space-between; gap:18px;
+      padding:12px clamp(16px,3vw,34px); border-top:1px solid var(--line-soft);
+    }
+    .dots{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .dot{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.18); cursor:pointer; border:0; padding:0;
+      transition:background .3s var(--e), transform .3s var(--e), width .3s var(--e); }
+    .dot:hover{ background:rgba(255,255,255,.45); }
+    .dot.is-on{ background:var(--signal); width:22px; border-radius:5px; }
+    .nav{ display:flex; align-items:center; gap:10px; }
+    .count{ font-family:'IBM Plex Mono',monospace; font-size:.8rem; letter-spacing:.12em; color:var(--mute); min-width:62px; text-align:center; }
+    .count b{ color:#fff; }
+    .arrow{ width:40px; height:40px; border-radius:50%; border:1px solid var(--line); background:transparent; color:#fff;
+      display:grid; place-items:center; cursor:pointer; transition:.3s var(--e); }
+    .arrow:hover{ border-color:rgba(255,255,255,.45); transform:translateY(-1px); }
+    .arrow svg{ width:18px; height:18px; }
+    .hint{ font-family:'IBM Plex Mono',monospace; font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); }
+
+    /* progress line under topbar */
+    .progress{ position:absolute; left:0; top:0; height:2px; background:var(--signal); width:0;
+      box-shadow:0 0 12px var(--signal); transition:width .5s var(--e); z-index:5; }
+
+    /* toast */
+    .toast{ position:fixed; left:50%; bottom:84px; transform:translate(-50%,18px); opacity:0; pointer-events:none;
+      background:var(--panel-2); border:1px solid var(--line); color:var(--ink); padding:11px 18px; border-radius:10px;
+      font-size:.85rem; font-weight:600; transition:.4s var(--e); z-index:30; box-shadow:0 20px 50px -20px #000; }
+    .toast.show{ opacity:1; transform:translate(-50%,0); }
+    .toast.err{ border-color:rgba(255,90,90,.5); }
+
+    /* fullscreen tweak */
+    .deck-shell:fullscreen{ background:#060608; }
+    .deck-shell:fullscreen .deck-stage{ width:min(96vw, calc((100vh - 150px) * 16 / 9)); }
+
+    @media (max-width:640px){
+      .brand-sub, .hint{ display:none; }
+      .tbtn span.lbl{ display:none; }
+      .tbtn--cta span.lbl{ display:inline; }
+      .deck-stage{ width:96vw; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck-shell" id="shell" aria-label="CausQ pitch deck">
+    <div class="progress" id="progress"></div>
+
+    <!-- topbar -->
+    <header class="topbar">
+      <a class="brand" href="pitch.html" title="Back to the one-page pitch">
+        <svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <circle cx="16" cy="16" r="13" stroke="#06B6D4" stroke-width="2.4"/>
+          <path d="M22 22l6 6" stroke="#06B6D4" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="4.5" fill="#06B6D4"/>
+        </svg>
+        <span class="brand-name">Caus<b>Q</b></span>
+        <span class="brand-sub">Pitch deck</span>
+      </a>
+      <div class="topbar-actions">
+        <button class="tbtn icon-only" id="fsBtn" title="Toggle fullscreen (F)" aria-label="Toggle fullscreen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        </button>
+        <button class="tbtn tbtn--cta" id="pptBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+          <span class="lbl">Download PPT</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- stage -->
+    <div class="stage-wrap">
+      <section class="deck-stage" id="stage" tabindex="0" aria-roledescription="carousel">
+        <div class="mesh" aria-hidden="true"></div>
+        <div class="grain" aria-hidden="true"></div>
+        <!-- slides injected here -->
+      </section>
+    </div>
+
+    <!-- controls -->
+    <footer class="controls">
+      <div class="dots" id="dots" aria-label="Slide navigation"></div>
+      <div class="nav">
+        <span class="hint">&larr; &rarr; to navigate</span>
+        <button class="arrow" id="prevBtn" aria-label="Previous slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span class="count" id="count"><b>01</b> / 11</span>
+        <button class="arrow" id="nextBtn" aria-label="Next slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  /* ============================================================
+     SINGLE SOURCE OF TRUTH — drives both the on-screen deck
+     and the downloadable PowerPoint.
+     ============================================================ */
+  const META = { name:'CausQ', year:'2026', contact:'hello@causq.com',
+    confidential:'Confidential · Capabilities & partnership overview' };
+
+  const DECK = [
+    { type:'cover',
+      conf: META.confidential,
+      kicker:'The CausQ pitch',
+      title:'Engineering what’s next, together.',
+      titleHTML:'Engineering<br>what’s next,<br>together.',
+      lead:'We help technology and security leaders make the enterprise AI-native, modernize the network it runs on, and stay secure as the quantum era arrives. As one integrated system, not three disconnected programs.',
+      prepared:'Prepared for technology & security leaders · ' + META.year },
+
+    { type:'stats', no:'01', section:'Why now',
+      title:'Three forces are colliding at once.',
+      titleHTML:'Three forces are<br>colliding at once.',
+      lead:'AI is moving from pilots to production. The network has become the platform it runs on. The cryptographic ground is shifting under everyone. And the people who can do all three are scarce.',
+      stats:[
+        { v:'$5T',  l:'Digital-transformation spend by 2030, up from $2.1T in 2025' },
+        { v:'4.8M', l:'Cybersecurity roles unfilled worldwide' },
+        { v:'50%+', l:'Of AI projects never make it past pilot' },
+        { v:'46%',  l:'Annual growth in quantum-safe cryptography to 2030' },
+      ] },
+
+    { type:'cards', no:'02', section:'The problem',
+      title:'Run separately, they fight each other.',
+      titleHTML:'Run separately,<br>they fight each other.',
+      lead:'Most enterprises treat AI, the network and security as three separate programs. So the gains compete instead of compound, and the spend rarely turns into a working system.',
+      cards:[
+        { tag:'Symptom 01', h:'AI stuck in pilot purgatory', p:'Data is not ready, governance is missing and there is no path to production. The proofs-of-concept pile up; the value does not.' },
+        { tag:'Symptom 02', h:'The network can’t carry it', p:'Legacy, manual and opaque infrastructure was never built for AI-scale demand. It becomes the bottleneck the moment workloads get serious.' },
+        { tag:'Symptom 03', h:'Security is bolted on', p:'Bolted on after the fact, with quantum-vulnerable cryptography hiding across the estate and a talent gap that worsens every quarter.' },
+        { tag:'Symptom 04', h:'Vendors sell boxes', p:'Resellers ship products and leave. No one owns the outcome end to end, so integration risk lands squarely on your team.' },
+        { tag:'Symptom 05', h:'The talent isn’t there', p:'The people who can architect AI, modern networks and quantum-era security together are rare, and almost never in one team.' },
+        { tag:'The cost', h:'Spend without compounding', p:'Stalled initiatives, growing risk and budget that buys point projects instead of an estate that gets stronger every quarter.' },
+      ] },
+
+    { type:'markets', no:'03', section:'The opportunity',
+      title:'The scale of the shift you’re navigating.',
+      titleHTML:'The scale of the<br>shift you’re navigating.',
+      lead:'These are the markets we operate in, and how fast they are moving. Each is a decision your organisation is already making, whether by design or by drift.',
+      markets:[
+        { k:'AI services & consulting', v:'$72.8B', vs:'by 2030', c:'~32% CAGR', p:'Demand for getting AI into production, not just into a slide.' },
+        { k:'Managed security & SOC', v:'$66.8B', vs:'by 2030', c:'~11% CAGR', p:'24/7 detection and response, as the talent gap widens.' },
+        { k:'SASE & secure access', v:'$28.5B', vs:'by 2028', c:'~26% CAGR', p:'The converged, identity-first replacement for the legacy edge.' },
+        { k:'Post-quantum cryptography', v:'$2.8B', vs:'by 2030', c:'~46% CAGR', p:'The fastest-growing slice, and the one with a hard deadline.' },
+        { k:'IT services, overall', v:'$2.6T', vs:'by 2030', c:'the wider pool', p:'The budget enterprises spend to build and run all of it.' },
+        { k:'Where CausQ sits', v:'All four', vs:'as one system', c:'compounding', p:'The compounding value lives in the seams others leave open.', accent:true },
+      ] },
+
+    { type:'pillars', no:'04', section:'What we do',
+      title:'One operating system for change.',
+      titleHTML:'One operating system<br>for change.',
+      lead:'Four connected practices, a deep bench of specialised capabilities, and the advisory to sequence it all. We bring them together so each one reinforces the others.',
+      pillars:[
+        { no:'01 / AI', h:'AI & Intelligent Operations', p:'Strategy to production, and into the network’s control plane.' },
+        { no:'02 / Network', h:'Network Modernization', p:'Software-defined, automated, AI-ready fabric.' },
+        { no:'03 / Quantum', h:'Quantum-era Security', p:'Crypto-agility, Zero Trust and post-quantum readiness.' },
+      ],
+      chips:['Cybersecurity & SOC','Network Security','SASE & Secure Access','Wireless & Mobility','Data Center & AI Fabric','Identity & Zero Trust','Cloud, Edge & Managed','Consulting & Advisory'] },
+
+    { type:'values', no:'05', section:'Why us',
+      title:'Engineers in the room, not resellers in the lobby.',
+      titleHTML:'Engineers in the room,<br>not resellers in the lobby.',
+      values:[
+        { h:'Engineer-led', p:'The people who scope the work deliver it. Substance over slideware, every time.' },
+        { h:'Vendor-agnostic', p:'No product quota behind our advice. We recommend what serves the outcome.' },
+        { h:'One integrated system', p:'AI, network and security designed together, where the compounding value lives.' },
+        { h:'Senior-led', p:'No bait-and-switch. The senior engineer you meet is the one who stays.' },
+        { h:'Built to hand over', p:'If your team can’t run it without us, we’re not finished. Transfer is the deliverable.' },
+        { h:'Global, remote-first', p:'Follow-the-sun delivery across time zones, on-site or remote, wherever you operate.' },
+      ] },
+
+    { type:'moves', no:'06', section:'How we work',
+      title:'One method, four moves.',
+      titleHTML:'One method,<br>four moves.',
+      lead:'Whether it is a half-day survey or a multi-site program, the shape is the same. We discover, we design, we deliver, and we do not call it done until it is assured.',
+      moves:[
+        { n:'Move 01', h:'Discover', p:'Survey, assess and baseline the estate as it really is. Findings and a prioritised backlog in days.' },
+        { n:'Move 02', h:'Design', p:'Target-state architecture, a sequenced roadmap and a costed business case your board can fund.' },
+        { n:'Move 03', h:'Deliver', p:'Rehearsed changes, scripted rollback, signed-off cutovers. Automation where it earns its keep.' },
+        { n:'Move 04', h:'Assure', p:'Acceptance testing, as-builts and handover, or kept running by us under SLA.' },
+      ] },
+
+    { type:'journey', no:'07', section:'How we start',
+      title:'A low-risk path to a working system.',
+      titleHTML:'A low-risk path to<br>a working system.',
+      lead:'We don’t ask for a big bet up front. We earn the next step by proving the last one. You can stop after any stage and keep everything we’ve built.',
+      steps:[
+        { b:'1', ph:'Low commitment', h:'Briefing', p:'A focused half-day with our engineers, often at no cost. We align on the problem and leave you with a point of view and first moves.' },
+        { b:'2', ph:'Fixed scope', h:'Assessment or pilot', p:'A defined survey, assessment or single-slice pilot with a clear deliverable, timeline and price. Value proven on one thing first.' },
+        { b:'3', ph:'The plan', h:'Design & business case', p:'Architecture, a sequenced roadmap and a costed case. Decisions documented so anyone can pick it up cold.' },
+        { b:'4', ph:'Build', h:'Deliver & scale', p:'The same engineers who wrote the plan build it, cut it over and prove it works. Fixed-scope or embedded, your call.' },
+        { b:'5', ph:'Steady state', h:'Run & optimize', p:'Keep it healthy under SLA with follow-the-sun support, or hand it cleanly to your team. Either way, you own the outcome.' },
+      ] },
+
+    { type:'proof', no:'08', section:'Proof',
+      title:'We prove value before you scale spend.',
+      titleHTML:'We prove value before<br>you scale spend.',
+      lead:'No fabricated case studies and no vanity metrics. We agree what success looks like up front, then show it, measurably, before you commit further.',
+      items:[
+        { n:'A', h:'KPIs agreed before we start', p:'You define what good looks like; we design the engagement to hit it.' },
+        { n:'B', h:'Validated, not asserted', p:'Every detection, cutover and design is tested against acceptance criteria.' },
+        { n:'C', h:'Fixed-scope first', p:'A bounded pilot or assessment proves the value on one slice, at a known price.' },
+        { n:'D', h:'As-builts & knowledge transfer', p:'You leave with documentation and a team that can run it, not a dependency.' },
+      ] },
+
+    { type:'cta', no:'09', section:'Next step',
+      title:'Let’s start with a briefing.',
+      titleHTML:'Let’s start with a briefing.',
+      lead:'Tell us the decision in front of you. We’ll bring the engineers who have made it before, and a deliverable you can act on, with no obligation to go further.',
+      contact: META.contact,
+      pills:[{ t:'Book a briefing', solid:true },{ t:'How we engage', solid:false }] },
+
+    { type:'sources',
+      title:'Sources & notes',
+      list:[
+        'Digital transformation spend, ~$2.1T (2025) to ~$5.0T (2030), ~18.5% CAGR. The Business Research Company / Statista.',
+        '4.8M unfilled cybersecurity roles worldwide. ISC2 Cybersecurity Workforce Study, 2025.',
+        'Majority of AI projects do not pass pilot; ~50% of generative-AI projects abandoned after proof-of-concept. Gartner.',
+        'Post-quantum cryptography, ~$0.4B (2025) to ~$2.84B (2030), ~46% CAGR. MarketsandMarkets.',
+        'AI consulting & implementation services, ~$14B (2024) to ~$72.8B (2030), ~32% CAGR. Industry research.',
+        'Managed security services, ~$39B (2025) to ~$66.8B (2030), ~11% CAGR. MarketsandMarkets.',
+        'SASE to ~$28.5B by 2028, ~26% CAGR. Gartner.',
+        'Global IT services to ~$2.59T by 2030. Industry research.',
+      ],
+      note:'Market figures are third-party estimates included for context. Totals and growth rates vary by analyst and definition. CausQ does not warrant any figure and presents no client-specific financials in this overview.' },
+  ];
+
+  /* ============================================================
+     HTML RENDERERS
+     ============================================================ */
+  const kickerEl = (no, section) => `<span class="dk-kicker r" style="--i:0">${no} / ${section}</span>`;
+  const foot = (no, section) => `<span class="dk-foot">CausQ &middot; <b>${no ? no + ' / ' + section : 'Pitch deck ' + META.year}</b></span>`;
+
+  function splitVU(v){ // splits trailing unit (T, M, %, +) for teal accent
+    const m = v.match(/^([^A-Za-z%+]+)(.*)$/);
+    return m ? { num:m[1], unit:m[2] } : { num:v, unit:'' };
+  }
+
+  const RENDER = {
+    cover: s => `
+      <div class="slide slide--cover" data-type="cover">
+        <span class="dk-conf r" style="--i:0">${s.conf}</span>
+        <span class="dk-kicker r" style="--i:1">${s.kicker}</span>
+        <h1 class="dk-cover-title r" style="--i:2">${s.titleHTML}</h1>
+        <p class="dk-lead r" style="--i:3">${s.lead}</p>
+        <p class="dk-prepared r" style="--i:4">${s.prepared}</p>
+      </div>`,
+
+    stats: s => `
+      <div class="slide" data-type="stats">
+        <div class="dk-splithead">
+          <div>${kickerEl(s.no,s.section)}<h2 class="dk-title r" style="--i:1">${s.titleHTML}</h2></div>
+          <p class="dk-lead r" style="--i:2">${s.lead}</p>
+        </div>
+        <div class="dk-stats">
+          ${s.stats.map((x,i)=>{ const {num,unit}=splitVU(x.v); return `
+            <div class="dk-stat r" style="--i:${i+3}"><div class="v">${num}<span class="u">${unit}</span></div><div class="l">${x.l}</div></div>`; }).join('')}
+        </div>
+        ${foot(s.no,s.section)}
+      </div>`,
+
+    cards: s => `
+      <div class="slide" data-type="cards">
+        <div class="dk-head">${kickerEl(s.no,s.section)}<h2 class="dk-title sm r" style="--i:1">${s.titleHTML}</h2></div>
+        <div class="dk-cards">
+          ${s.cards.map((c,i)=>`<div class="dk-card r" style="--i:${i+2}"><span class="tag">${c.tag}</span><h3>${c.h}</h3><p>${c.p}</p></div>`).join('')}
+        </div>
+      </div>`,
+
+    markets: s => `
+      <div class="slide" data-type="markets">
+        <div class="dk-head">${kickerEl(s.no,s.section)}<h2 class="dk-title sm r" style="--i:1">${s.titleHTML}</h2></div>
+        <div class="dk-mkts">
+          ${s.markets.map((m,i)=>`<div class="dk-mkt ${m.accent?'accent':''} r" style="--i:${i+2}"><span class="k">${m.k}</span><b class="v">${m.v}<span>${m.vs}</span></b><span class="c">${m.c}</span><p>${m.p}</p></div>`).join('')}
+        </div>
+        ${foot(s.no,s.section)}
+      </div>`,
+
+    pillars: s => `
+      <div class="slide" data-type="pillars">
+        <div class="dk-head">${kickerEl(s.no,s.section)}<h2 class="dk-title sm r" style="--i:1">${s.titleHTML}</h2></div>
+        <div class="dk-pillars">
+          ${s.pillars.map((p,i)=>`<div class="dk-pillar r" style="--i:${i+2}"><span class="no">${p.no}</span><h3>${p.h}</h3><p>${p.p}</p></div>`).join('')}
+        </div>
+        <div class="dk-chips r" style="--i:6">${s.chips.map(c=>`<span class="dk-chip">${c}</span>`).join('')}</div>
+        ${foot(s.no,s.section)}
+      </div>`,
+
+    values: s => `
+      <div class="slide" data-type="values">
+        <div class="dk-head">${kickerEl(s.no,s.section)}<h2 class="dk-title sm r" style="--i:1">${s.titleHTML}</h2></div>
+        <div class="dk-values">
+          ${s.values.map((v,i)=>`<div class="dk-value r" style="--i:${i+2}"><h3>${v.h}</h3><p>${v.p}</p></div>`).join('')}
+        </div>
+        ${foot(s.no,s.section)}
+      </div>`,
+
+    moves: s => `
+      <div class="slide" data-type="moves">
+        <div class="dk-splithead">
+          <div>${kickerEl(s.no,s.section)}<h2 class="dk-title r" style="--i:1">${s.titleHTML}</h2></div>
+          <p class="dk-lead r" style="--i:2">${s.lead}</p>
+        </div>
+        <div class="dk-moves">
+          ${s.moves.map((m,i)=>`<div class="dk-move r" style="--i:${i+3}"><span class="n">${m.n}</span><h3>${m.h}</h3><p>${m.p}</p></div>`).join('')}
+        </div>
+        ${foot(s.no,s.section)}
+      </div>`,
+
+    journey: s => `
+      <div class="slide" data-type="journey">
+        <div class="dk-head">${kickerEl(s.no,s.section)}<h2 class="dk-title sm r" style="--i:1">${s.titleHTML}</h2><p class="dk-lead r" style="--i:2">${s.lead}</p></div>
+        <div class="dk-journey">
+          ${s.steps.map((j,i)=>`<div class="dk-jstep r" style="--i:${i+3}"><div class="dk-jrail"><span class="dk-badge">${j.b}</span>${i<s.steps.length-1?'<span class="dk-jline"></span>':''}</div><span class="ph">${j.ph}</span><h3>${j.h}</h3><p>${j.p}</p></div>`).join('')}
+        </div>
+        ${foot(s.no,s.section)}
+      </div>`,
+
+    proof: s => `
+      <div class="slide" data-type="proof">
+        <div class="dk-proof">
+          <div>${kickerEl(s.no,s.section)}<h2 class="dk-title sm r" style="--i:1">${s.titleHTML}</h2><p class="dk-lead r" style="--i:2">${s.lead}</p></div>
+          <ul class="dk-prooflist">
+            ${s.items.map((it,i)=>`<li class="r" style="--i:${i+3}"><span class="n">${it.n}</span><span class="t"><b>${it.h}</b><span>${it.p}</span></span></li>`).join('')}
+          </ul>
+        </div>
+        ${foot(s.no,s.section)}
+      </div>`,
+
+    cta: s => `
+      <div class="slide slide--cta" data-type="cta">
+        ${kickerEl(s.no,s.section)}
+        <h2 class="dk-title r" style="--i:1" style="margin-top:2.2cqh">${s.titleHTML}</h2>
+        <p class="dk-lead r" style="--i:2">${s.lead}</p>
+        <div class="dk-ctarow r" style="--i:3">
+          ${s.pills.map(p=>`<span class="dk-pill ${p.solid?'solid':'ghost'}">${p.t}${p.solid?' →':''}</span>`).join('')}
+        </div>
+        <span class="dk-contact r" style="--i:4">${s.contact}</span>
+        ${foot(s.no,s.section)}
+      </div>`,
+
+    sources: s => `
+      <div class="slide slide--sources" data-type="sources">
+        <span class="dk-srch r" style="--i:0">${s.title}</span>
+        <ol class="dk-srclist">
+          ${s.list.map((t,i)=>`<li class="r" style="--i:${i+1}"><sup>${i+1}</sup> ${t}</li>`).join('')}
+        </ol>
+        <p class="dk-srcnote r" style="--i:9">${s.note}</p>
+      </div>`,
+  };
+
+  /* ============================================================
+     BUILD + NAVIGATE
+     ============================================================ */
+  const stage = document.getElementById('stage');
+  const dotsWrap = document.getElementById('dots');
+  const countEl = document.getElementById('count');
+  const progress = document.getElementById('progress');
+  const TOTAL = DECK.length;
+  let idx = 0;
+
+  stage.insertAdjacentHTML('beforeend', DECK.map(s => RENDER[s.type](s)).join(''));
+  const slides = [...stage.querySelectorAll('.slide')];
+
+  DECK.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'dot'; b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    b.addEventListener('click', () => go(i));
+    dotsWrap.appendChild(b);
+  });
+  const dots = [...dotsWrap.children];
+  const pad = n => String(n).padStart(2, '0');
+
+  function go(n){
+    idx = (n + TOTAL) % TOTAL;
+    slides.forEach((sl, i) => sl.classList.toggle('is-active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('is-on', i === idx));
+    countEl.innerHTML = `<b>${pad(idx + 1)}</b> / ${pad(TOTAL)}`;
+    progress.style.width = ((idx + 1) / TOTAL * 100) + '%';
+  }
+  const next = () => go(idx + 1);
+  const prev = () => go(idx - 1);
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { go(0); }
+    else if (e.key === 'End') { go(TOTAL - 1); }
+    else if (e.key.toLowerCase() === 'f') { toggleFs(); }
+  });
+
+  // touch swipe
+  let tx = 0;
+  stage.addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, { passive:true });
+  stage.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 45) (dx < 0 ? next : prev)();
+  }, { passive:true });
+
+  // fullscreen
+  const shell = document.getElementById('shell');
+  function toggleFs(){ if (!document.fullscreenElement) shell.requestFullscreen?.(); else document.exitFullscreen?.(); }
+  document.getElementById('fsBtn').addEventListener('click', toggleFs);
+
+  go(0);
+
+  // toast
+  const toastEl = document.getElementById('toast');
+  let toastT;
+  function toast(msg, isErr){
+    toastEl.textContent = msg; toastEl.classList.toggle('err', !!isErr); toastEl.classList.add('show');
+    clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('show'), 2600);
+  }
+
+  /* ============================================================
+     POWERPOINT EXPORT (PptxGenJS) — mirrors DECK
+     ============================================================ */
+  const C = { night:'0B0B0D', panel:'17171C', panel2:'1F1F27', line:'2C2C36',
+    ink:'F4F4F6', mute:'A6A6B2', faint:'74747F', teal:'06B6D4', tealDeep:'0891B2', tealInk:'04171C' };
+  const F = { display:'Arial', body:'Arial', mono:'Consolas' };
+  const M = 0.7, CW = 13.333 - M * 2; // page margins / content width (16:9 @ 13.333x7.5in)
+
+  function kick(slide, text, y){
+    slide.addShape('ellipse', { x:M, y:y + 0.06, w:0.1, h:0.1, fill:{ color:C.teal } });
+    slide.addText(text.toUpperCase(), { x:M + 0.2, y, w:CW - 0.2, h:0.3, fontFace:F.mono, fontSize:11,
+      color:C.teal, bold:true, charSpacing:2, valign:'middle' });
+  }
+  function title(slide, text, y, size){
+    slide.addText(text, { x:M, y, w:CW, h:size > 30 ? 1.5 : 1.1, fontFace:F.display, fontSize:size, bold:true,
+      color:'FFFFFF', charSpacing:-1, lineSpacingMultiple:0.95, valign:'top' });
+  }
+  function lead(slide, text, x, y, w){
+    slide.addText(text, { x, y, w, h:1.4, fontFace:F.body, fontSize:13, color:C.mute, lineSpacingMultiple:1.25, valign:'top' });
+  }
+  function pageFoot(slide, no, section){
+    slide.addText([{ text:'CausQ  ', options:{ color:C.faint } }, { text:(no ? no + ' / ' + section : 'Pitch deck ' + META.year), options:{ color:C.teal } }],
+      { x:M, y:7.0, w:CW, h:0.3, fontFace:F.mono, fontSize:9, charSpacing:1.5 });
+  }
+  function card(slide, x, y, w, h, opts){
+    slide.addShape('roundRect', { x, y, w, h, rectRadius:0.08,
+      fill:{ color:opts && opts.accent ? '0C2A30' : C.panel }, line:{ color:opts && opts.accent ? C.teal : C.line, width:1 } });
+  }
+  // simple 16:9 grid placement
+  function cols(n, gap){ const g = gap == null ? 0.3 : gap; const w = (CW - g * (n - 1)) / n; return { w, at:i => M + i * (w + g) }; }
+
+  function buildPPTX(){
+    const pptx = new PptxGenJS();
+    pptx.defineLayout({ name:'CQ', width:13.333, height:7.5 });
+    pptx.layout = 'CQ';
+    pptx.author = 'CausQ'; pptx.company = 'CausQ'; pptx.title = 'CausQ — Capabilities & Partnership Overview';
+
+    const bg = () => ({ fill:{ color:C.night } });
+
+    DECK.forEach(s => {
+      const sl = pptx.addSlide(); sl.background = { color:C.night };
+
+      if (s.type === 'cover'){
+        sl.addShape('rect', { x:0, y:0, w:13.333, h:7.5, fill:{ type:'solid', color:'0A1418' } });
+        sl.addShape('rect', { x:0, y:0, w:13.333, h:7.5, fill:{ color:C.night } });
+        sl.addText(s.conf.toUpperCase(), { x:0, y:0.7, w:13.333, h:0.3, align:'center', fontFace:F.mono, fontSize:10, color:C.faint, charSpacing:2 });
+        sl.addText(s.kicker.toUpperCase(), { x:0, y:1.45, w:13.333, h:0.3, align:'center', fontFace:F.mono, fontSize:12, color:C.teal, bold:true, charSpacing:3 });
+        sl.addText(s.title, { x:0.8, y:1.9, w:11.73, h:2.9, align:'center', fontFace:F.display, fontSize:58, bold:true, color:'FFFFFF', charSpacing:-1.5, lineSpacingMultiple:0.95 });
+        sl.addText(s.lead, { x:2.4, y:4.85, w:8.53, h:1.4, align:'center', fontFace:F.body, fontSize:14, color:C.mute, lineSpacingMultiple:1.3 });
+        sl.addText(s.prepared.toUpperCase(), { x:0, y:6.6, w:13.333, h:0.3, align:'center', fontFace:F.mono, fontSize:10, color:C.faint, charSpacing:2 });
+        sl.addShape('line', { x:6.27, y:6.35, w:0.8, h:0, line:{ color:C.teal, width:1.5 } });
+        return;
+      }
+
+      kick(sl, s.no + ' / ' + s.section, 0.62);
+
+      if (s.type === 'stats'){
+        title(sl, s.title, 1.05, 34);
+        lead(sl, s.lead, 7.0, 1.15, CW - 6.3);
+        const g = cols(4, 0.35);
+        s.stats.forEach((x, i) => {
+          const X = g.at(i);
+          sl.addShape('line', { x:X, y:3.5, w:g.w, h:0, line:{ color:C.line, width:1 } });
+          const vu = splitVU(x.v);
+          sl.addText([{ text:vu.num, options:{ color:'FFFFFF' } }, { text:vu.unit, options:{ color:C.teal } }],
+            { x:X, y:3.65, w:g.w, h:1.0, fontFace:F.display, fontSize:40, bold:true, charSpacing:-1 });
+          sl.addText(x.l, { x:X, y:4.75, w:g.w, h:1.6, fontFace:F.body, fontSize:11.5, color:C.mute, lineSpacingMultiple:1.2, valign:'top' });
+        });
+      }
+
+      else if (s.type === 'cards'){
+        title(sl, s.title, 1.05, 30);
+        const g = cols(3, 0.3); const rowY = [2.55, 5.0], cardH = 2.25;
+        s.cards.forEach((c, i) => {
+          const X = g.at(i % 3), Y = rowY[Math.floor(i / 3)];
+          card(sl, X, Y, g.w, cardH);
+          const px = X + 0.28, pw = g.w - 0.56;
+          sl.addText(c.tag.toUpperCase(), { x:px, y:Y + 0.22, w:pw, h:0.3, fontFace:F.mono, fontSize:9.5, color:C.teal, bold:true, charSpacing:1.5 });
+          sl.addText(c.h, { x:px, y:Y + 0.52, w:pw, h:0.55, fontFace:F.display, fontSize:16, bold:true, color:'FFFFFF', charSpacing:-0.5 });
+          sl.addText(c.p, { x:px, y:Y + 1.08, w:pw, h:1.05, fontFace:F.body, fontSize:10.5, color:C.mute, lineSpacingMultiple:1.18, valign:'top' });
+        });
+      }
+
+      else if (s.type === 'markets'){
+        title(sl, s.title, 1.05, 30);
+        const g = cols(3, 0.3); const rowY = [2.55, 5.0], cardH = 2.25;
+        s.markets.forEach((m, i) => {
+          const X = g.at(i % 3), Y = rowY[Math.floor(i / 3)];
+          card(sl, X, Y, g.w, cardH, { accent:m.accent });
+          const px = X + 0.28, pw = g.w - 0.56;
+          sl.addText(m.k.toUpperCase(), { x:px, y:Y + 0.2, w:pw, h:0.3, fontFace:F.mono, fontSize:9, color:m.accent ? C.teal : C.faint, charSpacing:1.2 });
+          sl.addText(m.v, { x:px, y:Y + 0.5, w:pw, h:0.6, fontFace:F.display, fontSize:26, bold:true, color:'FFFFFF', charSpacing:-1 });
+          sl.addText(m.vs + '   ·   ' + m.c, { x:px, y:Y + 1.12, w:pw, h:0.3, fontFace:F.mono, fontSize:9.5, color:C.teal });
+          sl.addText(m.p, { x:px, y:Y + 1.46, w:pw, h:0.7, fontFace:F.body, fontSize:10, color:C.mute, lineSpacingMultiple:1.15, valign:'top' });
+        });
+      }
+
+      else if (s.type === 'pillars'){
+        title(sl, s.title, 1.05, 30);
+        const g = cols(3, 0.3), Y = 2.5, cardH = 2.35;
+        s.pillars.forEach((p, i) => {
+          const X = g.at(i); card(sl, X, Y, g.w, cardH);
+          const px = X + 0.32, pw = g.w - 0.64;
+          sl.addText(p.no.toUpperCase(), { x:px, y:Y + 0.28, w:pw, h:0.3, fontFace:F.mono, fontSize:10, color:C.teal, bold:true, charSpacing:1.5 });
+          sl.addText(p.h, { x:px, y:Y + 0.66, w:pw, h:0.7, fontFace:F.display, fontSize:18, bold:true, color:'FFFFFF', charSpacing:-0.5 });
+          sl.addText(p.p, { x:px, y:Y + 1.4, w:pw, h:0.85, fontFace:F.body, fontSize:11, color:C.mute, lineSpacingMultiple:1.2, valign:'top' });
+        });
+        // chips
+        let cx = M, cy = 5.35; const chH = 0.42;
+        s.chips.forEach(ch => {
+          const w = 0.22 + ch.length * 0.085;
+          if (cx + w > M + CW){ cx = M; cy += chH + 0.18; }
+          sl.addShape('roundRect', { x:cx, y:cy, w, h:chH, rectRadius:0.2, fill:{ color:C.panel }, line:{ color:C.line, width:1 } });
+          sl.addText(ch, { x:cx, y:cy, w, h:chH, align:'center', valign:'middle', fontFace:F.mono, fontSize:9.5, color:C.ink });
+          cx += w + 0.18;
+        });
+      }
+
+      else if (s.type === 'values'){
+        title(sl, s.title, 1.05, 28);
+        const g = cols(3, 0.4); const rowY = [2.85, 5.1];
+        s.values.forEach((v, i) => {
+          const X = g.at(i % 3), Y = rowY[Math.floor(i / 3)];
+          sl.addShape('line', { x:X, y:Y, w:0, h:1.7, line:{ color:C.teal, width:2 } });
+          const px = X + 0.22, pw = g.w - 0.3;
+          sl.addText(v.h, { x:px, y:Y, w:pw, h:0.5, fontFace:F.display, fontSize:15, bold:true, color:'FFFFFF', charSpacing:-0.5 });
+          sl.addText(v.p, { x:px, y:Y + 0.5, w:pw, h:1.2, fontFace:F.body, fontSize:10.5, color:C.mute, lineSpacingMultiple:1.2, valign:'top' });
+        });
+      }
+
+      else if (s.type === 'moves'){
+        title(sl, s.title, 1.05, 34);
+        lead(sl, s.lead, 7.0, 1.15, CW - 6.3);
+        const g = cols(4, 0.35), Y = 3.5;
+        s.moves.forEach((m, i) => {
+          const X = g.at(i);
+          sl.addShape('line', { x:X, y:Y, w:g.w, h:0, line:{ color:C.line, width:2 } });
+          sl.addText(m.n.toUpperCase(), { x:X, y:Y + 0.18, w:g.w, h:0.3, fontFace:F.mono, fontSize:9.5, color:C.teal, bold:true, charSpacing:1.5 });
+          sl.addText(m.h, { x:X, y:Y + 0.5, w:g.w, h:0.6, fontFace:F.display, fontSize:24, bold:true, color:'FFFFFF', charSpacing:-0.5 });
+          sl.addText(m.p, { x:X, y:Y + 1.2, w:g.w, h:1.6, fontFace:F.body, fontSize:11, color:C.mute, lineSpacingMultiple:1.2, valign:'top' });
+        });
+      }
+
+      else if (s.type === 'journey'){
+        title(sl, s.title, 1.05, 28);
+        lead(sl, s.lead, M, 2.05, CW * 0.7);
+        const g = cols(5, 0.25), Y = 3.55;
+        s.steps.forEach((j, i) => {
+          const X = g.at(i);
+          sl.addShape('ellipse', { x:X, y:Y, w:0.42, h:0.42, fill:{ color:C.teal } });
+          sl.addText(j.b, { x:X, y:Y, w:0.42, h:0.42, align:'center', valign:'middle', fontFace:F.display, fontSize:14, bold:true, color:C.tealInk });
+          if (i < s.steps.length - 1) sl.addShape('line', { x:X + 0.5, y:Y + 0.21, w:g.w - 0.5, h:0, line:{ color:C.line, width:1 } });
+          sl.addText(j.ph.toUpperCase(), { x:X, y:Y + 0.55, w:g.w, h:0.25, fontFace:F.mono, fontSize:8, color:C.faint, charSpacing:1 });
+          sl.addText(j.h, { x:X, y:Y + 0.8, w:g.w, h:0.5, fontFace:F.display, fontSize:13, bold:true, color:'FFFFFF', charSpacing:-0.5 });
+          sl.addText(j.p, { x:X, y:Y + 1.3, w:g.w, h:1.7, fontFace:F.body, fontSize:9, color:C.mute, lineSpacingMultiple:1.15, valign:'top' });
+        });
+      }
+
+      else if (s.type === 'proof'){
+        title(sl, s.title, 1.05, 28);
+        lead(sl, s.lead, M, 2.2, CW * 0.42);
+        const X = M + CW * 0.5, w = CW * 0.5;
+        let Y = 1.4;
+        s.items.forEach(it => {
+          sl.addShape('ellipse', { x:X, y:Y, w:0.5, h:0.5, fill:{ color:C.night }, line:{ color:C.teal, width:1 } });
+          sl.addText(it.n, { x:X, y:Y, w:0.5, h:0.5, align:'center', valign:'middle', fontFace:F.display, fontSize:15, bold:true, color:C.teal });
+          sl.addText(it.h, { x:X + 0.7, y:Y - 0.02, w:w - 0.7, h:0.4, fontFace:F.display, fontSize:14, bold:true, color:'FFFFFF', charSpacing:-0.5 });
+          sl.addText(it.p, { x:X + 0.7, y:Y + 0.36, w:w - 0.7, h:0.7, fontFace:F.body, fontSize:10.5, color:C.mute, lineSpacingMultiple:1.15, valign:'top' });
+          Y += 1.32;
+        });
+      }
+
+      else if (s.type === 'cta'){
+        sl.addText(s.title, { x:M, y:1.7, w:CW * 0.8, h:1.4, fontFace:F.display, fontSize:46, bold:true, color:'FFFFFF', charSpacing:-1.5 });
+        sl.addText(s.lead, { x:M, y:3.2, w:CW * 0.62, h:1.3, fontFace:F.body, fontSize:14, color:C.mute, lineSpacingMultiple:1.3, valign:'top' });
+        // pills
+        let px = M, py = 4.7;
+        s.pills.forEach(p => {
+          const label = p.t + (p.solid ? '  →' : ''); const w = 0.6 + label.length * 0.105;
+          sl.addShape('roundRect', { x:px, y:py, w, h:0.6, rectRadius:0.3, fill:{ color:p.solid ? C.teal : C.night }, line:{ color:p.solid ? C.teal : C.line, width:1 } });
+          sl.addText(label, { x:px, y:py, w, h:0.6, align:'center', valign:'middle', fontFace:F.body, fontSize:13, bold:true, color:p.solid ? C.tealInk : C.ink });
+          px += w + 0.25;
+        });
+        sl.addText(s.contact, { x:M, y:5.8, w:CW, h:0.5, fontFace:F.display, fontSize:22, bold:true, color:C.teal, charSpacing:-0.5 });
+      }
+
+      else if (s.type === 'sources'){
+        sl.addText(s.title.toUpperCase(), { x:M, y:0.62, w:CW, h:0.4, fontFace:F.mono, fontSize:13, color:C.teal, bold:true, charSpacing:2 });
+        const g = cols(2, 0.6), colItems = Math.ceil(s.list.length / 2);
+        s.list.forEach((t, i) => {
+          const c = Math.floor(i / colItems), r = i % colItems;
+          sl.addText([{ text:(i + 1) + '  ', options:{ color:C.teal, bold:true } }, { text:t, options:{ color:C.mute } }],
+            { x:g.at(c), y:1.4 + r * 0.62, w:g.w, h:0.6, fontFace:F.body, fontSize:10, lineSpacingMultiple:1.1, valign:'top' });
+        });
+        sl.addText(s.note, { x:M, y:6.3, w:CW, h:0.8, fontFace:F.body, fontSize:9, color:C.faint, italic:true, lineSpacingMultiple:1.15, valign:'top' });
+        return;
+      }
+
+      if (s.no) pageFoot(sl, s.no, s.section);
+    });
+
+    return pptx;
+  }
+
+  const pptBtn = document.getElementById('pptBtn');
+  pptBtn.addEventListener('click', async () => {
+    if (typeof PptxGenJS === 'undefined'){ toast('PowerPoint engine still loading, try again in a moment.', true); return; }
+    const orig = pptBtn.innerHTML;
+    pptBtn.disabled = true;
+    pptBtn.innerHTML = '<span class="spin"></span><span class="lbl">Building deck…</span>';
+    try {
+      const pptx = buildPPTX();
+      await pptx.writeFile({ fileName: 'CausQ-Pitch-Deck.pptx' });
+      toast('Downloaded CausQ-Pitch-Deck.pptx');
+    } catch (err){
+      console.error(err);
+      toast('Could not generate the PPT. ' + (err && err.message ? err.message : ''), true);
+    } finally {
+      pptBtn.disabled = false; pptBtn.innerHTML = orig;
+    }
+  });
+  </script>
+</body>
+</html>
