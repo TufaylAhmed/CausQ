@@ -3,6 +3,7 @@
 # deploy artifacts (generated; not source)
 /deploy_portal
 /portal-deploy.zip
+/portal-next.zip
 
 # dependencies
 /node_modules
