@@ -16,8 +16,9 @@ export function AuthScene({
   return (
     <div className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
       <aside className="scene-ink hidden flex-col justify-between p-12 lg:flex">
-        <a href="https://causq.com" className="wordmark relative z-10 text-2xl text-white">
-          Caus<b>Q</b>
+        <a href="https://causq.com" className="relative z-10 flex items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/causq-white.png" alt="CausQ" className="h-8 w-auto" />
         </a>
         <div className="relative z-10">
           <p className="kicker" style={{ color: "var(--signal)" }}>
@@ -38,9 +39,8 @@ export function AuthScene({
 
       <main className="flex items-center justify-center p-6 sm:p-10">
         <div className="reveal w-full max-w-sm">
-          <p className="wordmark mb-6 text-xl lg:hidden">
-            Caus<b>Q</b>
-          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/causq-ink.png" alt="CausQ" className="mb-6 h-7 w-auto lg:hidden" />
           {kicker && <p className="kicker mb-3">{kicker}</p>}
           <h1 className="text-2xl font-semibold tracking-tight text-[var(--ink)]">{title}</h1>
           <div className="mt-7">{children}</div>

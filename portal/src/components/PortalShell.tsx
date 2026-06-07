@@ -31,8 +31,9 @@ export async function PortalShell({
     <div className="min-h-screen flex flex-col">
       <header className="appbar sticky top-0 z-20">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center gap-7 px-5">
-          <a href="/portal" className="wordmark text-lg text-white">
-            Caus<b>Q</b>
+          <a href="/portal" className="flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/causq-white.png" alt="CausQ" className="h-6 w-auto" />
           </a>
           <nav className="appnav hidden items-center gap-6 sm:flex">
             <a href="/portal" className={active === "engagements" ? "active" : ""}>

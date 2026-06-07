@@ -30,8 +30,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="min-h-screen flex flex-col">
       <header className="appbar sticky top-0 z-20">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center gap-6 px-5">
-          <a href="/portal" className="wordmark text-lg text-white">
-            Caus<b>Q</b>
+          <a href="/portal" className="flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/causq-white.png" alt="CausQ" className="h-6 w-auto" />
           </a>
           <span className="rounded-full border border-[var(--signal)]/40 px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-[var(--signal)]">
             Admin
