@@ -61,6 +61,41 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          detail: Json
+          id: string
+          target: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          detail?: Json
+          id?: string
+          target?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          detail?: Json
+          id?: string
+          target?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_audit_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       documents: {
         Row: {
           created_at: string
@@ -407,6 +442,10 @@ export type Database = {
       auth_is_active: { Args: never; Returns: boolean }
       auth_is_staff: { Args: never; Returns: boolean }
       auth_org_id: { Args: never; Returns: string }
+      create_invite: {
+        Args: { p_days?: number; p_email?: string; p_org: string }
+        Returns: string
+      }
       engagement_messages: {
         Args: { p_engagement: string }
         Returns: {
@@ -418,11 +457,16 @@ export type Database = {
           id: string
         }[]
       }
+      log_admin_action: {
+        Args: { p_action: string; p_detail?: Json; p_target?: string }
+        Returns: undefined
+      }
       post_message: {
         Args: { p_body: string; p_engagement: string }
         Returns: string
       }
       redeem_invite: { Args: { p_token: string }; Returns: undefined }
+      reject_profile: { Args: { p_id: string }; Returns: undefined }
     }
     Enums: {
       engagement_status: "active" | "on_hold" | "closed"
