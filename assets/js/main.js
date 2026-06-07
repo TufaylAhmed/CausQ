@@ -154,6 +154,7 @@ function renderFooter(){
           <a href="cookies.html">Cookies</a>
           <a href="responsible-ai.html">Responsible AI</a>
           <a href="security.html">Security</a>
+          <a href="compliance.html">Compliance</a>
         </div>
       </div>
     </div>
