@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function oauth(provider: "google" | "azure") {
+  async function oauth(provider: "google") {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider,
@@ -110,14 +110,9 @@ export default function LoginPage() {
         <span className="h-px flex-1 bg-[var(--line)]" />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Button variant="outline" className="h-11" onClick={() => oauth("google")}>
-          Google
-        </Button>
-        <Button variant="outline" className="h-11" onClick={() => oauth("azure")}>
-          Microsoft
-        </Button>
-      </div>
+      <Button variant="outline" className="h-11 w-full" onClick={() => oauth("google")}>
+        Continue with Google
+      </Button>
     </AuthScene>
   );
 }
