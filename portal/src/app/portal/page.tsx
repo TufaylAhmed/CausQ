@@ -25,11 +25,16 @@ export default async function PortalHome() {
       <h1 className="text-2xl font-semibold">Your engagements</h1>
       <ul className="space-y-2">
         {(engagements ?? []).map((e) => (
-          <li key={e.id} className="rounded border p-3">
-            <div className="font-medium">{e.title}</div>
-            <div className="text-sm text-neutral-500">
-              {e.status} · {e.progress}%
-            </div>
+          <li key={e.id}>
+            <a
+              href={`/portal/engagements/${e.id}`}
+              className="block rounded border p-3 transition-colors hover:border-brand"
+            >
+              <div className="font-medium">{e.title}</div>
+              <div className="text-sm text-neutral-500">
+                {e.status} · {e.progress}%
+              </div>
+            </a>
           </li>
         ))}
         {(!engagements || engagements.length === 0) && (
