@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { InvoiceDownload } from "./InvoiceDownload";
+import { PayButton } from "./PayButton";
 
 export default async function InvoicesPage() {
   const supabase = await createClient();
@@ -39,6 +40,9 @@ export default async function InvoicesPage() {
                 {inv.status}
               </Badge>
               {inv.pdf_path && <InvoiceDownload path={inv.pdf_path} />}
+              {inv.status !== "paid" && Number(inv.amount) > 0 && (
+                <PayButton invoiceId={inv.id} />
+              )}
             </div>
           </li>
         ))}

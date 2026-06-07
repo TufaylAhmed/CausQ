@@ -259,8 +259,10 @@ export type Database = {
           id: string
           number: string
           org_id: string
+          paid_at: string | null
           pdf_path: string | null
           status: Database["public"]["Enums"]["invoice_status"]
+          stripe_session_id: string | null
         }
         Insert: {
           amount?: number
@@ -270,8 +272,10 @@ export type Database = {
           id?: string
           number: string
           org_id: string
+          paid_at?: string | null
           pdf_path?: string | null
           status?: Database["public"]["Enums"]["invoice_status"]
+          stripe_session_id?: string | null
         }
         Update: {
           amount?: number
@@ -281,8 +285,10 @@ export type Database = {
           id?: string
           number?: string
           org_id?: string
+          paid_at?: string | null
           pdf_path?: string | null
           status?: Database["public"]["Enums"]["invoice_status"]
+          stripe_session_id?: string | null
         }
         Relationships: [
           {
