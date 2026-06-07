@@ -11,10 +11,14 @@ insert into public.orgs (id, name, verified_domains) values
   ('00000000-0000-0000-0000-0000000000a1', 'Acme',   '{acme.com}'),
   ('00000000-0000-0000-0000-0000000000b1', 'Globex', '{globex.com}');
 
+-- handle_new_user() auto-creates these profiles on the auth.users inserts above
+-- (org via domain match), so upsert to set the exact role/status this test needs.
 insert into public.profiles (id, email, org_id, role, status) values
   ('00000000-0000-0000-0000-0000000000a2', 'amy@acme.com',   '00000000-0000-0000-0000-0000000000a1', 'client', 'active'),
   ('00000000-0000-0000-0000-0000000000b2', 'gil@globex.com', '00000000-0000-0000-0000-0000000000b1', 'client', 'active'),
-  ('00000000-0000-0000-0000-0000000000c2', 'pat@acme.com',   '00000000-0000-0000-0000-0000000000a1', 'client', 'pending');
+  ('00000000-0000-0000-0000-0000000000c2', 'pat@acme.com',   '00000000-0000-0000-0000-0000000000a1', 'client', 'pending')
+on conflict (id) do update set
+  org_id = excluded.org_id, role = excluded.role, status = excluded.status;
 
 insert into public.engagements (id, org_id, title) values
   ('00000000-0000-0000-0000-0000000000a3', '00000000-0000-0000-0000-0000000000a1', 'Acme engagement'),
