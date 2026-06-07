@@ -22,7 +22,12 @@ export default async function PortalHome() {
 
   return (
     <div className="mx-auto max-w-3xl p-6 space-y-4">
-      <h1 className="text-2xl font-semibold">Your engagements</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Your engagements</h1>
+        <a href="/portal/invoices" className="text-sm text-brand-deep underline">
+          Invoices →
+        </a>
+      </div>
       <ul className="space-y-2">
         {(engagements ?? []).map((e) => (
           <li key={e.id}>

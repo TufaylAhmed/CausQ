@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import { DocumentRow } from "./DocumentRow";
 import { UploadForm } from "./UploadForm";
+import { MessageComposer } from "./MessageComposer";
 
 export default async function EngagementDetail({
   params,
@@ -40,6 +41,10 @@ export default async function EngagementDetail({
     .select("id, filename, storage_path")
     .eq("engagement_id", id)
     .order("created_at", { ascending: false });
+
+  const { data: messages } = await supabase.rpc("engagement_messages", {
+    p_engagement: id,
+  });
 
   return (
     <div className="mx-auto max-w-3xl p-6 space-y-6">
@@ -85,6 +90,25 @@ export default async function EngagementDetail({
             <p className="text-sm text-neutral-500">No documents yet.</p>
           )}
         </div>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="font-medium">Messages</h2>
+        <ul className="space-y-2">
+          {(messages ?? []).map((m) => (
+            <li key={m.id} className="rounded border p-3">
+              <div className="text-xs text-neutral-500">
+                {m.author_name ?? "Unknown"}
+                {m.author_role === "client" ? "" : " · CausQ"}
+              </div>
+              <div className="text-sm">{m.body}</div>
+            </li>
+          ))}
+          {(!messages || messages.length === 0) && (
+            <li className="text-sm text-neutral-500">No messages yet.</li>
+          )}
+        </ul>
+        <MessageComposer engagementId={id} />
       </section>
     </div>
   );
