@@ -25,3 +25,11 @@ insert into public.documents (id, org_id, engagement_id, filename, storage_path,
    '11111111-1111-1111-1111-111111111111/Quantum-readiness-summary.txt',
    42)
 on conflict (id) do nothing;
+
+insert into public.invoices (id, org_id, number, amount, currency, status, due_date, pdf_path) values
+  ('55555555-5555-5555-5555-555555555551', '11111111-1111-1111-1111-111111111111',
+   'INV-1042', 24000, 'USD', 'paid', '2026-04-30',
+   '11111111-1111-1111-1111-111111111111/invoices/INV-1042.pdf'),
+  ('55555555-5555-5555-5555-555555555552', '11111111-1111-1111-1111-111111111111',
+   'INV-1051', 18000, 'USD', 'sent', '2026-06-15', null)
+on conflict (id) do nothing;
