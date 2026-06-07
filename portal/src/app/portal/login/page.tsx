@@ -57,13 +57,18 @@ export default function LoginPage() {
             Sign in
           </Button>
           {error && <p className="text-sm text-[var(--destructive)]">{error}</p>}
-          <button
-            type="button"
-            onClick={() => { setMode("magic"); setError(null); }}
-            className="meta underline underline-offset-4 hover:text-[var(--signal-deep)]"
-          >
-            Email me a one-time link instead
-          </button>
+          <div className="flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={() => { setMode("magic"); setError(null); }}
+              className="meta underline underline-offset-4 hover:text-[var(--signal-deep)]"
+            >
+              Email me a one-time link instead
+            </button>
+            <a className="meta underline underline-offset-4 hover:text-[var(--signal-deep)]" href="/portal/reset">
+              Forgot password?
+            </a>
+          </div>
         </form>
       )}
 
