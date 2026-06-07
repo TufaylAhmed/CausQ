@@ -15,7 +15,7 @@ export function UploadForm({ engagementId }: { engagementId: string }) {
         setBusy(false);
         if (r?.error) setError(r.error);
       }}
-      className="flex items-center gap-2 rounded border border-dashed p-3"
+      className="flex items-center gap-2 rounded-[var(--radius)] border border-dashed border-[var(--line-strong)] bg-[var(--paper-warm)] p-3"
     >
       <input type="file" name="file" required className="text-sm" />
       <Button type="submit" size="sm" disabled={busy}>

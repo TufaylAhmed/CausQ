@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { sendMagicLink } from "./actions";
+import { AuthScene } from "@/components/AuthScene";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function LoginPage() {
   const [sent, setSent] = useState(false);
@@ -19,49 +19,58 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen grid place-items-center p-6">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <p className="font-mono text-xs uppercase tracking-widest text-brand-deep">CausQ</p>
-          <CardTitle>Sign in to the portal</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {sent ? (
-            <p className="text-sm text-neutral-600">Check your email for a sign-in link.</p>
-          ) : (
-            <form
-              action={async (fd) => {
-                const r = await sendMagicLink(fd);
-                if (r?.error) setError(r.error);
-                else setSent(true);
-              }}
-              className="space-y-3"
-            >
-              <Input name="email" type="email" placeholder="you@company.com" required />
-              <Button type="submit" className="w-full">
-                Email me a sign-in link
-              </Button>
-              {error && <p className="text-sm text-red-600">{error}</p>}
-            </form>
-          )}
-          <div className="flex items-center gap-2 text-xs text-neutral-400">
-            <span className="h-px flex-1 bg-neutral-200" />or
-            <span className="h-px flex-1 bg-neutral-200" />
-          </div>
-          <Button variant="outline" className="w-full" onClick={() => oauth("google")}>
-            Continue with Google
-          </Button>
-          <Button variant="outline" className="w-full" onClick={() => oauth("azure")}>
-            Continue with Microsoft
-          </Button>
-          <p className="text-center text-xs text-neutral-500">
-            No account?{" "}
-            <a className="underline" href="/portal/request-access">
-              Request access
-            </a>
+    <AuthScene
+      kicker="Sign in"
+      title="Welcome back"
+      foot={
+        <>
+          No account?{" "}
+          <a className="font-medium text-[var(--signal-deep)] underline underline-offset-4" href="/portal/request-access">
+            Request access
+          </a>
+        </>
+      }
+    >
+      {sent ? (
+        <div className="panel p-5">
+          <p className="kicker mb-2">Check your inbox</p>
+          <p className="text-sm text-[var(--ink-mute)]">
+            We sent a one-time sign-in link to your email. It expires shortly, so
+            use it soon.
           </p>
-        </CardContent>
-      </Card>
-    </main>
+        </div>
+      ) : (
+        <form
+          action={async (fd) => {
+            const r = await sendMagicLink(fd);
+            if (r?.error) setError(r.error);
+            else setSent(true);
+          }}
+          className="space-y-3"
+        >
+          <label className="meta block">Work email</label>
+          <Input name="email" type="email" placeholder="you@company.com" required className="h-11" />
+          <Button type="submit" className="h-11 w-full">
+            Email me a sign-in link
+          </Button>
+          {error && <p className="text-sm text-[var(--destructive)]">{error}</p>}
+        </form>
+      )}
+
+      <div className="my-6 flex items-center gap-3">
+        <span className="h-px flex-1 bg-[var(--line)]" />
+        <span className="meta">or continue with</span>
+        <span className="h-px flex-1 bg-[var(--line)]" />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <Button variant="outline" className="h-11" onClick={() => oauth("google")}>
+          Google
+        </Button>
+        <Button variant="outline" className="h-11" onClick={() => oauth("azure")}>
+          Microsoft
+        </Button>
+      </div>
+    </AuthScene>
   );
 }

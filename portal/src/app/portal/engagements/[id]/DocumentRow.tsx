@@ -15,8 +15,11 @@ export function DocumentRow({ path, filename }: { path: string; filename: string
     window.open(data.signedUrl, "_blank");
   }
   return (
-    <div className="flex items-center justify-between rounded border p-3">
-      <span className="text-sm">{filename}</span>
+    <div className="flex items-center justify-between gap-3 rounded-[var(--radius)] border border-[var(--line)] bg-[var(--paper-warm)] px-3 py-2.5">
+      <span className="flex min-w-0 items-center gap-2 text-sm">
+        <span className="meta">↧</span>
+        <span className="truncate">{filename}</span>
+      </span>
       <Button size="sm" variant="outline" onClick={download}>
         Download
       </Button>

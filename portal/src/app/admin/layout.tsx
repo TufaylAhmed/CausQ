@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { signOut } from "@/app/portal/signout-action";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -24,21 +25,42 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     ["Invoices", "/admin/invoices"],
     ["Requests", "/admin/requests"],
   ];
+
   return (
-    <div className="mx-auto max-w-4xl p-6">
-      <header className="mb-6 flex flex-wrap items-center gap-4 border-b pb-3">
-        <span className="font-mono text-xs uppercase tracking-widest text-brand-deep">
-          CausQ admin
-        </span>
-        <nav className="flex flex-wrap gap-3 text-sm">
-          {nav.map(([label, href]) => (
-            <a key={href} href={href} className="text-neutral-600 hover:text-brand-deep">
-              {label}
+    <div className="min-h-screen flex flex-col">
+      <header className="appbar sticky top-0 z-20">
+        <div className="mx-auto flex h-14 w-full max-w-5xl items-center gap-6 px-5">
+          <a href="/portal" className="wordmark text-lg text-white">
+            Caus<b>Q</b>
+          </a>
+          <span className="rounded-full border border-[var(--signal)]/40 px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-[var(--signal)]">
+            Admin
+          </span>
+          <div className="ml-auto flex items-center gap-4">
+            <a
+              href="/portal"
+              className="font-mono text-[0.7rem] uppercase tracking-widest text-white/55 hover:text-white"
+            >
+              Portal
             </a>
-          ))}
-        </nav>
+            <form action={signOut}>
+              <button className="font-mono text-[0.7rem] uppercase tracking-widest text-white/55 hover:text-white">
+                Sign out
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className="border-t border-white/5">
+          <nav className="appnav mx-auto flex w-full max-w-5xl items-center gap-5 overflow-x-auto px-5 py-2.5">
+            {nav.map(([label, href]) => (
+              <a key={href} href={href} className="whitespace-nowrap">
+                {label}
+              </a>
+            ))}
+          </nav>
+        </div>
       </header>
-      {children}
+      <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-10">{children}</main>
     </div>
   );
 }

@@ -1,36 +1,37 @@
 "use client";
 import { useState } from "react";
 import { redeemInvite } from "./actions";
+import { AuthScene } from "@/components/AuthScene";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function InvitePage() {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <main className="min-h-screen grid place-items-center p-6">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <p className="font-mono text-xs uppercase tracking-widest text-brand-deep">CausQ</p>
-          <CardTitle>Redeem an invite</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form
-            action={async (fd) => {
-              const r = await redeemInvite(fd);
-              if (r?.error) setError(r.error);
-            }}
-            className="space-y-3"
-          >
-            <Input name="token" placeholder="Invite code" required />
-            <Button type="submit" className="w-full">
-              Redeem
-            </Button>
-            {error && <p className="text-sm text-red-600">{error}</p>}
-          </form>
-        </CardContent>
-      </Card>
-    </main>
+    <AuthScene
+      kicker="Invite"
+      title="Redeem your invite code"
+      foot={
+        <a className="font-medium text-[var(--signal-deep)] underline underline-offset-4" href="/portal">
+          Back to portal
+        </a>
+      }
+    >
+      <form
+        action={async (fd) => {
+          const r = await redeemInvite(fd);
+          if (r?.error) setError(r.error);
+        }}
+        className="space-y-3"
+      >
+        <label className="meta block">Invite code</label>
+        <Input name="token" placeholder="e.g. 7f3k9a2b…" required className="h-11 font-mono" />
+        <Button type="submit" className="h-11 w-full">
+          Redeem
+        </Button>
+        {error && <p className="text-sm text-[var(--destructive)]">{error}</p>}
+      </form>
+    </AuthScene>
   );
 }

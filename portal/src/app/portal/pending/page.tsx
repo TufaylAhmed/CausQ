@@ -1,18 +1,26 @@
+import { AuthScene } from "@/components/AuthScene";
+
 export default function PendingPage() {
   return (
-    <main className="min-h-screen grid place-items-center p-6 text-center">
-      <div>
-        <p className="font-mono text-xs uppercase tracking-widest text-brand-deep">CausQ</p>
-        <h1 className="mt-2 text-2xl font-semibold">Awaiting approval</h1>
-        <p className="mt-2 max-w-md text-neutral-500">
-          Your account is being reviewed. You will get access once a CausQ administrator
-          approves it. Have an invite code?{" "}
-          <a className="underline" href="/portal/invite">
+    <AuthScene
+      kicker="Awaiting approval"
+      title="Your account is being reviewed"
+      foot={
+        <>
+          Have an invite code?{" "}
+          <a className="font-medium text-[var(--signal-deep)] underline underline-offset-4" href="/portal/invite">
             Redeem it here
           </a>
-          .
+        </>
+      }
+    >
+      <div className="panel p-5">
+        <p className="text-sm leading-relaxed text-[var(--ink-mute)]">
+          You will get access the moment a CausQ administrator approves your
+          account. This usually happens quickly. You can close this tab and come
+          back later, you will stay signed in.
         </p>
       </div>
-    </main>
+    </AuthScene>
   );
 }

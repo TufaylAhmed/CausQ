@@ -22,7 +22,7 @@ export function MessageComposer({ engagementId }: { engagementId: string }) {
         required
         rows={2}
         placeholder="Write a message…"
-        className="w-full rounded border p-2 text-sm"
+        className="w-full rounded-[var(--radius)] border border-[var(--input)] bg-[var(--paper)] p-3 text-sm outline-none focus:border-[var(--signal)]"
       />
       <div className="flex items-center gap-2">
         <Button type="submit" size="sm">
