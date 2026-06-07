@@ -3,7 +3,12 @@ import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/lib/types/database.types";
 
 // Public pages under /portal that must NOT require a session.
-const PUBLIC_PORTAL_PATHS = ["/portal/login", "/portal/request-access"];
+const PUBLIC_PORTAL_PATHS = [
+  "/portal/login",
+  "/portal/signup",
+  "/portal/reset",
+  "/portal/request-access",
+];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
