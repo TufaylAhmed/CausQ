@@ -17,6 +17,18 @@ export function AuthScene({
   return (
     <div className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
       <aside className="scene-ink hidden flex-col justify-between p-12 lg:flex">
+        {/* Homepage hero image (matches causq.com first slide), dimmed for legibility */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/home-hero-wide.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 z-0 h-full w-full object-cover object-center opacity-35"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-0 bg-gradient-to-tr from-[var(--ink)] via-[var(--ink)]/80 to-[var(--ink)]/55"
+        />
         <a href="https://causq.com" className="relative z-10 flex items-center">
           <Wordmark variant="white" className="h-8 w-auto" dotSize={9} />
         </a>
