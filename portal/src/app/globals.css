@@ -279,7 +279,7 @@
 }
 .auth-hero-zoom {
   transform-origin: center;
-  animation: authZoom 30s ease-in-out infinite alternate;
+  animation: authZoom 16s ease-in-out infinite alternate;
 }
 @media (prefers-reduced-motion: reduce) {
   .auth-hero-zoom { animation: none; }
