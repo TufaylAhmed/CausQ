@@ -59,6 +59,8 @@
   --paper-warm: #f6f4ee;
   --signal: #06b6d4;
   --signal-deep: #0891b2;
+  --signal-glow: rgba(6, 182, 212, 0.18);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --line: rgba(12, 12, 14, 0.10);
   --line-strong: rgba(12, 12, 14, 0.16);
 
@@ -269,5 +271,36 @@
   to   { opacity: 1; transform: none; }
 }
 .reveal { animation: reveal 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+/* CausQ logo lockup: wordmark + radiating teal signal dot (matches causq.com) */
+.cq-lockup { display: inline-flex; align-items: flex-end; line-height: 0; }
+.cq-lockup img { display: block; }
+.cq-rad {
+  position: relative;
+  flex: none;
+  margin: 0 0 4px 6px;
+  border-radius: 9999px;
+  background: var(--signal);
+  box-shadow: 0 0 8px 1px var(--signal-glow);
+}
+.cq-rad::before,
+.cq-rad::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 100%; height: 100%;
+  border-radius: 9999px;
+  border: 1.5px solid var(--signal);
+  transform: translate(-50%, -50%) scale(1);
+  animation: radiate 2.8s var(--ease) infinite;
+}
+.cq-rad::after { animation-delay: 1.4s; }
+@keyframes radiate {
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.75; }
+  100% { transform: translate(-50%, -50%) scale(6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cq-rad::before, .cq-rad::after { animation: none; }
+}
 
 input::placeholder, textarea::placeholder { color: #9a978d; }

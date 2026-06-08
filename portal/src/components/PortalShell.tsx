@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/portal/signout-action";
+import { Wordmark } from "@/components/Wordmark";
 
 type Active = "engagements" | "invoices" | "admin" | undefined;
 
@@ -32,8 +33,7 @@ export async function PortalShell({
       <header className="appbar sticky top-0 z-20">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center gap-7 px-5">
           <a href="/portal" className="flex items-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/causq-white.png" alt="CausQ" className="h-6 w-auto" />
+            <Wordmark variant="white" className="h-6 w-auto" dotSize={6} />
           </a>
           <nav className="appnav hidden items-center gap-6 sm:flex">
             <a href="/portal" className={active === "engagements" ? "active" : ""}>

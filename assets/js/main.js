@@ -84,6 +84,7 @@ function renderNav(){
       <a href="index.html" class="brand" aria-label="CausQ home"><span class="logo-lockup"><img class="logo-img" src="assets/img/causq-word-ink.png" alt="CausQ"><span class="rad"></span></span></a>
       <div class="nav-links" id="navLinks">
         ${links}
+        <a href="https://portal.causq.com/portal/login" class="btn btn-login"><span class="lpip" aria-hidden="true"></span>Client login</a>
         <a href="contact.html" class="btn btn-dark">Let's talk <span class="arr">&rarr;</span></a>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -98,7 +99,7 @@ function renderFooter(){
     <div class="wrap">
       <div class="foot-top">
         <div>
-          <img src="assets/img/causq-word-white.png" alt="CausQ" class="foot-logo" />
+          <span class="cq-lockup foot-logo-lockup"><img src="assets/img/causq-word-white.png" alt="CausQ" class="foot-logo" /><span class="cq-rad" aria-hidden="true"></span></span>
           <p class="blurb">Engineering AI, modern networks and quantum-era security for enterprises that
             can't afford for the infrastructure to blink. Worldwide.</p>
         </div>
