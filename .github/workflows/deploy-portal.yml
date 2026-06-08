@@ -1,0 +1,115 @@
+name: Deploy portal
+
+# Builds the Next.js portal in CI and ships the standalone bundle to the
+# Namecheap/cPanel host over SSH, then restarts Passenger. Fully automatic:
+# push a change under portal/ to main and the live portal updates in ~2 min.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   SSH_HOST       e.g. serverNNN.web-hosting.com
+#   SSH_PORT       Namecheap shared SSH is usually 21098
+#   SSH_USER       cPanel user, e.g. faazcvhi
+#   SSH_KEY        private deploy key (PEM); public half goes in cPanel SSH Access
+#   PORTAL_PATH    absolute app dir, e.g. /home/faazcvhi/portal_app
+#   NEXT_PUBLIC_SUPABASE_URL        build-time, inlined into the client bundle
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY   build-time, inlined into the client bundle
+#   NEXT_PUBLIC_SITE_URL            build-time (https://portal.causq.com)
+#
+# Runtime-only secrets (Stripe, MailerSend, Supabase service role) are NOT
+# needed here: they live in the server's .env, which this deploy never touches.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "portal/**"
+      - ".github/workflows/deploy-portal.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-portal
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: portal/package-lock.json
+
+      - name: Install dependencies
+        working-directory: portal
+        run: npm ci
+
+      - name: Build (standalone)
+        working-directory: portal
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+        run: npm run build
+
+      - name: Assemble deploy bundle
+        working-directory: portal
+        run: |
+          set -euo pipefail
+          rm -rf deploy_portal
+          mkdir -p deploy_portal
+          # standalone root: server.js, package.json, node_modules, .next (server)
+          cp -R .next/standalone/. deploy_portal/
+          # static assets the standalone server serves
+          mkdir -p deploy_portal/.next/static
+          cp -R .next/static/. deploy_portal/.next/static/
+          # public/ (logos, svgs)
+          cp -R public deploy_portal/public
+          test -f deploy_portal/server.js
+          test -f deploy_portal/.next/BUILD_ID
+          echo "Bundle BUILD_ID: $(cat deploy_portal/.next/BUILD_ID)"
+
+      - name: Configure SSH
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          cat >> ~/.ssh/config <<EOF
+          Host deploy
+            HostName ${{ secrets.SSH_HOST }}
+            User ${{ secrets.SSH_USER }}
+            Port ${{ secrets.SSH_PORT }}
+            IdentityFile ~/.ssh/id_deploy
+            StrictHostKeyChecking accept-new
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Deploy over rsync + restart Passenger
+        env:
+          APP: ${{ secrets.PORTAL_PATH }}
+        run: |
+          set -euo pipefail
+          B=portal/deploy_portal
+          # Replace the large build dirs cleanly (--delete). The app-root files
+          # we never ship — .env, .htaccess, tmp/ — are left untouched.
+          rsync -az --delete "$B/.next/"        "deploy:$APP/.next/"
+          rsync -az --delete "$B/public/"       "deploy:$APP/public/"
+          rsync -az --delete "$B/node_modules/" "deploy:$APP/node_modules/"
+          rsync -az          "$B/server.js"     "deploy:$APP/"
+          rsync -az          "$B/package.json"  "deploy:$APP/"
+          # Readable perms so static assets serve (avoids the logo 403), then
+          # touch restart.txt so Passenger reloads the new code.
+          ssh deploy "mkdir -p '$APP/tmp' \
+            && chmod -R u+rwX,go+rX '$APP/.next' '$APP/public' \
+            && touch '$APP/tmp/restart.txt' \
+            && echo Deployed BUILD_ID: \$(cat '$APP/.next/BUILD_ID')"
+
+      - name: Smoke check
+        run: |
+          set -euo pipefail
+          sleep 8
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://portal.causq.com/portal/login || true)
+          echo "portal/login -> HTTP $code"
+          test "$code" = "200" || echo "::warning::login returned $code (Passenger may still be warming up)"
