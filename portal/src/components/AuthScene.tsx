@@ -23,11 +23,11 @@ export function AuthScene({
           src="/home-hero-wide.jpg"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 z-0 h-full w-full object-cover object-center opacity-35"
+          className="auth-hero-zoom absolute inset-0 z-0 h-full w-full object-cover object-center opacity-65"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 z-0 bg-gradient-to-tr from-[var(--ink)] via-[var(--ink)]/80 to-[var(--ink)]/55"
+          className="absolute inset-0 z-0 bg-gradient-to-tr from-[var(--ink)]/90 via-[var(--ink)]/55 to-[var(--ink)]/20"
         />
         <a href="https://causq.com" className="relative z-10 flex items-center">
           <Wordmark variant="white" className="h-8 w-auto" dotSize={9} />
