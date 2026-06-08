@@ -107,15 +107,20 @@ jobs:
             && echo Deployed BUILD_ID: \$(cat '$APP/.next/BUILD_ID')"
 
       - name: Smoke check
+        env:
+          ORIGIN_IP: ${{ secrets.SSH_HOST }}
         run: |
           set -euo pipefail
+          # Hit the ORIGIN directly (--resolve), bypassing Cloudflare. Cloudflare
+          # bot rules 403 the GitHub Actions datacenter IP even when the site is
+          # healthy, so checking through the edge gives false negatives. This
+          # tests what we care about: Passenger came up with the new build.
           url=https://portal.causq.com/portal/login
-          # Passenger cold-starts after restart.txt; poll until it serves 200
-          # (up to ~90s) instead of guessing a fixed sleep.
+          code=""
           for i in $(seq 1 18); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "$url" || true)
-            echo "attempt $i: portal/login -> HTTP $code"
+            code=$(curl -s -o /dev/null -w '%{http_code}' --resolve "portal.causq.com:443:${ORIGIN_IP}" "$url" || true)
+            echo "attempt $i: origin portal/login -> HTTP $code"
             [ "$code" = "200" ] && { echo "portal is up"; exit 0; }
             sleep 5
           done
-          echo "::warning::login still $code after ~90s (Passenger slow to warm)"
+          echo "::warning::origin login still $code after ~90s (Passenger slow to warm)"
