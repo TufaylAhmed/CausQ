@@ -109,7 +109,13 @@ jobs:
       - name: Smoke check
         run: |
           set -euo pipefail
-          sleep 20
-          code=$(curl -s -o /dev/null -w '%{http_code}' https://portal.causq.com/portal/login || true)
-          echo "portal/login -> HTTP $code"
-          test "$code" = "200" || echo "::warning::login returned $code (Passenger may still be warming up)"
+          url=https://portal.causq.com/portal/login
+          # Passenger cold-starts after restart.txt; poll until it serves 200
+          # (up to ~90s) instead of guessing a fixed sleep.
+          for i in $(seq 1 18); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$url" || true)
+            echo "attempt $i: portal/login -> HTTP $code"
+            [ "$code" = "200" ] && { echo "portal is up"; exit 0; }
+            sleep 5
+          done
+          echo "::warning::login still $code after ~90s (Passenger slow to warm)"
