@@ -33,9 +33,9 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "20"
           cache: npm
@@ -109,7 +109,7 @@ jobs:
       - name: Smoke check
         run: |
           set -euo pipefail
-          sleep 8
+          sleep 20
           code=$(curl -s -o /dev/null -w '%{http_code}' https://portal.causq.com/portal/login || true)
           echo "portal/login -> HTTP $code"
           test "$code" = "200" || echo "::warning::login returned $code (Passenger may still be warming up)"
