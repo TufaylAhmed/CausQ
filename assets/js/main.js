@@ -174,19 +174,21 @@ const PARTNERS = [
   ['paloalto.webp',    'Palo Alto Networks'],
   ['juniper.png',      'Juniper Networks'],
   ['extreme.png',      'Extreme Networks'],
+  ['hpe.png',          'HPE'],
   ['ruckus.webp',      'Ruckus'],
   ['zscaler.svg',      'Zscaler'],
   ['cato.png',         'Cato Networks'],
 ];
 
 function renderLogos(){
-  // Uses your uploaded logo; falls back to a text wordmark only if the file is
-  // missing (so the strip never shows a broken image).
-  return PARTNERS.map(([file, name]) => `
-    <span class="logo" title="${name}">
+  // One framed cell per partner — all visible at once (no marquee). Each cell
+  // is a .reveal so it eases in on scroll; the staggered transition-delay makes
+  // the grid cascade. Falls back to a wordmark if an image file is missing.
+  return PARTNERS.map(([file, name], i) => `
+    <div class="logo-cell reveal" style="transition-delay:${i * 70}ms" title="${name}">
       <img src="assets/img/company-logos/${file}" alt="${name}"
            onerror="this.outerHTML='<span class=&quot;wm&quot;>${name}</span>'">
-    </span>`).join('');
+    </div>`).join('');
 }
 
 /* ----------------------------------------------------------------- boot */
@@ -197,8 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const footMount = document.getElementById('footer-mount');
   if (footMount) footMount.innerHTML = renderFooter();
   const logoMount = document.getElementById('logo-mount');
-  // duplicate the set so the marquee can loop seamlessly
-  if (logoMount) logoMount.innerHTML = renderLogos() + renderLogos();
+  if (logoMount) logoMount.innerHTML = renderLogos();
 
   // nav scroll state
   const nav = document.getElementById('nav');

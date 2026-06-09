@@ -672,13 +672,42 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
    the box edge and the logo's top is shaved off. overflow:clip lets us clip one
    axis while leaving the other visible (plain overflow:hidden can't). The
    overflow:hidden line is a fallback for engines without overflow:clip. */
-.logo-marquee{ overflow:hidden; overflow:clip; overflow-x:clip; overflow-y:visible; padding:24px 0; -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
-.logo-track{ display:flex; align-items:center; gap:72px; width:max-content; animation:marquee 42s linear infinite; }
-.logo-track .logo{ will-change:transform; }
-/* pause on hover only on real pointers — on touch, scrolling a finger over
-   the strip would latch :hover and freeze the marquee permanently */
-@media (hover:hover){ .logo-marquee:hover .logo-track{ animation-play-state:paused; } }
-@keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+/* Partner logos — a calm "spec sheet" grid. Every mark is visible at once,
+   framed by hairline gridlines (made from the 1px grid gap showing through).
+   Replaces the old scrolling marquee so nothing has to be waited for.        */
+.logo-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:1px;
+  background:var(--line);                 /* the hairlines between cells */
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+}
+.logo-cell{
+  display:flex; align-items:center; justify-content:center;
+  min-height:112px; padding:24px 26px;
+  background:var(--paper);
+  transition:background .4s var(--ease), box-shadow .4s var(--ease);
+}
+.logo-cell img{
+  max-height:34px; max-width:148px; width:auto; height:auto; object-fit:contain;
+  filter:grayscale(1); opacity:.55;
+  transition:filter .4s var(--ease), opacity .4s var(--ease), transform .4s var(--ease);
+}
+.logo-cell .wm{
+  font-family:'Albert Sans',sans-serif; font-weight:700; font-size:1.15rem;
+  letter-spacing:-.02em; color:#8a8a92; transition:color .4s var(--ease);
+}
+@media (hover:hover){
+  .logo-cell:hover{ background:var(--paper-2); box-shadow:inset 0 0 0 1px var(--signal-glow); }
+  .logo-cell:hover img{ filter:grayscale(0); opacity:1; transform:scale(1.05); }
+  .logo-cell:hover .wm{ color:var(--ink); }
+}
+@media (max-width:760px){
+  .logo-grid{ grid-template-columns:repeat(2, 1fr); }
+  .logo-cell{ min-height:96px; padding:20px; }
+}
 
 @media(prefers-reduced-motion:reduce){
   *{ animation:none !important; transition:none !important; }
