@@ -93,6 +93,18 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Portal Milestone 2, Phase 2A: Dashboard + Notifications** (shipped to prod).
+  Turned `/portal` from an engagements list into a KPI dashboard (active
+  projects, outstanding invoices, milestones due in 14d, unread messages) with a
+  unified 30-day activity feed; moved the engagements list to `/portal/projects`.
+  Added an in-app notification system: `notifications` table (profile + org
+  scoped RLS), DB triggers that fire on staff message / new document / invoice
+  sent-or-overdue / milestone done, RPCs `mark_notification_read`,
+  `mark_all_notifications_read`, `unread_notification_count`, a
+  `/portal/notifications` page (all/unread filter), and a bell + unread badge in
+  `PortalShell`. pgTAP proves org/user isolation. Prod Supabase migration applied
+  via MCP (project `krpmwhwayccphqnzlpff`); app shipped through the
+  deploy-portal Action. Next: Phase 2B (invoice workflow).
 - **Create this `CLAUDE.md`** to remember everything asked.
 - **Recreate the pitch as a downloadable slideshow** → built `pitch-deck.html`
   (16:9 deck + "Download PPT" button via PptxGenJS, single source of truth).
