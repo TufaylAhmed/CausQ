@@ -49,12 +49,19 @@ export default async function AdminInvoices() {
           return (
             <li key={inv.id} className="flex items-center justify-between rounded border p-3">
               <div className="text-sm">
-                <div className="font-medium">{inv.number}</div>
+                <a href={`/admin/invoices/${inv.id}`} className="font-medium hover:underline">
+                  {inv.number}
+                </a>
                 <div className="text-neutral-500">
                   {orgName ?? "n/a"} · {inv.currency} {Number(inv.amount).toLocaleString()}
                 </div>
               </div>
-              <Badge variant={inv.status === "paid" ? "default" : "secondary"}>{inv.status}</Badge>
+              <div className="flex items-center gap-3">
+                <Badge variant={inv.status === "paid" ? "default" : "secondary"}>{inv.status}</Badge>
+                <a href={`/admin/invoices/${inv.id}`} className="text-xs text-neutral-500 hover:text-neutral-800">
+                  Manage &rarr;
+                </a>
+              </div>
             </li>
           );
         })}

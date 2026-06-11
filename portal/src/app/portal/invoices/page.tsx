@@ -32,7 +32,12 @@ export default async function InvoicesPage() {
         {list.map((inv) => (
           <div key={inv.id} className="flex flex-wrap items-center gap-4 p-4 sm:p-5">
             <div className="min-w-0 flex-1">
-              <div className="font-mono text-sm font-medium">{inv.number}</div>
+              <a
+                href={`/portal/invoices/${inv.id}`}
+                className="font-mono text-sm font-medium hover:text-[var(--signal-deep)]"
+              >
+                {inv.number}
+              </a>
               <div className="meta mt-0.5">
                 {inv.currency} {Number(inv.amount).toLocaleString()} &middot; due{" "}
                 {inv.due_date ?? "n/a"}

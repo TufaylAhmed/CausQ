@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getStripe, markInvoicePaid } from "@/lib/stripe";
+import { getStripe, markInvoicePaid, sendPaymentReceipt } from "@/lib/stripe";
 
 export async function POST(request: Request) {
   const stripe = getStripe();
@@ -23,7 +23,10 @@ export async function POST(request: Request) {
       metadata?: { invoice_id?: string };
     };
     const invoiceId = session.metadata?.invoice_id;
-    if (invoiceId) await markInvoicePaid(invoiceId, session.id);
+    if (invoiceId) {
+      await markInvoicePaid(invoiceId, session.id);
+      await sendPaymentReceipt(invoiceId);
+    }
   }
   return NextResponse.json({ received: true });
 }

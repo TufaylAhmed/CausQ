@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/portal/signout-action";
 import { Wordmark } from "@/components/Wordmark";
@@ -43,9 +44,9 @@ export async function PortalShell({
             <a href="/portal/projects" className={active === "projects" ? "active" : ""}>
               Projects
             </a>
-            <a href="/portal/invoices" className={active === "invoices" ? "active" : ""}>
+            <Link href="/portal/invoices" className={active === "invoices" ? "active" : ""}>
               Invoices
-            </a>
+            </Link>
             {isStaff && (
               <a href="/admin" className={active === "admin" ? "active" : ""}>
                 Admin

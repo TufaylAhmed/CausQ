@@ -48,6 +48,7 @@ export default async function PortalHome() {
   const [
     { count: activeCount },
     { data: outstanding },
+    { count: overdueCount },
     { count: dueCount },
     { count: unreadMsgs },
     { data: activeEngagements },
@@ -57,6 +58,7 @@ export default async function PortalHome() {
   ] = await Promise.all([
     supabase.from("engagements").select("id", { count: "exact", head: true }).eq("status", "active"),
     supabase.from("invoices").select("amount, currency").in("status", ["sent", "overdue"]),
+    supabase.from("invoices").select("id", { count: "exact", head: true }).in("status", ["sent", "overdue"]).lt("due_date", today),
     supabase
       .from("milestones")
       .select("id", { count: "exact", head: true })
@@ -134,7 +136,7 @@ export default async function PortalHome() {
     {
       label: "Outstanding",
       value: outstandingTotal > 0 ? `${outstandingCcy} ${outstandingTotal.toLocaleString()}` : "0",
-      foot: "sent + overdue",
+      foot: overdueCount && overdueCount > 0 ? `${overdueCount} overdue` : "sent + overdue",
     },
     { label: "Milestones due", value: String(dueCount ?? 0), foot: "next 14 days" },
     { label: "Unread messages", value: String(unreadMsgs ?? 0), foot: "awaiting you" },
