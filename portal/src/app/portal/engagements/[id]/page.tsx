@@ -48,9 +48,9 @@ export default async function EngagementDetail({
   });
 
   return (
-    <PortalShell active="engagements">
-      <a href="/portal" className="meta inline-flex items-center gap-1 hover:text-[var(--signal-deep)]">
-        &larr; All engagements
+    <PortalShell active="projects">
+      <a href="/portal/projects" className="meta inline-flex items-center gap-1 hover:text-[var(--signal-deep)]">
+        &larr; All projects
       </a>
 
       <div className="reveal mt-4 flex flex-wrap items-start justify-between gap-4">
