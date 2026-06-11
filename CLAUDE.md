@@ -93,6 +93,14 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Portal Milestone 2, Phase 2B: Invoice workflow** (shipped to prod). Added
+  `invoice_line_items` (RLS: own-org read, staff write); a client invoice detail
+  page `/portal/invoices/[id]` with line items, a derived status timeline, pay
+  button and PDF download; an admin detail page `/admin/invoices/[id]` for status
+  control, PDF upload to the org-scoped `documents` path, and line-item editing;
+  a MailerSend payment receipt sent from the Stripe webhook when an invoice is
+  marked paid; and an overdue count on the dashboard Outstanding KPI. pgTAP proves
+  line-item isolation. Next: Phase 3 (projects/tasks).
 - **Portal Milestone 2, Phase 2A: Dashboard + Notifications** (shipped to prod).
   Turned `/portal` from an engagements list into a KPI dashboard (active
   projects, outstanding invoices, milestones due in 14d, unread messages) with a
