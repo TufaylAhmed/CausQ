@@ -467,3 +467,44 @@ input::placeholder, textarea::placeholder { color: #9a978d; }
 }
 .tl-alert .tl-dot { background: #b4451f; border-color: #b4451f; }
 .tl-alert .text-sm { color: #b4451f; }
+
+/* ---- Phase 3: project health badge ------------------------------------- */
+.health {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 3rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  line-height: 1;
+}
+.health-num {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.health-label {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 3px;
+  opacity: 0.75;
+}
+.health-good { background: #eefaf3; border-color: rgba(15,122,79,0.30); color: #0f7a4f; }
+.health-warn { background: #fdf8ec; border-color: rgba(176,106,31,0.30); color: #b06a1f; }
+.health-bad  { background: #fdf1ec; border-color: rgba(180,69,31,0.30);  color: #b4451f; }
+
+/* compact inline variant (number only) used on cards and quick links */
+.health-sm {
+  flex-direction: row;
+  min-width: 0;
+  padding: 0.16rem 0.5rem 0.14rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+}

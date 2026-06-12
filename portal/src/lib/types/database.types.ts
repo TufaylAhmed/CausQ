@@ -525,9 +525,70 @@ export type Database = {
           },
         ]
       }
+      tasks: {
+        Row: {
+          assignee_profile_id: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          engagement_id: string
+          id: string
+          sort_order: number
+          status: Database["public"]["Enums"]["milestone_status"]
+          title: string
+        }
+        Insert: {
+          assignee_profile_id?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          engagement_id: string
+          id?: string
+          sort_order?: number
+          status?: Database["public"]["Enums"]["milestone_status"]
+          title: string
+        }
+        Update: {
+          assignee_profile_id?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          engagement_id?: string
+          id?: string
+          sort_order?: number
+          status?: Database["public"]["Enums"]["milestone_status"]
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_engagement_id_fkey"
+            columns: ["engagement_id"]
+            isOneToOne: false
+            referencedRelation: "engagements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_assignee_profile_id_fkey"
+            columns: ["assignee_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      engagement_health: {
+        Row: {
+          engagement_id: string | null
+          health: number | null
+          milestones_done: number | null
+          milestones_total: number | null
+          org_id: string | null
+          tasks_overdue: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       approve_profile: {
@@ -560,6 +621,10 @@ export type Database = {
       mark_notification_read: { Args: { p_id: string }; Returns: undefined }
       post_message: {
         Args: { p_body: string; p_engagement: string }
+        Returns: string
+      }
+      record_client_document: {
+        Args: { p_engagement: string; p_filename: string; p_path: string; p_size: number }
         Returns: string
       }
       redeem_invite: { Args: { p_token: string }; Returns: undefined }

@@ -55,14 +55,33 @@ export async function updateOrgDomains(formData: FormData) {
   revalidatePath("/admin/orgs");
 }
 
+// Project templates: default milestones seeded on creation.
+const PROJECT_TEMPLATES: Record<string, string[]> = {
+  assessment: ["Kickoff & scoping", "Current-state assessment", "Findings & recommendations", "Executive readout"],
+  implementation: ["Design", "Build", "Test", "Cutover", "Handover"],
+  managed: ["Onboarding", "Baseline & monitoring", "First monthly review"],
+};
+
 export async function createEngagement(formData: FormData) {
   const org_id = String(formData.get("org_id"));
   const title = String(formData.get("title") || "").trim();
   const summary = String(formData.get("summary") || "").trim() || null;
+  const template = String(formData.get("template") || "");
   if (!title) throw new Error("Title required.");
   const { supabase } = await staffClient();
-  const { error } = await supabase.from("engagements").insert({ org_id, title, summary });
+  const { data: created, error } = await supabase
+    .from("engagements")
+    .insert({ org_id, title, summary })
+    .select("id")
+    .single();
   if (error) throw new Error(error.message);
+
+  const milestones = PROJECT_TEMPLATES[template];
+  if (created && milestones?.length) {
+    const rows = milestones.map((t, i) => ({ engagement_id: created.id, title: t, sort: i }));
+    const { error: mErr } = await supabase.from("milestones").insert(rows);
+    if (mErr) throw new Error(mErr.message);
+  }
   revalidatePath("/admin/engagements");
 }
 

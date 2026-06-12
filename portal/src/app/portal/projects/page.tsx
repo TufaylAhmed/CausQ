@@ -2,6 +2,10 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { PortalShell } from "@/components/PortalShell";
 
+function healthClass(h: number): string {
+  return h >= 70 ? "health-good" : h >= 40 ? "health-warn" : "health-bad";
+}
+
 export default async function ProjectsPage() {
   const supabase = await createClient();
   const {
@@ -22,6 +26,12 @@ export default async function ProjectsPage() {
     .order("created_at", { ascending: false });
 
   const list = engagements ?? [];
+
+  const ids = list.map((e) => e.id);
+  const { data: healthRows } = ids.length
+    ? await supabase.from("engagement_health").select("engagement_id, health").in("engagement_id", ids)
+    : { data: [] as { engagement_id: string; health: number }[] };
+  const healthMap = new Map((healthRows ?? []).map((r) => [r.engagement_id, r.health]));
 
   return (
     <PortalShell active="projects">
@@ -44,7 +54,12 @@ export default async function ProjectsPage() {
           >
             <div className="flex items-start justify-between gap-3">
               <h2 className="text-lg font-semibold leading-snug">{e.title}</h2>
-              <span className={`pill pill-${e.status}`}>{e.status.replace("_", " ")}</span>
+              <span className="flex flex-none items-center gap-2">
+                <span className={`health health-sm ${healthClass(healthMap.get(e.id) ?? e.progress)}`}>
+                  {healthMap.get(e.id) ?? e.progress}
+                </span>
+                <span className={`pill pill-${e.status}`}>{e.status.replace("_", " ")}</span>
+              </span>
             </div>
             {e.summary && (
               <p className="mt-2 line-clamp-2 text-sm text-[var(--ink-mute)]">{e.summary}</p>

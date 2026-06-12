@@ -34,6 +34,15 @@ export default async function AdminEngagements() {
           <label className="block text-xs text-neutral-500">Summary</label>
           <Input name="summary" placeholder="Short summary" />
         </div>
+        <div>
+          <label className="block text-xs text-neutral-500">Template</label>
+          <select name="template" className="rounded border p-2 text-sm">
+            <option value="">No milestones</option>
+            <option value="assessment">Assessment</option>
+            <option value="implementation">Implementation</option>
+            <option value="managed">Managed service</option>
+          </select>
+        </div>
         <Button type="submit">Create</Button>
       </form>
 

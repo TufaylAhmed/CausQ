@@ -46,6 +46,6 @@ export async function uploadDocument(engagementId: string, formData: FormData) {
   });
   if (ins.error) return { error: ins.error.message };
 
-  revalidatePath(`/portal/engagements/${engagementId}`);
+  revalidatePath(`/portal/projects/${engagementId}`);
   return { ok: true };
 }

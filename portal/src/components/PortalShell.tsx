@@ -41,9 +41,9 @@ export async function PortalShell({
             <a href="/portal" className={active === "dashboard" ? "active" : ""}>
               Dashboard
             </a>
-            <a href="/portal/projects" className={active === "projects" ? "active" : ""}>
+            <Link href="/portal/projects" className={active === "projects" ? "active" : ""}>
               Projects
-            </a>
+            </Link>
             <Link href="/portal/invoices" className={active === "invoices" ? "active" : ""}>
               Invoices
             </Link>

@@ -13,6 +13,10 @@ type FeedItem = {
 
 const DAY = 86_400_000;
 
+function healthClass(h: number): string {
+  return h >= 70 ? "health-good" : h >= 40 ? "health-warn" : "health-bad";
+}
+
 function ago(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.round(diff / 60000);
@@ -100,13 +104,19 @@ export default async function PortalHome() {
   const engTitle = new Map((engRows ?? []).map((e) => [e.id, e.title]));
   const authorName = new Map((authorRows ?? []).map((a) => [a.id, a.name ?? "Someone"]));
 
+  const activeIds = (activeEngagements ?? []).map((e) => e.id);
+  const { data: healthRows } = activeIds.length
+    ? await supabase.from("engagement_health").select("engagement_id, health").in("engagement_id", activeIds)
+    : { data: [] as { engagement_id: string; health: number }[] };
+  const healthMap = new Map((healthRows ?? []).map((r) => [r.engagement_id, r.health]));
+
   const feed: FeedItem[] = [
     ...(recentMessages ?? []).map((m) => ({
       key: `m${m.id}`,
       tag: "MSG" as const,
       title: `${authorName.get(m.author_id) ?? "Someone"} on ${engTitle.get(m.engagement_id ?? "") ?? "a project"}`,
       sub: m.body.length > 90 ? `${m.body.slice(0, 90)}…` : m.body,
-      href: `/portal/engagements/${m.engagement_id}`,
+      href: `/portal/projects/${m.engagement_id}`,
       ts: m.created_at,
     })),
     ...(recentDocuments ?? []).map((d) => ({
@@ -114,7 +124,7 @@ export default async function PortalHome() {
       tag: "DOC" as const,
       title: d.filename,
       sub: d.engagement_id ? (engTitle.get(d.engagement_id) ?? "Document added") : "Document added",
-      href: d.engagement_id ? `/portal/engagements/${d.engagement_id}` : "/portal/projects",
+      href: d.engagement_id ? `/portal/projects/${d.engagement_id}` : "/portal/projects",
       ts: d.created_at,
     })),
     ...(recentInvoices ?? []).map((inv) => ({
@@ -204,17 +214,23 @@ export default async function PortalHome() {
             <p className="kicker">Jump to a project</p>
           </div>
           <div className="p-3">
-            {(activeEngagements ?? []).map((e) => (
-              <a key={e.id} href={`/portal/engagements/${e.id}`} className="quick-link block rounded-md px-3 py-3">
-                <span className="block truncate text-sm font-medium">{e.title}</span>
-                <span className="mt-2 flex items-center gap-2">
-                  <span className="bar flex-1">
-                    <span style={{ width: `${e.progress}%` }} />
+            {(activeEngagements ?? []).map((e) => {
+              const eh = healthMap.get(e.id) ?? e.progress;
+              return (
+                <a key={e.id} href={`/portal/projects/${e.id}`} className="quick-link block rounded-md px-3 py-3">
+                  <span className="flex items-center justify-between gap-2">
+                    <span className="truncate text-sm font-medium">{e.title}</span>
+                    <span className={`health health-sm ${healthClass(eh)}`}>{eh}</span>
                   </span>
-                  <span className="meta">{e.progress}%</span>
-                </span>
-              </a>
-            ))}
+                  <span className="mt-2 flex items-center gap-2">
+                    <span className="bar flex-1">
+                      <span style={{ width: `${e.progress}%` }} />
+                    </span>
+                    <span className="meta">{e.progress}%</span>
+                  </span>
+                </a>
+              );
+            })}
             {(activeEngagements ?? []).length === 0 && (
               <p className="px-3 py-6 text-center text-sm text-[var(--ink-mute)]">
                 No active projects yet.

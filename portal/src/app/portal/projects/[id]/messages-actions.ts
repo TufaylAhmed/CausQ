@@ -46,6 +46,6 @@ export async function sendMessage(engagementId: string, formData: FormData) {
     // notification is best-effort; never block the message
   }
 
-  revalidatePath(`/portal/engagements/${engagementId}`);
+  revalidatePath(`/portal/projects/${engagementId}`);
   return { ok: true };
 }
