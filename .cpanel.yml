@@ -11,11 +11,14 @@ deployment:
     - /bin/cp -f careers.html $DEPLOYPATH
     - /bin/cp -f contact.html $DEPLOYPATH
     - /bin/cp -f xsiam-xsoar.html $DEPLOYPATH
+    - /bin/cp -f consulting-advisory.html $DEPLOYPATH
     - /bin/cp -f privacy.html $DEPLOYPATH
     - /bin/cp -f terms.html $DEPLOYPATH
+    - /bin/cp -f refunds.html $DEPLOYPATH
     - /bin/cp -f cookies.html $DEPLOYPATH
     - /bin/cp -f responsible-ai.html $DEPLOYPATH
     - /bin/cp -f security.html $DEPLOYPATH
+    - /bin/cp -f compliance.html $DEPLOYPATH
     # Article pages
     - /bin/cp -f article-boxes-to-fabric.html $DEPLOYPATH
     - /bin/cp -f article-cbom.html $DEPLOYPATH
