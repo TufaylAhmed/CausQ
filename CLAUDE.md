@@ -93,6 +93,18 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Portal Milestone 2, Phase 3: Projects upgrade** (shipped to prod). Added a
+  `tasks` table (RLS: own-org read, staff write) and an `engagement_health`
+  security_invoker view (milestone completion minus an overdue-task penalty).
+  Moved the engagement detail to `/portal/projects/[id]` (old
+  `/portal/engagements/[id]` now redirects, preserving stored notification links);
+  added `/portal/projects/[id]/tasks` (kanban board, staff add/move/remove).
+  Clients can upload files to `{org}/projects/{id}/client-uploads/` via a storage
+  insert policy + `record_client_document()` RPC (10 MB + mime limits). Health
+  shows on project cards and dashboard quick links. Admin can create a project
+  from a template that seeds default milestones. Notification triggers re-pointed
+  at `/portal/projects` and now alert the lead on client upload. pgTAP proves task
+  isolation, health, and upload path scoping. Next: Phase 4 (lightweight CRM).
 - **Portal Milestone 2, Phase 2B: Invoice workflow** (shipped to prod). Added
   `invoice_line_items` (RLS: own-org read, staff write); a client invoice detail
   page `/portal/invoices/[id]` with line items, a derived status timeline, pay
