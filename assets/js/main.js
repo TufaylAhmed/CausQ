@@ -152,6 +152,7 @@ function renderFooter(){
         <div class="links">
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
+          <a href="refunds.html">Refunds</a>
           <a href="cookies.html">Cookies</a>
           <a href="responsible-ai.html">Responsible AI</a>
           <a href="security.html">Security</a>
