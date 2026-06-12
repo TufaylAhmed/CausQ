@@ -304,7 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---- home hero slider + network build-code stream
   initHeroSlider();
   initHeroCode();
-  initWordCycle();
 
   // ---- scroll progress bar
   const prog = document.createElement('div');
@@ -415,25 +414,6 @@ function showError(form){
    HERO SLIDER — crossfade, autoplay w/ progress dots, arrows, keyboard,
    and pointer parallax on the active slide.
 ============================================================================ */
-/* v2 hero word cycler: rotates the .cw words inside #heroCycle. Respects
-   reduced motion by holding the first word. */
-function initWordCycle(){
-  const root = document.getElementById('heroCycle');
-  if (!root) return;
-  const words = [...root.querySelectorAll('.cw')];
-  if (words.length < 2) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let i = 0;
-  setInterval(() => {
-    const prev = words[i];
-    i = (i + 1) % words.length;
-    const next = words[i];
-    prev.classList.remove('on'); prev.classList.add('off');
-    next.classList.remove('off'); next.classList.add('on');
-    setTimeout(() => prev.classList.remove('off'), 520);
-  }, 2800);
-}
-
 function initHeroSlider(){
   const root = document.getElementById('heroSlider');
   if (!root) return;
