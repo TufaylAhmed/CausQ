@@ -93,6 +93,19 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Portal Milestone 2 COMPLETE** (Phases 2A, 2B, 3, 4, 5 all shipped to prod
+  2026-06-11/12). The client portal is now a full workspace: dashboard +
+  notifications, full invoice lifecycle, projects/tasks with health, lightweight
+  CRM, and a staff metrics dashboard.
+- **Portal Milestone 2, Phase 5: Staff metrics dashboard** (shipped to prod).
+  `staff_dashboard_metrics()` and `ar_aging_report()` SECURITY DEFINER RPCs
+  (staff-guarded, revoked from PUBLIC). `/admin/dashboard` with KPI cards (active
+  projects, revenue MTD, outstanding, overdue, pending approvals, open pipeline)
+  and an AR-aging bar chart (**Recharts**, client component, server-fetched data).
+  CSV export route handlers for invoices and engagements (`/admin/dashboard/
+  export/{invoices,engagements}`, staff-gated, return 401 unauthed). Metrics added
+  to the admin nav. pgTAP proves clients get `forbidden` and metrics match raw
+  queries. (Recharts is the portal's only added dependency this milestone.)
 - **Portal Milestone 2, Phase 4: Lightweight CRM** (shipped to prod). Added
   `contacts`, `opportunities` (staff-only RLS), and `activity_log` tables. Client
   `/portal/contacts` (the CausQ team assigned to the account; clients see only
