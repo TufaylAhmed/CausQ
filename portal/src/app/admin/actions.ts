@@ -1,6 +1,9 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import type { Database } from "@/lib/types/database.types";
+
+type EngagementStatus = Database["public"]["Enums"]["engagement_status"];
 
 async function staffClient() {
   const supabase = await createClient();
@@ -82,6 +85,26 @@ export async function createEngagement(formData: FormData) {
     const { error: mErr } = await supabase.from("milestones").insert(rows);
     if (mErr) throw new Error(mErr.message);
   }
+  revalidatePath("/admin/engagements");
+}
+
+export async function setEngagementStatus(formData: FormData) {
+  const id = String(formData.get("id"));
+  const status = String(formData.get("status")) as EngagementStatus;
+  const { supabase } = await staffClient();
+  const { error } = await supabase.from("engagements").update({ status }).eq("id", id);
+  if (error) throw new Error(error.message);
+  await supabase.rpc("log_admin_action", { p_action: "set_engagement_status", p_target: id, p_detail: { status } });
+  revalidatePath("/admin/engagements");
+}
+
+// Hard delete: cascades milestones, tasks, and messages; documents are detached.
+export async function deleteEngagement(formData: FormData) {
+  const id = String(formData.get("id"));
+  const { supabase } = await staffClient();
+  const { error } = await supabase.from("engagements").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  await supabase.rpc("log_admin_action", { p_action: "delete_engagement", p_target: id, p_detail: {} });
   revalidatePath("/admin/engagements");
 }
 

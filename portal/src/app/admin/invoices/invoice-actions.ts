@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import type { Database } from "@/lib/types/database.types";
 
 type InvoiceStatus = Database["public"]["Enums"]["invoice_status"];
@@ -69,6 +70,21 @@ export async function deleteLineItem(formData: FormData) {
   const { error } = await supabase.from("invoice_line_items").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath(`/admin/invoices/${invoice_id}`);
+}
+
+// Deletes an unpaid invoice (cascades its line items). Paid invoices are kept
+// permanently as a financial record.
+export async function deleteInvoice(formData: FormData) {
+  const id = String(formData.get("invoice_id"));
+  const supabase = await staffClient();
+  const { data: inv, error: e1 } = await supabase.from("invoices").select("status").eq("id", id).single();
+  if (e1 || !inv) throw new Error("Invoice not found.");
+  if (inv.status === "paid") throw new Error("Paid invoices cannot be deleted.");
+  const { error } = await supabase.from("invoices").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  await supabase.rpc("log_admin_action", { p_action: "delete_invoice", p_target: id, p_detail: {} });
+  revalidatePath("/admin/invoices");
+  redirect("/admin/invoices");
 }
 
 // Updates invoice status. Setting "paid" stamps paid_at; "sent"/"overdue" fire

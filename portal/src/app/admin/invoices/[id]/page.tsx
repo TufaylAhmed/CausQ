@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { uploadInvoicePdf, addLineItem, deleteLineItem, updateInvoiceStatus } from "../invoice-actions";
+import { uploadInvoicePdf, addLineItem, deleteLineItem, updateInvoiceStatus, deleteInvoice } from "../invoice-actions";
+import { ConfirmButton } from "@/components/ConfirmButton";
 
 const STATUSES = ["draft", "sent", "overdue", "paid"] as const;
 
@@ -44,7 +45,20 @@ export default async function AdminInvoiceDetail({ params }: { params: Promise<{
             {orgName ?? "n/a"} · {ccy} {Number(invoice.amount).toLocaleString()} · due {invoice.due_date ?? "n/a"}
           </p>
         </div>
-        <Badge variant={invoice.status === "paid" ? "default" : "secondary"}>{invoice.status}</Badge>
+        <div className="flex items-center gap-3">
+          <Badge variant={invoice.status === "paid" ? "default" : "secondary"}>{invoice.status}</Badge>
+          {invoice.status !== "paid" && (
+            <form action={deleteInvoice}>
+              <input type="hidden" name="invoice_id" value={invoice.id} />
+              <ConfirmButton
+                message={`Delete invoice ${invoice.number}? This removes it and its line items.`}
+                className="text-xs text-red-600 hover:underline"
+              >
+                Delete
+              </ConfirmButton>
+            </form>
+          )}
+        </div>
       </div>
 
       {/* Status */}
