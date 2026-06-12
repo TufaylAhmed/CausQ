@@ -7,7 +7,7 @@
   <meta name="description" content="CausQ helps enterprises across the globe become AI-native, modernize their networks and secure themselves for a quantum world. Engineering what's next." />
   <meta name="keywords" content="AI transformation, network modernization, quantum security, post-quantum cryptography, Zero Trust, enterprise networking, Cisco, Juniper, Arista, Palo Alto, NVIDIA" />
   <link rel="canonical" href="https://causq.com/" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#0b0b0d" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="CausQ" />
   <meta property="og:url" content="https://causq.com/" />
@@ -34,88 +34,175 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/styles.css?v=20260619" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260620" />
 </head>
-<body>
+<body class="v2 dark-hero">
   <div id="nav-mount"></div>
 
-  <!-- ============================== HERO SLIDER ============================== -->
-  <header class="hero-slider" id="heroSlider">
-    <div class="slides">
-
-      <div class="hero-slide is-active">
-        <div class="slide-bg" data-mouse><img src="assets/img/home-hero-wide.jpg" alt=""></div>
-        <div class="wrap slide-inner">
-          <div class="slide-copy">
-            <span class="kicker anim">AI · Networks · Quantum Security</span>
-            <h1 class="display h-xl anim d1">Engineering<br>what&rsquo;s&nbsp;next.</h1>
-            <p class="lead anim d2">CausQ helps the world&rsquo;s enterprises become AI-native, modernize the networks
-              they run on, and stay secure as the quantum era arrives. Across the globe.</p>
-            <div class="hero-cta anim d3">
-              <a href="contact.html" class="btn btn-signal">Start a conversation <span class="arr">&rarr;</span></a>
-              <a href="what-we-do.html" class="btn btn-ghost">See what we do</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-slide">
-        <div class="slide-bg" data-mouse><img src="assets/img/do-hero.jpg" alt=""></div>
-        <div class="wrap slide-inner">
-          <div class="slide-copy">
-            <span class="kicker anim">Quantum-era Security</span>
-            <h2 class="display h-xl anim d1">Secure today.<br>Quantum-safe<br>for tomorrow.</h2>
-            <p class="lead anim d2">Crypto-agility and post-quantum readiness that protect your data against the
-              threats of today, and the decryption of tomorrow.</p>
-            <div class="hero-cta anim d3">
-              <a href="what-we-do.html#quantum" class="btn btn-signal">Our security approach <span class="arr">&rarr;</span></a>
-              <a href="article-harvest-now-decrypt-later.html" class="btn btn-ghost">Read the thinking</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-slide">
-        <div class="slide-bg" data-mouse><img src="assets/img/think-hero.jpg" alt=""></div>
-        <div class="wrap slide-inner">
-          <div class="slide-copy">
-            <span class="kicker anim">AI &amp; Network Modernization</span>
-            <h2 class="display h-xl anim d1">The network AI<br>was built to run on.</h2>
-            <p class="lead anim d2">We re-engineer connectivity and intelligence as one system, automated,
-              observable and ready for AI-scale demand.</p>
-            <div class="hero-cta anim d3">
-              <a href="what-we-do.html" class="btn btn-signal">What we do <span class="arr">&rarr;</span></a>
-              <a href="contact.html" class="btn btn-ghost">Talk to us</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
+  <!-- ============================== HERO: THE LIVE GRID ============================== -->
+  <header class="v2-hero">
+    <div class="v2-grid" aria-hidden="true">
+      <svg viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice">
+        <!-- faint lattice -->
+        <g class="gl">
+          <path d="M0 175 H1440 M0 350 H1440 M0 525 H1440"/>
+          <path d="M240 0 V700 M480 0 V700 M720 0 V700 M960 0 V700 M1200 0 V700"/>
+        </g>
+        <!-- live links pulsing along the lattice -->
+        <path class="lk" d="M240 175 H720 V350 H1200"/>
+        <path class="lk" style="animation-delay:-2.2s" d="M1200 525 H960 V175 H480"/>
+        <path class="lk" style="animation-delay:-3.8s" d="M480 700 V350 H960"/>
+        <!-- nodes -->
+        <g class="nd">
+          <circle cx="240" cy="175" r="3"/><circle cx="480" cy="175" r="3"/><circle cx="960" cy="175" r="3"/>
+          <circle cx="240" cy="350" r="3"/><circle cx="480" cy="350" r="3"/><circle cx="1200" cy="350" r="3"/>
+          <circle cx="480" cy="525" r="3"/><circle cx="960" cy="525" r="3"/><circle cx="1200" cy="525" r="3"/>
+        </g>
+        <circle class="nd hot" cx="720" cy="175" r="3.6"/>
+        <circle class="nd hot" style="animation-delay:-1.1s" cx="720" cy="350" r="3.6"/>
+        <circle class="nd hot" style="animation-delay:-2s" cx="960" cy="350" r="3.6"/>
+        <circle class="nd hot" style="animation-delay:-.6s" cx="1200" cy="175" r="3.6"/>
+      </svg>
     </div>
 
-    <div class="hero-stars" aria-hidden="true">
-      <i style="--x:60%;--y:-6%;--tx:380px;--ty:238px;--len:165px;--d:6.2s;--delay:.3s"></i>
-      <i class="amber" style="--x:78%;--y:6%;--tx:320px;--ty:200px;--len:135px;--d:7.6s;--delay:2.2s"></i>
-      <i style="--x:46%;--y:-10%;--tx:450px;--ty:282px;--len:185px;--d:8.1s;--delay:3.5s"></i>
-      <i style="--x:85%;--y:20%;--tx:280px;--ty:175px;--len:120px;--d:6.9s;--delay:1.3s"></i>
-      <i style="--x:68%;--y:32%;--tx:340px;--ty:212px;--len:150px;--d:9s;--delay:4.7s"></i>
-      <i class="amber" style="--x:54%;--y:16%;--tx:400px;--ty:250px;--len:145px;--d:7.1s;--delay:5.6s"></i>
-    </div>
-
-    <div class="hero-code" aria-hidden="true">
-      <pre class="hero-code-inner"><code id="heroCode"></code></pre>
-    </div>
-
-    <div class="slider-ui">
-      <div class="wrap row">
-        <div class="hero-dots" id="heroDots"></div>
-        <div class="slider-arrows">
-          <button type="button" data-prev aria-label="Previous slide">&larr;</button>
-          <button type="button" data-next aria-label="Next slide">&rarr;</button>
-        </div>
+    <div class="wrap">
+      <span class="live-chip reveal"><span class="pip"></span>Engineering live &middot; worldwide</span>
+      <h1 class="display reveal" data-delay="1">The enterprise,<br>
+        <span class="cycle" id="heroCycle">
+          <span class="cw on">AI-native.</span>
+          <span class="cw">quantum-safe.</span>
+          <span class="cw">self-healing.</span>
+          <span class="cw">always on.</span>
+        </span>
+      </h1>
+      <p class="lead reveal" data-delay="2">CausQ makes the enterprise AI-native, modernizes the network it runs on,
+        and secures it for the quantum era. One integrated system, not three disconnected programs.</p>
+      <div class="cta-row reveal" data-delay="3">
+        <a href="contact.html" class="btn btn-signal">Book a briefing <span class="arr">&rarr;</span></a>
+        <a href="what-we-do.html" class="btn btn-light">See what we do</a>
       </div>
     </div>
   </header>
+
+  <!-- ============================== OPERATIONS TICKER ============================== -->
+  <div class="tickband" aria-hidden="true">
+    <div class="tick">
+      <span class="ti">PQC migration <b>underway</b></span>
+      <span class="ti">MTTR <b>-47%</b></span>
+      <span class="ti">Availability <b>99.99%</b></span>
+      <span class="ti">AI ops <b>in production</b></span>
+      <span class="ti">Zero Trust <b>at scale</b></span>
+      <span class="ti">Coverage <b>24/7 follow-the-sun</b></span>
+      <span class="ti">Cortex XSIAM &amp; XSOAR <b>deployed</b></span>
+      <span class="ti">Crypto inventory <b>complete</b></span>
+      <span class="ti">PQC migration <b>underway</b></span>
+      <span class="ti">MTTR <b>-47%</b></span>
+      <span class="ti">Availability <b>99.99%</b></span>
+      <span class="ti">AI ops <b>in production</b></span>
+      <span class="ti">Zero Trust <b>at scale</b></span>
+      <span class="ti">Coverage <b>24/7 follow-the-sun</b></span>
+      <span class="ti">Cortex XSIAM &amp; XSOAR <b>deployed</b></span>
+      <span class="ti">Crypto inventory <b>complete</b></span>
+    </div>
+  </div>
+
+  <!-- ============================== THREE FORCES ============================== -->
+  <section class="section">
+    <div class="wrap">
+      <span class="kicker reveal">What we do</span>
+      <h2 class="display h-lg reveal" data-delay="1" style="margin-top:18px">Three forces.<br>One operating system for change.</h2>
+
+      <div class="pillar3">
+        <a href="what-we-do.html#ai" class="glowcard reveal" data-delay="1">
+          <span class="gnum">FORCE / 01</span>
+          <div class="gfx" aria-hidden="true">
+            <svg viewBox="0 0 280 120">
+              <rect class="frame" x="105" y="35" width="70" height="50" rx="8"/>
+              <path class="wire" d="M105 50 H40 M105 70 H55 M175 50 H240 M175 70 H225 M125 35 V12 M155 35 V18 M125 85 V108 M155 85 V102"/>
+              <path class="hotwire" d="M40 50 H105 M175 70 H225"/>
+              <circle class="node" cx="40" cy="50" r="3"/><circle class="node" cx="55" cy="70" r="3"/>
+              <circle class="hot" cx="240" cy="50" r="3.4"/><circle class="node" cx="225" cy="70" r="3"/>
+              <circle class="hot" style="animation-delay:-1.3s" cx="125" cy="12" r="3.4"/><circle class="node" cx="155" cy="18" r="3"/>
+              <circle class="node" cx="125" cy="108" r="3"/><circle class="hot" style="animation-delay:-.7s" cx="155" cy="102" r="3.4"/>
+              <circle class="hot" cx="140" cy="60" r="4.4"/>
+            </svg>
+          </div>
+          <h3 class="display h-sm">AI &amp; Intelligent Operations</h3>
+          <p>Intelligence wired into the way the business runs: AI-ready platforms, AIOps, and operations that learn,
+            from copilots to closed-loop automation.</p>
+          <span class="glink">Become AI-native <span class="arr">&rarr;</span></span>
+        </a>
+
+        <a href="what-we-do.html#network" class="glowcard reveal" data-delay="2">
+          <span class="gnum">FORCE / 02</span>
+          <div class="gfx" aria-hidden="true">
+            <svg viewBox="0 0 280 120">
+              <path class="wire" d="M30 95 Q140 10 250 95 M65 98 Q140 40 215 98 M100 100 Q140 68 180 100"/>
+              <path class="hotwire" d="M30 95 Q140 10 250 95"/>
+              <circle class="node" cx="30" cy="95" r="3"/><circle class="node" cx="250" cy="95" r="3"/>
+              <circle class="node" cx="65" cy="98" r="3"/><circle class="node" cx="215" cy="98" r="3"/>
+              <circle class="hot" cx="140" cy="53" r="4"/>
+              <circle class="hot" style="animation-delay:-1.6s" cx="100" cy="100" r="3.4"/>
+              <circle class="hot" style="animation-delay:-.9s" cx="180" cy="100" r="3.4"/>
+            </svg>
+          </div>
+          <h3 class="display h-sm">Network Modernization</h3>
+          <p>The network AI was built to run on: data center and AI fabrics, SD-WAN and SASE, campus and edge,
+            automated end to end.</p>
+          <span class="glink">Modernize the network <span class="arr">&rarr;</span></span>
+        </a>
+
+        <a href="what-we-do.html#quantum" class="glowcard reveal" data-delay="3">
+          <span class="gnum">FORCE / 03</span>
+          <div class="gfx" aria-hidden="true">
+            <svg viewBox="0 0 280 120">
+              <path class="frame" d="M140 14 L182 30 V64 Q182 92 140 108 Q98 92 98 64 V30 Z"/>
+              <ellipse class="wire" cx="140" cy="60" rx="70" ry="22" />
+              <path class="hotwire" d="M70 60 a70 22 0 0 1 140 0 a70 22 0 0 1 -140 0"/>
+              <circle class="hot" cx="140" cy="60" r="4.4"/>
+              <circle class="node" cx="70" cy="60" r="3"/><circle class="node" cx="210" cy="60" r="3"/>
+              <circle class="hot" style="animation-delay:-1.2s" cx="140" cy="38" r="3"/>
+            </svg>
+          </div>
+          <h3 class="display h-sm">Quantum-era Security</h3>
+          <p>Secure today, quantum-safe for tomorrow: cryptographic discovery, post-quantum migration, Zero Trust
+            and a SOC that keeps pace.</p>
+          <span class="glink">Get quantum-ready <span class="arr">&rarr;</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== MEASURED WHERE IT COUNTS ============================== -->
+  <section class="section" style="padding-top:30px">
+    <div class="wrap">
+      <span class="kicker reveal">Proof, not promises</span>
+      <h2 class="display h-lg reveal" data-delay="1" style="margin-top:18px">Measured where it counts.</h2>
+      <div class="stat-grid">
+        <div class="stat reveal"><div class="v"><span data-count="3" data-suffix="×">0</span></div><div class="l">Faster AI initiatives reaching production</div></div>
+        <div class="stat reveal" data-delay="1"><div class="v"><span data-count="60">0</span><span class="u">%</span></div><div class="l">Reduction in network operating overhead</div></div>
+        <div class="stat reveal" data-delay="2"><div class="v"><span data-count="99.99" data-dec="2">0</span><span class="u">%</span></div><div class="l">Availability sustained on managed estates</div></div>
+        <div class="stat reveal" data-delay="3"><div class="v"><span data-count="24">0</span><span class="u">/7</span></div><div class="l">Follow-the-sun global delivery</div></div>
+      </div>
+
+      <div class="proofband" aria-hidden="true">
+        <div class="proof">
+          <div class="pc"><span class="meta-row">AI Operations</span><p>Copilots are the easy part. We wire AI into change, incident and capacity workflows, where the hours actually go.</p></div>
+          <div class="pc"><span class="meta-row">Network</span><p>We design fabrics for the traffic AI actually generates: east-west, bursty, and unforgiving of oversubscription.</p></div>
+          <div class="pc"><span class="meta-row">Quantum readiness</span><p>Harvest-now, decrypt-later is already happening. Inventory your cryptography before someone else does.</p></div>
+          <div class="pc"><span class="meta-row">Zero Trust</span><p>Identity is the new perimeter. We make it enforceable without making the business unusable.</p></div>
+          <div class="pc"><span class="meta-row">SOC</span><p>XSIAM and XSOAR, deployed by engineers who carry pagers, not just certifications.</p></div>
+          <div class="pc"><span class="meta-row">Handover</span><p>Built to hand over: every engagement ends with your team running it, documented and rehearsed.</p></div>
+          <div class="pc"><span class="meta-row">AI Operations</span><p>Copilots are the easy part. We wire AI into change, incident and capacity workflows, where the hours actually go.</p></div>
+          <div class="pc"><span class="meta-row">Network</span><p>We design fabrics for the traffic AI actually generates: east-west, bursty, and unforgiving of oversubscription.</p></div>
+          <div class="pc"><span class="meta-row">Quantum readiness</span><p>Harvest-now, decrypt-later is already happening. Inventory your cryptography before someone else does.</p></div>
+          <div class="pc"><span class="meta-row">Zero Trust</span><p>Identity is the new perimeter. We make it enforceable without making the business unusable.</p></div>
+          <div class="pc"><span class="meta-row">SOC</span><p>XSIAM and XSOAR, deployed by engineers who carry pagers, not just certifications.</p></div>
+          <div class="pc"><span class="meta-row">Handover</span><p>Built to hand over: every engagement ends with your team running it, documented and rehearsed.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ============================== PARTNERS ============================== -->
   <section class="partners">
@@ -125,179 +212,47 @@
     </div>
   </section>
 
-  <!-- ============================== PILLARS ============================== -->
-  <section class="section">
+  <!-- ============================== SIGNALS ============================== -->
+  <section class="section" style="padding-top:40px">
     <div class="wrap">
-      <div class="split-head">
-        <div>
-          <span class="kicker reveal">What we do</span>
-          <h2 class="display h-lg reveal" data-delay="1" style="margin-top:18px">Three forces.<br>One operating system for change.</h2>
-        </div>
-        <p class="lead reveal" data-delay="2">We don&rsquo;t sell point projects. We re-engineer how intelligence,
-          connectivity and trust work together, so the gains compound instead of competing.</p>
+      <span class="kicker reveal">What we think</span>
+      <h2 class="display h-lg reveal" data-delay="1" style="margin-top:18px">Signals from the front line.</h2>
+      <div class="pillar3" style="margin-top:44px">
+        <a href="article-harvest-now-decrypt-later.html" class="glowcard reveal" data-delay="1">
+          <span class="gnum">QUANTUM / READ</span>
+          <h3 class="display h-sm" style="margin-top:16px">Harvest now, decrypt later is not a thought experiment.</h3>
+          <span class="glink">Read the signal <span class="arr">&rarr;</span></span>
+        </a>
+        <a href="article-network-ai-workload.html" class="glowcard reveal" data-delay="2">
+          <span class="gnum">NETWORK / READ</span>
+          <h3 class="display h-sm" style="margin-top:16px">Your network was not built for the workload AI brings.</h3>
+          <span class="glink">Read the signal <span class="arr">&rarr;</span></span>
+        </a>
+        <a href="article-three-programs.html" class="glowcard reveal" data-delay="3">
+          <span class="gnum">STRATEGY / READ</span>
+          <h3 class="display h-sm" style="margin-top:16px">Three programs, one system: why sequencing beats spending.</h3>
+          <span class="glink">Read the signal <span class="arr">&rarr;</span></span>
+        </a>
       </div>
-
-      <div class="pillars">
-        <article class="pillar reveal">
-          <figure class="media"><img loading="lazy" decoding="async" src="assets/img/pillar-ai.jpg" alt="" onerror="this.remove()"></figure>
-          <div class="pillar-body">
-            <span class="no">01 / AI</span>
-            <h3 class="display h-sm">AI &amp; Intelligent Operations</h3>
-            <p>From strategy to running systems, we put AI to work across the enterprise and the network
-              itself, with the governance to do it responsibly.</p>
-            <a href="what-we-do.html#ai" class="tlink">Explore <span class="arr">&rarr;</span></a>
-          </div>
-        </article>
-
-        <article class="pillar reveal" data-delay="1">
-          <figure class="media"><img loading="lazy" decoding="async" src="assets/img/pillar-network.jpg" alt="" onerror="this.remove()"></figure>
-          <div class="pillar-body">
-            <span class="no">02 / Network</span>
-            <h3 class="display h-sm">Network Modernization</h3>
-            <p>Campus, data-center, cloud and edge, re-architected as automated, software-defined fabric
-              built for the demands of AI-scale workloads.</p>
-            <a href="what-we-do.html#network" class="tlink">Explore <span class="arr">&rarr;</span></a>
-          </div>
-        </article>
-
-        <article class="pillar reveal" data-delay="2">
-          <figure class="media"><img loading="lazy" decoding="async" src="assets/img/pillar-quantum.jpg" alt="" onerror="this.remove()"></figure>
-          <div class="pillar-body">
-            <span class="no">03 / Quantum</span>
-            <h3 class="display h-sm">Quantum-era Security</h3>
-            <p>Crypto-agility, post-quantum readiness and Zero Trust, protecting your data against the
-              threats of today and the decryption of tomorrow.</p>
-            <a href="what-we-do.html#quantum" class="tlink">Explore <span class="arr">&rarr;</span></a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================== FEATURE: AI-native ============================== -->
-  <section class="feature-x warm">
-    <div class="fx-grid">
-      <div class="fx-media"><img loading="lazy" decoding="async" src="assets/img/feature-ai.jpg" alt="" data-parallax="0.08"></div>
-      <div class="fx-copy">
-        <div class="inner reveal">
-          <span class="kicker">Become AI-native</span>
-          <h2 class="display h-md" style="margin-top:16px">Intelligence, wired into the way the business runs.</h2>
-          <p class="lead" style="margin-top:18px; font-size:1.12rem">We move organisations past pilots, embedding
-            AI into operations, decisions and the network&rsquo;s own control plane, with guardrails leadership can trust.</p>
-          <ul class="feature-list">
-            <li><span class="n">01</span><span class="t"><b>Applied AI &amp; agents</b><span>Production systems, not demos, grounded in your data and processes.</span></span></li>
-            <li><span class="n">02</span><span class="t"><b>AI-driven network operations</b><span>Self-optimizing, self-healing infrastructure that predicts and prevents.</span></span></li>
-            <li><span class="n">03</span><span class="t"><b>Responsible AI &amp; governance</b><span>Policy, evaluation and oversight built in from day one.</span></span></li>
-          </ul>
-          <a href="what-we-do.html#ai" class="btn btn-dark" style="margin-top:30px">How we deliver AI <span class="arr">&rarr;</span></a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================== FEATURE: Quantum (flip) ============================== -->
-  <section class="feature-x flip">
-    <div class="fx-grid">
-      <div class="fx-media"><img loading="lazy" decoding="async" src="assets/img/feature-quantum.jpg" alt="" data-parallax="0.08"></div>
-      <div class="fx-copy">
-        <div class="inner reveal">
-          <span class="kicker">Ready for the quantum era</span>
-          <h2 class="display h-md" style="margin-top:16px">Secure today. Quantum-safe for tomorrow.</h2>
-          <p class="lead" style="margin-top:18px; font-size:1.12rem">&ldquo;Harvest now, decrypt later&rdquo; is already happening.
-            We give you the visibility and crypto-agility to migrate to post-quantum standards before it matters,
-            without halting the business.</p>
-          <ul class="feature-list">
-            <li><span class="n">01</span><span class="t"><b>Cryptographic discovery</b><span>Map every key, certificate and algorithm across your estate.</span></span></li>
-            <li><span class="n">02</span><span class="t"><b>Post-quantum migration</b><span>NIST PQC-aligned roadmaps and crypto-agile architecture.</span></span></li>
-            <li><span class="n">03</span><span class="t"><b>Zero Trust everywhere</b><span>Identity-first access from the core to the furthest edge.</span></span></li>
-          </ul>
-          <a href="what-we-do.html#quantum" class="btn btn-dark" style="margin-top:30px">Our security approach <span class="arr">&rarr;</span></a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================== STATS (night) ============================== -->
-  <section class="section night">
-    <div class="wrap">
-      <div class="split-head" style="margin-bottom:48px">
-        <div>
-          <span class="kicker reveal">Proof, not promises</span>
-          <h2 class="display h-lg on-night reveal" data-delay="1" style="margin-top:18px">Measured where it counts.</h2>
-        </div>
-        <p class="lead reveal" data-delay="2">Outcomes from enterprise programs across the globe, the
-          numbers our clients take to their boards.</p>
-      </div>
-      <div class="stat-grid">
-        <div class="stat reveal"><div class="v"><span data-count="3" data-suffix="×">0</span></div><div class="l">Faster AI initiatives reaching production</div></div>
-        <div class="stat reveal" data-delay="1"><div class="v"><span data-count="60">0</span><span class="u">%</span></div><div class="l">Reduction in network operating overhead</div></div>
-        <div class="stat reveal" data-delay="2"><div class="v"><span data-count="99.99" data-dec="2">0</span><span class="u">%</span></div><div class="l">Availability sustained on managed estates</div></div>
-        <div class="stat reveal" data-delay="3"><div class="v"><span data-count="24">0</span><span class="u">/7</span></div><div class="l">Follow-the-sun global delivery</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================== INSIGHTS ============================== -->
-  <section class="section">
-    <div class="wrap">
-      <div class="split-head">
-        <div>
-          <span class="kicker reveal">What we think</span>
-          <h2 class="display h-lg reveal" data-delay="1" style="margin-top:18px">Signals from<br>the front line.</h2>
-        </div>
-        <p class="lead reveal" data-delay="2">Perspectives from our engineers and strategists on the shifts
-          reshaping the enterprise. <a href="what-we-think.html" class="tlink" style="font-size:1rem">All thinking <span class="arr">&rarr;</span></a></p>
-      </div>
-
-      <div class="insights">
-        <article class="insight feature-big reveal">
-          <figure class="media"><img loading="lazy" decoding="async" src="assets/img/insight-1.jpg" alt="" onerror="this.remove()"></figure>
-          <div class="insight-body">
-            <div class="meta"><span class="cat">Quantum</span><span>8 min read</span></div>
-            <h3>The clock on encryption is already ticking. Here&rsquo;s how to stay ahead of it.</h3>
-            <p>Why crypto-agility, not a single migration, is the real answer to the quantum threat, and how to start this quarter.</p>
-            <a href="article-harvest-now-decrypt-later.html" class="tlink">Read <span class="arr">&rarr;</span></a>
-          </div>
-        </article>
-        <article class="insight reveal" data-delay="1">
-          <figure class="media"><img loading="lazy" decoding="async" src="assets/img/insight-2.jpg" alt="" onerror="this.remove()"></figure>
-          <div class="insight-body">
-            <div class="meta"><span class="cat">AI</span><span>6 min</span></div>
-            <h3>The network is becoming AI&rsquo;s most important workload.</h3>
-            <p>What AI-scale traffic demands from the fabric beneath it.</p>
-            <a href="article-network-ai-workload.html" class="tlink">Read <span class="arr">&rarr;</span></a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================== PULL QUOTE ============================== -->
-  <section class="section warm">
-    <div class="wrap">
-      <p class="pquote reveal">We believe the enterprises that win the next decade won&rsquo;t treat AI, the network and
-        security as separate programs, they&rsquo;ll run them as <em>one intelligent system.</em></p>
-      <p class="quote-by reveal" data-delay="1">The CausQ point of view</p>
     </div>
   </section>
 
   <!-- ============================== CTA ============================== -->
-  <section class="section night cta-band">
+  <section class="v2-cta">
+    <span class="bigdot" aria-hidden="true"></span>
     <div class="wrap">
-      <div style="max-width:760px">
-        <img loading="lazy" decoding="async" src="assets/img/causq-word-white.png" alt="CausQ" class="cta-logo reveal" />
-        <h2 class="display h-lg on-night reveal" data-delay="1">Let&rsquo;s engineer what&rsquo;s next for you.</h2>
-        <p class="lead reveal" data-delay="2" style="margin-top:22px">Tell us where you&rsquo;re headed. We&rsquo;ll bring the
-          engineers who&rsquo;ve done it before, and a plan you can act on.</p>
-        <div class="hero-cta reveal" data-delay="3">
-          <a href="contact.html" class="btn btn-signal">Book a briefing <span class="arr">&rarr;</span></a>
-          <a href="careers.html" class="btn btn-ghost">Join the team</a>
-        </div>
+      <span class="live-chip reveal"><span class="pip"></span>Thirty minutes, one engineer, zero sales script</span>
+      <h2 class="display reveal" data-delay="1" style="margin-top:26px">Let&rsquo;s engineer<br>what&rsquo;s next for you.</h2>
+      <p class="lead reveal" data-delay="2">Tell us where you&rsquo;re headed and what&rsquo;s in the way. We respond within one
+        business day.</p>
+      <div class="cta-row reveal" data-delay="3">
+        <a href="contact.html" class="btn btn-signal">Book a briefing <span class="arr">&rarr;</span></a>
+        <a href="mailto:hello@causq.com" class="btn btn-light">hello@causq.com</a>
       </div>
     </div>
   </section>
 
   <div id="footer-mount"></div>
-  <script src="assets/js/main.js?v=20260619"></script>
+  <script src="assets/js/main.js?v=20260620"></script>
 </body>
 </html>

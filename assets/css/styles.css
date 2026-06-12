@@ -1286,3 +1286,216 @@ body.dark-hero .nav:not(.scrolled) .nav-menu a:not(.btn){ color:var(--ink); }
   body.deck .section, body.deck .section-sm{ padding:30px 0 !important; page-break-before:always; }
   body.deck .stat-grid, body.deck .feat-grid, body.deck .pd-mkts, body.deck .values, body.deck .journey{ page-break-inside:avoid; }
 }
+
+/* ============================================================ V2: THE LIVE GRID
+   Dark-first redesign layer, gated on body.v2 so every existing page keeps its
+   light system untouched. One canvas (night), one electric accent (signal teal),
+   and a "live system" language: pulsing status pips, an operations ticker,
+   glowing cards, and hand-built SVG graphics. Inspired by the dark+electric
+   single-accent school; executed in CausQ's own brand voice.                   */
+
+body.v2{
+  background:var(--night, #0b0b0d);
+  color:#e7e7ea;
+  background-image:
+    radial-gradient(1200px 600px at 70% -10%, rgba(6,182,212,.07), transparent 60%),
+    radial-gradient(circle, rgba(255,255,255,.028) 1px, transparent 1.4px);
+  background-size:auto, 26px 26px;
+  background-attachment:fixed;
+}
+body.v2 ::selection{ background:rgba(6,182,212,.35); color:#fff; }
+body.v2 .display{ color:#f4f4f6; }
+body.v2 .lead{ color:rgba(231,231,234,.62); }
+body.v2 .kicker{ color:var(--signal); }
+body.v2 .section{ border-color:rgba(255,255,255,.06); }
+
+/* --- nav: permanent dark glass on v2 (scrolled or not) --- */
+body.v2 .nav, body.v2 .nav.scrolled{
+  background:rgba(11,11,13,.78);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  box-shadow:none;
+}
+body.v2 .nav .brand .logo-img{ filter:invert(1) hue-rotate(180deg) brightness(1.7); }
+body.v2 .nav-links > a, body.v2 .nav .nav-top{ color:rgba(231,231,234,.66); }
+body.v2 .nav-links > a:hover, body.v2 .nav .nav-top:hover,
+body.v2 .nav-links > a.active, body.v2 .nav .nav-top.active{ color:#fff; }
+body.v2 .nav .btn-dark{ background:var(--signal); border-color:var(--signal); color:#04222a; }
+body.v2 .nav .btn-dark:hover{ background:var(--signal-deep); border-color:var(--signal-deep); }
+body.v2 .client-login{ color:rgba(231,231,234,.55); border-color:rgba(255,255,255,.18); }
+body.v2 .client-login:hover{ color:var(--signal); border-color:rgba(6,182,212,.55); background:rgba(6,182,212,.10); }
+body.v2 .menu-btn span{ background:#e7e7ea; }
+
+/* --- live status chip: mono label with a breathing pip --- */
+.live-chip{
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; font-weight:500;
+  color:rgba(231,231,234,.75);
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.03);
+  padding:7px 14px; border-radius:9999px;
+}
+.live-chip .pip{
+  width:7px; height:7px; border-radius:50%; flex:none;
+  background:var(--signal);
+  animation:v2pulse 2.4s var(--ease) infinite;
+}
+@keyframes v2pulse{
+  0%{ box-shadow:0 0 0 0 rgba(6,182,212,.55); }
+  70%{ box-shadow:0 0 0 9px rgba(6,182,212,0); }
+  100%{ box-shadow:0 0 0 0 rgba(6,182,212,0); }
+}
+
+/* --- hero --- */
+.v2-hero{ position:relative; padding:172px 0 96px; overflow:hidden; }
+.v2-hero .wrap{ position:relative; z-index:2; }
+.v2-hero h1{
+  font-size:clamp(2.9rem, 7.2vw, 5.6rem);
+  line-height:.98; letter-spacing:-.035em; font-weight:800; margin-top:26px;
+}
+.v2-hero .lead{ max-width:560px; margin-top:26px; font-size:clamp(1.05rem,1.5vw,1.25rem); }
+.v2-hero .cta-row{ display:flex; flex-wrap:wrap; gap:14px; margin-top:38px; align-items:center; }
+
+/* word cycler: fixed slot, words swap with a rise+blur transition */
+.cycle{ display:inline-grid; text-align:left; color:var(--signal); }
+.cycle .cw{
+  grid-area:1/1; white-space:nowrap;
+  opacity:0; transform:translateY(.55em); filter:blur(6px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease), filter .5s var(--ease);
+}
+.cycle .cw.on{ opacity:1; transform:none; filter:none; }
+.cycle .cw.off{ opacity:0; transform:translateY(-.45em); filter:blur(6px); }
+
+/* hero living-grid SVG backdrop */
+.v2-grid{ position:absolute; inset:0; z-index:1; opacity:.55; pointer-events:none; }
+.v2-grid svg{ width:100%; height:100%; }
+.v2-grid .gl{ stroke:rgba(255,255,255,.05); stroke-width:1; }
+.v2-grid .nd{ fill:rgba(231,231,234,.16); }
+.v2-grid .nd.hot{ fill:var(--signal); animation:ndblink 3.2s var(--ease) infinite; }
+.v2-grid .lk{
+  stroke:var(--signal); stroke-width:1.2; fill:none; opacity:.5;
+  stroke-dasharray:6 220; stroke-linecap:round;
+  animation:lkrun 5.5s linear infinite;
+}
+@keyframes ndblink{ 0%,100%{ opacity:.25; } 50%{ opacity:1; } }
+@keyframes lkrun{ to{ stroke-dashoffset:-226; } }
+
+/* --- operations ticker: infinite marquee band --- */
+.tickband{
+  border-top:1px solid rgba(255,255,255,.07);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.018);
+  overflow:hidden; padding:15px 0; position:relative; z-index:2;
+}
+.tick{ display:flex; width:max-content; animation:tickmove 36s linear infinite; }
+.tick:hover{ animation-play-state:paused; }
+.tick .ti{
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.13em; text-transform:uppercase;
+  color:rgba(231,231,234,.55); padding:0 30px; white-space:nowrap;
+}
+.tick .ti b{ color:var(--signal); font-weight:500; }
+.tick .ti::before{ content:""; width:5px; height:5px; border-radius:50%; background:rgba(6,182,212,.8); flex:none; }
+@keyframes tickmove{ to{ transform:translateX(-50%); } }
+
+/* --- pillar cards: three forces as glowing consoles --- */
+.pillar3{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:54px; }
+.glowcard{
+  position:relative; border-radius:18px; padding:30px 28px 28px;
+  background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+  border:1px solid rgba(255,255,255,.09);
+  transition:border-color .35s var(--ease), transform .35s var(--ease), box-shadow .35s var(--ease);
+  overflow:hidden;
+}
+.glowcard:hover{
+  border-color:rgba(6,182,212,.55);
+  transform:translateY(-5px);
+  box-shadow:0 24px 60px -28px rgba(6,182,212,.32), 0 0 0 1px rgba(6,182,212,.12);
+}
+.glowcard .gnum{
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:.66rem; letter-spacing:.16em; color:rgba(231,231,234,.42);
+}
+.glowcard h3{ color:#f4f4f6; margin-top:14px; }
+.glowcard p{ color:rgba(231,231,234,.58); font-size:.98rem; line-height:1.65; margin-top:12px; }
+.glowcard .gfx{ height:120px; margin:18px -6px 4px; }
+.glowcard .gfx svg{ width:100%; height:100%; }
+.glowcard .glink{
+  display:inline-flex; align-items:center; gap:8px; margin-top:18px;
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:.68rem; letter-spacing:.13em; text-transform:uppercase; color:var(--signal);
+}
+.glowcard .glink .arr{ transition:transform .25s var(--ease); }
+.glowcard:hover .glink .arr{ transform:translateX(4px); }
+/* shared svg accents inside cards */
+.gfx .wire{ stroke:rgba(255,255,255,.14); stroke-width:1.1; fill:none; }
+.gfx .hotwire{ stroke:var(--signal); stroke-width:1.3; fill:none; stroke-dasharray:5 140; stroke-linecap:round; animation:lkrun 4.6s linear infinite; }
+.gfx .node{ fill:rgba(231,231,234,.3); }
+.gfx .hot{ fill:var(--signal); animation:ndblink 2.8s var(--ease) infinite; }
+.gfx .frame{ stroke:rgba(255,255,255,.16); stroke-width:1.1; fill:rgba(255,255,255,.02); }
+
+/* --- v2 stats band --- */
+body.v2 .stat-grid{ margin-top:50px; }
+body.v2 .stat .v{ color:#f4f4f6; }
+body.v2 .stat .v [data-count]{ color:var(--signal); }
+body.v2 .stat .u{ color:var(--signal); }
+body.v2 .stat .l{ color:rgba(231,231,234,.5); }
+
+/* --- proof rail: repeating marquee of claim cards --- */
+.proofband{ overflow:hidden; margin-top:54px; }
+.proof{ display:flex; width:max-content; gap:16px; animation:tickmove 48s linear infinite; }
+.proof:hover{ animation-play-state:paused; }
+.proof .pc{
+  width:330px; flex:none; border-radius:14px; padding:22px 22px 20px;
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08);
+}
+.proof .pc .meta-row{
+  display:flex; align-items:center; gap:8px;
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
+  font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--signal);
+}
+.proof .pc .meta-row::before{ content:""; width:5px; height:5px; border-radius:50%; background:var(--signal); }
+.proof .pc p{ color:rgba(231,231,234,.72); font-size:.95rem; line-height:1.6; margin-top:12px; }
+
+/* --- big CTA band --- */
+.v2-cta{ position:relative; padding:120px 0 130px; text-align:center; overflow:hidden; }
+.v2-cta .bigdot{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:560px; height:560px; border-radius:50%;
+  background:radial-gradient(circle, rgba(6,182,212,.16), transparent 62%);
+  pointer-events:none;
+}
+.v2-cta h2{ font-size:clamp(2.2rem,5vw,4rem); letter-spacing:-.03em; }
+.v2-cta .lead{ margin:22px auto 0; max-width:520px; }
+.v2-cta .cta-row{ justify-content:center; display:flex; gap:14px; margin-top:38px; flex-wrap:wrap; }
+body.v2 .btn-signal{ box-shadow:0 12px 40px -14px rgba(6,182,212,.55); }
+body.v2 .btn-light{ background:transparent; color:#e7e7ea; border:1px solid rgba(255,255,255,.22); }
+body.v2 .btn-light:hover{ border-color:#fff; color:#fff; }
+
+/* --- footer on v2: hairline seam --- */
+body.v2 .footer{ border-top:1px solid rgba(255,255,255,.08); }
+
+/* --- partners wall on the dark canvas --- */
+body.v2 .partners{ border-top:1px solid rgba(255,255,255,.06); padding:56px 0; }
+body.v2 .partners .lbl{ color:rgba(231,231,234,.4); }
+body.v2 .logo-cell{ background:rgba(255,255,255,.025); box-shadow:inset 0 0 0 1px rgba(255,255,255,.07); }
+body.v2 .logo-cell img{ filter:grayscale(1) invert(1) brightness(1.35); opacity:.55; }
+body.v2 .logo-cell .wm{ color:rgba(231,231,234,.5); }
+@media (hover:hover){
+  body.v2 .logo-cell:hover{ background:rgba(6,182,212,.06); box-shadow:inset 0 0 0 1px rgba(6,182,212,.35); }
+  body.v2 .logo-cell:hover img{ filter:grayscale(1) invert(1) brightness(1.8); opacity:.95; }
+  body.v2 .logo-cell:hover .wm{ color:#fff; }
+}
+
+/* --- responsiveness + motion safety --- */
+@media (max-width: 960px){
+  .pillar3{ grid-template-columns:1fr; }
+  .v2-hero{ padding:140px 0 70px; }
+}
+@media (prefers-reduced-motion: reduce){
+  .tick, .proof, .live-chip .pip, .v2-grid .lk, .v2-grid .nd.hot,
+  .gfx .hotwire, .gfx .hot{ animation:none; }
+  .cycle .cw{ transition:none; }
+}
