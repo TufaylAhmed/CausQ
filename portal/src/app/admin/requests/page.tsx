@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
+import { deleteAccessRequest } from "../actions";
+import { ConfirmButton } from "@/components/ConfirmButton";
 
 export default async function AdminRequests() {
   const supabase = await createClient();
@@ -20,12 +22,20 @@ export default async function AdminRequests() {
                 </div>
                 <div className="text-neutral-500">{r.company ?? "No company"}</div>
               </div>
-              <a
-                href={`/admin/invites?email=${encodeURIComponent(r.email)}`}
-                className="text-sm text-brand-deep underline"
-              >
-                Create invite →
-              </a>
+              <div className="flex items-center gap-3">
+                <a
+                  href={`/admin/invites?email=${encodeURIComponent(r.email)}`}
+                  className="text-sm text-brand-deep underline"
+                >
+                  Create invite →
+                </a>
+                <form action={deleteAccessRequest}>
+                  <input type="hidden" name="id" value={r.id} />
+                  <ConfirmButton message="Dismiss this access request?" className="text-xs text-red-600 hover:underline">
+                    Dismiss
+                  </ConfirmButton>
+                </form>
+              </div>
             </div>
             {r.message && <p className="mt-2 text-sm text-neutral-700">{r.message}</p>}
           </li>

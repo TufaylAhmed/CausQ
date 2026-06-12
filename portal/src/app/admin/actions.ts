@@ -1,9 +1,19 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import type { Database } from "@/lib/types/database.types";
 
 type EngagementStatus = Database["public"]["Enums"]["engagement_status"];
+
+async function requireStaff() {
+  const { supabase, user } = await staffClient();
+  const { data: me } = await supabase.from("profiles").select("role, status").eq("id", user.id).single();
+  if (!me || me.status !== "active" || !["staff", "admin"].includes(me.role)) {
+    throw new Error("Staff only.");
+  }
+  return { supabase, user };
+}
 
 async function staffClient() {
   const supabase = await createClient();
@@ -130,6 +140,45 @@ export async function createInvoice(formData: FormData) {
     .insert({ org_id, number, amount, due_date, status: "sent" });
   if (error) throw new Error(error.message);
   revalidatePath("/admin/invoices");
+}
+
+// Hard delete: cascades all of the org's engagements, invoices, contacts,
+// opportunities, activity, and invites; members are detached (org_id set null).
+export async function deleteOrg(formData: FormData) {
+  const id = String(formData.get("id"));
+  const { supabase } = await staffClient();
+  const { error } = await supabase.from("orgs").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  await supabase.rpc("log_admin_action", { p_action: "delete_org", p_target: id, p_detail: {} });
+  revalidatePath("/admin/orgs");
+}
+
+export async function deleteMilestone(formData: FormData) {
+  const id = String(formData.get("id"));
+  const { supabase } = await staffClient();
+  const { error } = await supabase.from("milestones").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/engagements");
+}
+
+export async function deleteInvite(formData: FormData) {
+  const id = String(formData.get("id"));
+  const { supabase } = await staffClient();
+  const { error } = await supabase.from("invites").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  await supabase.rpc("log_admin_action", { p_action: "delete_invite", p_target: id, p_detail: {} });
+  revalidatePath("/admin/invites");
+}
+
+// access_requests are managed by the service role (public form inserts via it,
+// staff dismiss via it after an explicit role check).
+export async function deleteAccessRequest(formData: FormData) {
+  const id = String(formData.get("id"));
+  await requireStaff();
+  const admin = createAdminClient();
+  const { error } = await admin.from("access_requests").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/requests");
 }
 
 export async function createInviteAction(formData: FormData) {

@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import { createOrg, updateOrgDomains } from "../actions";
+import { createOrg, updateOrgDomains, deleteOrg } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ConfirmButton } from "@/components/ConfirmButton";
 
 export default async function AdminOrgs() {
   const supabase = await createClient();
@@ -29,7 +30,18 @@ export default async function AdminOrgs() {
       <ul className="space-y-2">
         {(orgs ?? []).map((o) => (
           <li key={o.id} className="rounded border p-3">
-            <div className="font-medium">{o.name}</div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="font-medium">{o.name}</div>
+              <form action={deleteOrg}>
+                <input type="hidden" name="id" value={o.id} />
+                <ConfirmButton
+                  message={`Delete "${o.name}"? This permanently removes all of its projects, invoices, contacts, opportunities, activity, and invites, and unlinks its users. This cannot be undone.`}
+                  className="text-xs text-red-600 hover:underline"
+                >
+                  Delete org
+                </ConfirmButton>
+              </form>
+            </div>
             <form action={updateOrgDomains} className="mt-2 flex items-end gap-2">
               <input type="hidden" name="id" value={o.id} />
               <div className="flex-1">

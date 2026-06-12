@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { InviteCreator } from "./InviteCreator";
+import { deleteInvite } from "../actions";
+import { ConfirmButton } from "@/components/ConfirmButton";
 
 export default async function AdminInvites({
   searchParams,
@@ -28,9 +30,20 @@ export default async function AdminInvites({
                 expires {new Date(i.expires_at).toLocaleDateString()}
               </div>
             </div>
-            <span className={i.redeemed_by ? "text-neutral-400" : "text-brand-deep"}>
-              {i.redeemed_by ? "redeemed" : "open"}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className={i.redeemed_by ? "text-neutral-400" : "text-brand-deep"}>
+                {i.redeemed_by ? "redeemed" : "open"}
+              </span>
+              <form action={deleteInvite}>
+                <input type="hidden" name="id" value={i.id} />
+                <ConfirmButton
+                  message={i.redeemed_by ? "Delete this redeemed invite record?" : "Revoke this open invite?"}
+                  className="text-xs text-red-600 hover:underline"
+                >
+                  {i.redeemed_by ? "Delete" : "Revoke"}
+                </ConfirmButton>
+              </form>
+            </div>
           </li>
         ))}
         {(!invites || invites.length === 0) && (

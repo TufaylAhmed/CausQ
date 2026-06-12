@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { createEngagement, addMilestone, setEngagementStatus, deleteEngagement } from "../actions";
+import { createEngagement, addMilestone, setEngagementStatus, deleteEngagement, deleteMilestone } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ConfirmButton } from "@/components/ConfirmButton";
@@ -13,6 +13,17 @@ export default async function AdminEngagements() {
     .from("engagements")
     .select("id, title, status, progress, orgs(name)")
     .order("created_at", { ascending: false });
+
+  const { data: milestones } = await supabase
+    .from("milestones")
+    .select("id, title, status, engagement_id")
+    .order("sort");
+  const msByEng = new Map<string, { id: string; title: string; status: string }[]>();
+  (milestones ?? []).forEach((m) => {
+    const arr = msByEng.get(m.engagement_id) ?? [];
+    arr.push(m);
+    msByEng.set(m.engagement_id, arr);
+  });
 
   return (
     <div className="space-y-6">
@@ -87,6 +98,21 @@ export default async function AdminEngagements() {
                   </form>
                 </div>
               </div>
+              {(msByEng.get(e.id) ?? []).length > 0 && (
+                <ul className="mt-2 space-y-1">
+                  {(msByEng.get(e.id) ?? []).map((m) => (
+                    <li key={m.id} className="flex items-center justify-between gap-2 text-sm">
+                      <span>
+                        {m.title} <span className="text-xs text-neutral-400">· {m.status}</span>
+                      </span>
+                      <form action={deleteMilestone}>
+                        <input type="hidden" name="id" value={m.id} />
+                        <button className="text-xs text-red-600 hover:underline">Remove</button>
+                      </form>
+                    </li>
+                  ))}
+                </ul>
+              )}
               <form action={addMilestone} className="mt-2 flex items-end gap-2">
                 <input type="hidden" name="engagement_id" value={e.id} />
                 <div className="flex-1">

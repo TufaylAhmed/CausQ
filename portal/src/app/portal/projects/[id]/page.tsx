@@ -6,6 +6,8 @@ import { DocumentRow } from "./DocumentRow";
 import { UploadForm } from "./UploadForm";
 import { ClientUploadForm } from "./ClientUploadForm";
 import { MessageComposer } from "./MessageComposer";
+import { deleteDocument } from "./upload-actions";
+import { ConfirmButton } from "@/components/ConfirmButton";
 
 function healthClass(h: number): string {
   return h >= 70 ? "health-good" : h >= 40 ? "health-warn" : "health-bad";
@@ -110,7 +112,19 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
           <div className="mt-4 space-y-2">
             {isStaff ? <UploadForm engagementId={id} /> : <ClientUploadForm engagementId={id} />}
             {(documents ?? []).map((d) => (
-              <DocumentRow key={d.id} path={d.storage_path} filename={d.filename} />
+              <div key={d.id} className="flex items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <DocumentRow path={d.storage_path} filename={d.filename} />
+                </div>
+                {isStaff && (
+                  <form action={deleteDocument}>
+                    <input type="hidden" name="id" value={d.id} />
+                    <ConfirmButton message={`Delete "${d.filename}"?`} className="px-1 text-xs text-red-600 hover:underline">
+                      Delete
+                    </ConfirmButton>
+                  </form>
+                )}
+              </div>
             ))}
             {(!documents || documents.length === 0) && (
               <p className="text-sm text-[var(--ink-mute)]">No documents yet.</p>

@@ -49,3 +49,31 @@ export async function uploadDocument(engagementId: string, formData: FormData) {
   revalidatePath(`/portal/projects/${engagementId}`);
   return { ok: true };
 }
+
+// Staff-only: remove a document from storage and the table.
+export async function deleteDocument(formData: FormData) {
+  const id = String(formData.get("id"));
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("Not signed in.");
+
+  const { data: me } = await supabase.from("profiles").select("role, status").eq("id", user.id).single();
+  if (!me || me.status !== "active" || !["staff", "admin"].includes(me.role)) {
+    throw new Error("Staff only.");
+  }
+
+  const { data: doc } = await supabase
+    .from("documents")
+    .select("storage_path, engagement_id")
+    .eq("id", id)
+    .single();
+  if (!doc) throw new Error("Document not found.");
+
+  await supabase.storage.from("documents").remove([doc.storage_path]);
+  const { error } = await supabase.from("documents").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+
+  if (doc.engagement_id) revalidatePath(`/portal/projects/${doc.engagement_id}`);
+}
