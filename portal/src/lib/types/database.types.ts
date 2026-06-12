@@ -739,6 +739,10 @@ export type Database = {
         Args: { p_id: string; p_org?: string }
         Returns: undefined
       }
+      ar_aging_report: {
+        Args: { p_start?: string; p_end?: string }
+        Returns: { bucket: string; invoice_count: number; total: number }[]
+      }
       auth_is_active: { Args: never; Returns: boolean }
       auth_is_staff: { Args: never; Returns: boolean }
       auth_org_id: { Args: never; Returns: string }
@@ -773,6 +777,17 @@ export type Database = {
       }
       redeem_invite: { Args: { p_token: string }; Returns: undefined }
       reject_profile: { Args: { p_id: string }; Returns: undefined }
+      staff_dashboard_metrics: {
+        Args: never
+        Returns: {
+          active_projects: number
+          revenue_mtd: number
+          outstanding: number
+          overdue_count: number
+          pending_approvals: number
+          open_pipeline: number
+        }[]
+      }
       unread_notification_count: { Args: never; Returns: number }
     }
     Enums: {

@@ -20,6 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const nav: [string, string][] = [
     ["Overview", "/admin"],
+    ["Metrics", "/admin/dashboard"],
     ["Orgs", "/admin/orgs"],
     ["Engagements", "/admin/engagements"],
     ["Invites", "/admin/invites"],
