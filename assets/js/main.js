@@ -84,8 +84,8 @@ function renderNav(){
       <a href="index.html" class="brand" aria-label="CausQ home"><span class="logo-lockup"><img class="logo-img" src="assets/img/causq-word-ink.png" alt="CausQ"><span class="rad"></span></span></a>
       <div class="nav-links" id="navLinks">
         ${links}
-        <a href="https://portal.causq.com/portal/login" class="client-login"><span class="lpip" aria-hidden="true"></span>Client login</a>
         <a href="contact.html" class="btn btn-dark">Let's talk <span class="arr">&rarr;</span></a>
+        <a href="https://portal.causq.com/portal/login" class="client-login" aria-label="Client login" title="Client login"><svg class="ci" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.3"/><path d="M8 10.5V7.4a4 4 0 0 1 8 0v3.1"/><circle cx="12" cy="15.4" r="1.15" fill="currentColor" stroke="none"/></svg></a>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
