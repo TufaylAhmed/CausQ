@@ -34,6 +34,150 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          id: string
+          kind: string
+          org_id: string
+          ref: string | null
+          summary: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          org_id: string
+          ref?: string | null
+          summary: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          org_id?: string
+          ref?: string | null
+          summary?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_log_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contacts: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          is_causq_staff: boolean
+          name: string
+          org_id: string
+          profile_id: string | null
+          role: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_causq_staff?: boolean
+          name: string
+          org_id: string
+          profile_id?: string | null
+          role?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_causq_staff?: boolean
+          name?: string
+          org_id?: string
+          profile_id?: string | null
+          role?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contacts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contacts_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opportunities: {
+        Row: {
+          created_at: string
+          currency: string
+          expected_close: string | null
+          id: string
+          org_id: string
+          owner_profile_id: string | null
+          stage: Database["public"]["Enums"]["opportunity_stage"]
+          title: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          expected_close?: string | null
+          id?: string
+          org_id: string
+          owner_profile_id?: string | null
+          stage?: Database["public"]["Enums"]["opportunity_stage"]
+          title: string
+          value?: number
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          expected_close?: string | null
+          id?: string
+          org_id?: string
+          owner_profile_id?: string | null
+          stage?: Database["public"]["Enums"]["opportunity_stage"]
+          title?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunities_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunities_owner_profile_id_fkey"
+            columns: ["owner_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       access_requests: {
         Row: {
           company: string | null
@@ -635,6 +779,7 @@ export type Database = {
       engagement_status: "active" | "on_hold" | "closed"
       invoice_status: "draft" | "sent" | "paid" | "overdue"
       milestone_status: "todo" | "in_progress" | "done"
+      opportunity_stage: "lead" | "qualified" | "proposal" | "won" | "lost"
       profile_role: "client" | "staff" | "admin"
       profile_status: "pending" | "active" | "rejected"
     }
@@ -770,6 +915,7 @@ export const Constants = {
       engagement_status: ["active", "on_hold", "closed"],
       invoice_status: ["draft", "sent", "paid", "overdue"],
       milestone_status: ["todo", "in_progress", "done"],
+      opportunity_stage: ["lead", "qualified", "proposal", "won", "lost"],
       profile_role: ["client", "staff", "admin"],
       profile_status: ["pending", "active", "rejected"],
     },

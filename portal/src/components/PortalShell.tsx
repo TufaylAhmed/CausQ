@@ -3,7 +3,15 @@ import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/portal/signout-action";
 import { Wordmark } from "@/components/Wordmark";
 
-type Active = "dashboard" | "projects" | "invoices" | "notifications" | "admin" | undefined;
+type Active =
+  | "dashboard"
+  | "projects"
+  | "invoices"
+  | "notifications"
+  | "contacts"
+  | "account"
+  | "admin"
+  | undefined;
 
 export async function PortalShell({
   active,
@@ -47,6 +55,12 @@ export async function PortalShell({
             <Link href="/portal/invoices" className={active === "invoices" ? "active" : ""}>
               Invoices
             </Link>
+            <a href="/portal/contacts" className={active === "contacts" ? "active" : ""}>
+              Contacts
+            </a>
+            <a href="/portal/account" className={active === "account" ? "active" : ""}>
+              Account
+            </a>
             {isStaff && (
               <a href="/admin" className={active === "admin" ? "active" : ""}>
                 Admin
