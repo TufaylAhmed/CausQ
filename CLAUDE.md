@@ -93,6 +93,16 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Portal Milestone 2, Phase 4: Lightweight CRM** (shipped to prod). Added
+  `contacts`, `opportunities` (staff-only RLS), and `activity_log` tables. Client
+  `/portal/contacts` (the CausQ team assigned to the account; clients see only
+  `is_causq_staff` contacts of their org) and `/portal/account` (org overview:
+  project + invoice summary with health). Staff `/admin/crm` pipeline kanban
+  (opportunities by stage with value sums + stage moves), `/admin/crm/contacts`
+  manager, and `/admin/crm/[orgId]` org detail with a unified activity timeline +
+  note composer. Stage changes/notes/adds log to `activity_log`. Nav: Contacts +
+  Account in the portal, CRM in the admin. pgTAP proves clients cannot read
+  opportunities/activity. Next: Phase 5 (staff metrics dashboard, Recharts).
 - **Portal Milestone 2, Phase 3: Projects upgrade** (shipped to prod). Added a
   `tasks` table (RLS: own-org read, staff write) and an `engagement_health`
   security_invoker view (milestone completion minus an overdue-task penalty).
