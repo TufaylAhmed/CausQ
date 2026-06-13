@@ -93,6 +93,23 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Homepage v2 redesign, then reverted** (2026-06-12 / 13). Built a "Live Grid"
+  dark-mode homepage on `index.html` (commit `3bcac8e`), inspired by mitigata.com
+  but adapted to CausQ's brand: near-black canvas with electric teal (`--signal`),
+  a live-status hero chip, a word-cycling headline (AI-native / quantum-safe /
+  self-healing / always on), an animated SVG "living grid" backdrop, an operations
+  ticker marquee, three "forces" console cards with animated SVG miniatures, a
+  restyled stats band, a redesigned partners wall, a signals article row, a
+  radial-glow CTA band, and a permanent dark glass nav. It shipped as an **additive
+  v2 CSS/JS layer** (extra rules in `styles.css`, `initWordCycle()` in `main.js`)
+  so the 22 inner pages stayed on the light system, untouched. A revert checkpoint
+  was tagged `design-v1-checkpoint` before going live. **The user reviewed it and
+  asked to revert.** Reverted via commit `11c1ba9` (tree now matches
+  `design-v1-checkpoint` exactly: the v2 CSS/JS layer removed, `index.html` back to
+  the v1 "Engineering what's next." hero), pushed to `main`, and pulled on the prod
+  docroot over SSH. Verified live: v1 hero restored, zero v2 markers in the HTML,
+  assets at `?v=20260619`, all pages HTTP 200. The redesign is **not lost** — it
+  lives in history at commit `3bcac8e` / tag `design-v1-checkpoint` if revisited.
 - **Portal Milestone 2 COMPLETE** (Phases 2A, 2B, 3, 4, 5 all shipped to prod
   2026-06-11/12). The client portal is now a full workspace: dashboard +
   notifications, full invoice lifecycle, projects/tasks with health, lightweight
