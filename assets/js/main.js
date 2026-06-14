@@ -4,22 +4,9 @@
    and wires forms to the Rust API (graceful offline fallback).
 ============================================================================ */
 
-/* ----------------------------------------------------------------- ANALYTICS
-   Google Analytics 4 (gtag.js). Loaded once from here so every page is tracked
-   from a single source. Skipped on local file:// previews so dev traffic stays
-   out of the property.                                                        */
-const GA_MEASUREMENT_ID = 'G-9E2P7FB4HZ';
-(function initAnalytics(){
-  if (location.protocol === 'file:' || !GA_MEASUREMENT_ID) return;
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
-  document.head.appendChild(s);
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function(){ dataLayer.push(arguments); };
-  gtag('js', new Date());
-  gtag('config', GA_MEASUREMENT_ID);
-})();
+/* Note: Google Analytics 4 (gtag.js) is loaded directly in each page's <head>
+   (the standard snippet) so Google's tag detector and Tag Assistant find it.
+   It is intentionally NOT injected from here. */
 
 const API_BASE = (location.protocol === 'file:') ? '' : ''; // same-origin when served by the Rust app
 
