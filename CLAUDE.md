@@ -93,6 +93,17 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Google Analytics 4 added sitewide** (2026-06-14). Wired GA4 property
+  `G-9E2P7FB4HZ` (gtag.js) into the site. Loaded once from `assets/js/main.js`
+  via a small `initAnalytics()` IIFE at the top of the file, so every page that
+  uses the shared script is tracked from a single source; it early-returns on
+  `file://` so local previews stay out of the property. `pitch-deck.html` is the
+  only page that does not load `main.js` (standalone PptxGenJS slideshow), so the
+  standard gtag snippet is inlined in its `<head>`. Bumped the cache-bust to
+  `main.js?v=20260620` across all 23 pages. Committed (`93b3209`), pushed to
+  `main`, pulled onto the prod docroot over SSH, and verified live (CDN `main.js`
+  carries `initAnalytics` + the GA id, homepage references `?v=20260620`, pages
+  HTTP 200).
 - **Homepage v2 redesign, then reverted** (2026-06-12 / 13). Built a "Live Grid"
   dark-mode homepage on `index.html` (commit `3bcac8e`), inspired by mitigata.com
   but adapted to CausQ's brand: near-black canvas with electric teal (`--signal`),
