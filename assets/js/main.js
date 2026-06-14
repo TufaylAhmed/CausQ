@@ -186,14 +186,16 @@ const PARTNERS = [
 ];
 
 function renderLogos(){
-  // One framed cell per partner — all visible at once (no marquee). Each cell
-  // is a .reveal so it eases in on scroll; the staggered transition-delay makes
-  // the grid cascade. Falls back to a wordmark if an image file is missing.
-  return PARTNERS.map(([file, name], i) => `
-    <div class="logo-cell reveal" style="transition-delay:${i * 70}ms" title="${name}">
+  // Single-line marquee: every mark on one row, scrolling continuously. The set
+  // is rendered twice (the second copy aria-hidden) so the loop is seamless —
+  // the CSS translateX(-50%) lands exactly on the start of the duplicate. Falls
+  // back to a wordmark if an image file is missing; the marquee pauses on hover.
+  const cells = PARTNERS.map(([file, name]) => `
+    <div class="logo-cell" title="${name}">
       <img src="assets/img/company-logos/${file}" alt="${name}"
            onerror="this.outerHTML='<span class=&quot;wm&quot;>${name}</span>'">
     </div>`).join('');
+  return `<div class="logo-track">${cells}<div class="logo-dup" aria-hidden="true">${cells}</div></div>`;
 }
 
 /* ----------------------------------------------------------------- boot */

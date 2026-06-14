@@ -687,27 +687,38 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
    the box edge and the logo's top is shaved off. overflow:clip lets us clip one
    axis while leaving the other visible (plain overflow:hidden can't). The
    overflow:hidden line is a fallback for engines without overflow:clip. */
-/* Partner logos — NOT a boxed table. A clean row of marks, each separated from
-   its neighbour by a small hairline "barrier" line, with an Apple-style frosted
-   glass highlight that lifts the logo into full colour on hover.              */
+/* Partner logos — a single-line MARQUEE. Every mark scrolls continuously on one
+   row, each separated from its neighbour by a small hairline "barrier" line,
+   lifting into full colour over an Apple-style frosted-glass highlight on hover.
+   The track is rendered twice (translateX -50% loops seamlessly) and pauses on
+   hover so a logo can be targeted. Not a boxed table: no frame, no gridlines.  */
 .logo-grid{
-  display:grid;
-  grid-template-columns:repeat(4, 1fr);
-  gap:0;                                  /* dividers are drawn per-cell, below */
+  position:relative;
+  overflow-x:clip; overflow-y:visible;    /* clip the loop, keep the glass shadow */
+  overflow:hidden hidden;                 /* fallback for engines w/o overflow:clip */
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+          mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.logo-track{
+  display:flex; align-items:center; width:max-content;
+  animation:logo-marquee 40s linear infinite;
+}
+.logo-dup{ display:contents; }            /* duplicate set joins the same flex row */
+.logo-grid:hover .logo-track{ animation-play-state:paused; }
+@keyframes logo-marquee{
+  from{ transform:translateX(0); }
+  to{   transform:translateX(-50%); }
 }
 .logo-cell{
-  position:relative;
+  position:relative; flex:0 0 auto;
   display:flex; align-items:center; justify-content:center;
-  min-height:112px; padding:24px 26px;
+  min-height:112px; padding:24px 44px;    /* roomier gaps for a single line */
 }
-/* the small barrier line between two adjacent logos (short, centred hairline —
-   not a full gridline, so the strip never reads as a table) */
+/* the small barrier line between two adjacent logos (short, centred hairline) */
 .logo-cell::after{
   content:""; position:absolute; right:0; top:50%; transform:translateY(-50%);
   width:1px; height:40px; background:var(--line);
 }
-.logo-cell:nth-child(4n)::after,
-.logo-cell:last-child::after{ display:none; }   /* none on a row's right edge */
 /* Apple transparent / frosted-glass highlight — revealed on hover */
 .logo-cell::before{
   content:""; position:absolute; inset:8px; border-radius:16px;
@@ -739,11 +750,14 @@ body.menu-open.dark-hero .nav:not(.scrolled) .btn-dark{ background:var(--ink); c
   .logo-cell:hover .wm{ color:var(--ink); }
 }
 @media (max-width:760px){
-  .logo-grid{ grid-template-columns:repeat(2, 1fr); }
-  .logo-cell{ min-height:96px; padding:20px; }
-  .logo-cell:nth-child(2n)::after{ display:none; }   /* none on 2-col right edge */
+  .logo-cell{ min-height:96px; padding:20px 32px; }
+  .logo-track{ animation-duration:28s; }
 }
 @media (prefers-reduced-motion:reduce){
+  /* no scrolling: fall back to a static, centred, wrapping row */
+  .logo-track{ animation:none; flex-wrap:wrap; justify-content:center; width:auto; }
+  .logo-dup{ display:none; }
+  .logo-grid{ -webkit-mask-image:none; mask-image:none; }
   .logo-cell::before,
   .logo-cell:hover::before{ transform:none; transition:opacity .2s linear; }
   .logo-cell:hover img{ transform:none; }
