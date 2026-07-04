@@ -93,6 +93,28 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Homepage rebuilt on the supermemory.ai structure** (2026-07-05, branch
+  `redesign/context-grid`, commit `92a3269`, NOT yet merged or deployed). The
+  user rejected the earlier redesign attempts and asked to restart from `main`
+  (`c05f63d`), analyze supermemory.ai in the browser, and clone its homepage
+  structure for causq.com in white + teal. Shipped as a full `index.html`
+  rewrite plus a scoped `assets/css/home.css` + `assets/js/home.js` layer
+  (loaded only by the homepage; styles.css, main.js and all 22 inner pages
+  untouched). Structure mirrors supermemory 1:1: dot-grid hero with badge pill,
+  segmented CTAs and a copyable `$ hello@causq.com` terminal row; sticky mono
+  section-index bars `[1/9]`-`[9/9]`; a capability catalog (numbered 01-08 tab
+  list swapping hand-built blueprint SVG cards); a teal/white two-card "what we
+  do" split with a stat strip; 01-04 how-we-work step cards; a proof section
+  with dashed spec panels and a CausQ vs big-consultancy vs staff-augmentation
+  comparison table; an engagements card carousel; engagement modes + trust
+  band; a teal point-of-view band (SVG bar chart + giant 3x stat) and pull
+  quote; ways-of-working plan cards; a numbered one-open-at-a-time FAQ; a final
+  CTA with rotating boxed word ("Your [network] needs its CausQ."); and a giant
+  watermark wordmark band above the shared footer. Zero border-radius inside
+  the homepage, teal `#0E7490`-`#083344` gradient cards, brand fonts kept.
+  NOTE: worked from a scratchpad GitHub clone because the OneDrive checkout had
+  7 dataless placeholder files that hung git (mmap timeouts); the OneDrive copy
+  needs a `git pull` once those files hydrate.
 - **Google Analytics 4 added sitewide** (2026-06-14). Wired GA4 property
   `G-9E2P7FB4HZ` (gtag.js) into the site. Loaded once from `assets/js/main.js`
   via a small `initAnalytics()` IIFE at the top of the file, so every page that
