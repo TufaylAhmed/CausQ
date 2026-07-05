@@ -93,6 +93,21 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Homepage: Cal.com CTA + drenched footer + hero/ticker polish** (2026-07-05,
+  commit `ce1bd6c`). "Talk to sales" (hero ghost CTA) and "Book a briefing"
+  (final CTA + footer) now open `https://cal.com/causq/30min?overlayCalendar=true`
+  in a new tab, same pattern as supermemory.ai (plain link, no embed script).
+  The Cal.com account is username `causq` (hello@causq.com) with public event
+  types `15min` and `30min`; the API key is SECRET, server-side only, never in
+  site code or the repo. The homepage watermark band + shared footer were
+  replaced by a supermemory-structure "drenched" footer in brand teal
+  (`.sq-footer` in home.css: editorial h2 + mono-labelled link columns +
+  right-aligned mono copyright + giant translucent "CausQ." wordmark with a
+  white rounded logo badge that scrolls back to top). The hero dot grid was
+  made stronger, the partner marquee stripped to a quiet supermemory-style
+  grayscale ticker (no barrier lines, no glass hover, pointer-events none),
+  and the nav logo dot restored to round. Inner pages keep the shared footer
+  and marquee styling. home.css bumped to `?v=20260705b`.
 - **Primary checkout moved to `~/dev/CausQ`** (2026-07-05). OneDrive turned
   ~24k files in the old Documents checkout into cloud-only placeholders that
   fail to hydrate (reads time out), which corrupted its `.git`. The user asked
