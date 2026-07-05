@@ -93,6 +93,15 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Primary checkout moved to `~/dev/CausQ`** (2026-07-05). OneDrive turned
+  ~24k files in the old Documents checkout into cloud-only placeholders that
+  fail to hydrate (reads time out), which corrupted its `.git`. The user asked
+  to move the project out of Documents; `~/dev/CausQ` is now the primary
+  working copy (full clone, `main` + `feat/client-portal`). Work and launch
+  Claude from `~/dev/CausQ`, NOT the OneDrive path. The old OneDrive folder is
+  kept only as a recovery source for still-stuck untracked files, most
+  importantly `portal/.env.local` and `backend/.env` (secrets, not in git);
+  once those hydrate, copy them over and the OneDrive folder can be deleted.
 - **Homepage rebuilt on the supermemory.ai structure** (2026-07-05, branch
   `redesign/context-grid`, commit `92a3269`; merged to `main` and pushed to
   GitHub on 2026-07-05, `c05f63d..9dc4b04`). The
