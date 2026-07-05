@@ -44,9 +44,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/styles.css?v=20260623" />
-  <link rel="stylesheet" href="assets/css/home.css?v=20260705" />
+  <link rel="stylesheet" href="assets/css/home.css?v=20260705b" />
 </head>
-<body class="home-sq">
+<body class="home-sq" id="top">
   <div id="nav-mount"></div>
 
   <main class="sq-page">
@@ -64,7 +64,7 @@
           secure for the quantum era. One integrated system, not three disconnected programs.</p>
         <div class="sq-hero-cta">
           <a href="contact.html" class="sq-btn sq-btn-solid"><span>Start a conversation</span><span class="sq-btn-arr">&rarr;</span></a>
-          <a href="what-we-do.html" class="sq-btn sq-btn-ghost"><span>See what we do</span></a>
+          <a href="https://cal.com/causq/30min?overlayCalendar=true" target="_blank" rel="noopener" class="sq-btn sq-btn-ghost"><span>Talk to sales</span><span class="sq-btn-arr">&#8599;</span></a>
         </div>
         <button class="sq-term" type="button" data-copy="hello@causq.com" title="Copy email">
           <span class="sq-term-ps1">$</span> <span class="sq-term-cmd">hello@causq.com</span>
@@ -460,7 +460,7 @@
     <section class="sq-final">
       <div class="sq-final-head">
         <h2 class="sq-h2 sq-h2-xl">Your <span class="sq-rotor"><span class="sq-rotor-word" id="rotorWord">&#9642; network</span></span><br>needs its CausQ<span class="dot">.</span></h2>
-        <a href="contact.html" class="sq-btn sq-btn-solid sq-btn-big"><span>Book a briefing</span><span class="sq-btn-arr">&rarr;</span></a>
+        <a href="https://cal.com/causq/30min?overlayCalendar=true" target="_blank" rel="noopener" class="sq-btn sq-btn-solid sq-btn-big"><span>Book a briefing</span><span class="sq-btn-arr">&#8599;</span></a>
       </div>
       <div class="sq-final-band">
         <div class="sq-final-counter">
@@ -475,14 +475,63 @@
       </div>
     </section>
 
-    <!-- watermark before shared footer -->
-    <div class="sq-watermark" aria-hidden="true">
-      <div class="sq-watermark-tile"><img src="assets/img/logo-causq.png" alt=""></div>
-      <span class="sq-watermark-word">CausQ.</span>
-    </div>
   </main>
 
-  <div id="footer-mount"></div>
+  <!-- drenched footer (homepage only; inner pages keep the shared footer) -->
+  <footer class="sq-footer">
+    <div class="sq-foot-top">
+      <div class="sq-foot-editorial">
+        <h2 class="sq-foot-h2">Engineering the AI-native,<br>quantum-safe enterprise.</h2>
+        <p class="sq-foot-sub">One bench, one program, one accountable partner. Made by engineers who care about the craft.</p>
+      </div>
+      <div class="sq-foot-cols">
+        <div class="sq-foot-col">
+          <div class="sq-foot-label">SERVICES</div>
+          <div class="sq-foot-links">
+            <a href="what-we-do.html#ai">AI &amp; Intelligent Operations</a>
+            <a href="what-we-do.html#network">Network Modernization</a>
+            <a href="what-we-do.html#quantum">Quantum-era Security</a>
+            <a href="xsiam-xsoar.html">Cortex XSIAM &amp; XSOAR</a>
+            <a href="consulting-advisory.html">Consulting &amp; Advisory</a>
+            <a href="what-we-do.html">All capabilities</a>
+          </div>
+        </div>
+        <div class="sq-foot-col">
+          <div class="sq-foot-label">COMPANY</div>
+          <div class="sq-foot-links">
+            <a href="who-we-are.html">Who we are</a>
+            <a href="what-we-think.html">What we think</a>
+            <a href="careers.html">Careers</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div class="sq-foot-col">
+          <div class="sq-foot-label">LEGAL</div>
+          <div class="sq-foot-links">
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+            <a href="security.html">Security</a>
+            <a href="compliance.html">Compliance</a>
+          </div>
+        </div>
+        <div class="sq-foot-col">
+          <div class="sq-foot-label">CONNECT</div>
+          <div class="sq-foot-links">
+            <a href="mailto:hello@causq.com">hello@causq.com</a>
+            <a href="https://cal.com/causq/30min?overlayCalendar=true" target="_blank" rel="noopener">Talk to sales</a>
+            <a href="contact.html">Book a briefing</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sq-foot-copy-row">
+      <span class="sq-foot-copy">&copy; 2026 &middot; CAUSQ &middot; ALL RIGHTS RESERVED</span>
+    </div>
+    <div class="sq-foot-wordmark-wrap">
+      <div class="sq-foot-wordmark" aria-hidden="true">CausQ.</div>
+      <a href="#top" class="sq-foot-badge" aria-label="Back to top"><img src="assets/img/logo-causq.png" alt=""></a>
+    </div>
+  </footer>
   <script src="assets/js/main.js?v=20260623"></script>
   <script src="assets/js/home.js?v=20260705"></script>
 </body>
