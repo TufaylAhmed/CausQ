@@ -93,6 +93,20 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Zero-trust access-fabric section added to the homepage** (2026-07-05,
+  commit `f7056ea`, live). The user pointed at Tailark Pro block
+  `hero-section-16` (`npx shadcn add @tailark-pro/hero-section-16`); the pro
+  registry needs an API key we don't have, so the block's public preview was
+  studied and its schematic-board structure rebuilt natively in the sq-
+  design system (no React/Tailwind). New section `[3/10]` "Zero trust fabric"
+  (`#zero-trust`, `.sq-zt-*` in home.css): blueprint dot-grid board with an
+  IDENTITY chip wired by self-drawing SVG traces to a live ACCESS REQUEST
+  card (user / device / posture / segment rows stagger in, ALLOW verdict
+  pops), a pulsing SESSION VERIFIED pill, a policy-as-code panel, then three
+  feature columns (identity-first access, microsegmentation, continuous
+  verification). Sections renumbered [n/9] to [n/10]. Board stacks vertically
+  under 820px. home.css `?v=20260705d`.
+
 - **Homepage: Cal.com CTA + drenched footer + hero/ticker polish** (2026-07-05,
   commit `ce1bd6c`). "Talk to sales" (hero ghost CTA) and "Book a briefing"
   (final CTA + footer) now open `https://cal.com/causq/30min?overlayCalendar=true`
