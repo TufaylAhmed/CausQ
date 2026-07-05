@@ -44,7 +44,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/styles.css?v=20260623" />
-  <link rel="stylesheet" href="assets/css/home.css?v=20260705c" />
+  <link rel="stylesheet" href="assets/css/home.css?v=20260705d" />
 </head>
 <body class="home-sq" id="top">
   <div id="nav-mount"></div>
@@ -76,7 +76,7 @@
     </header>
 
     <!-- ============================== [1/9] CAPABILITY CATALOG ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Capability catalog</span><span class="sq-secbar-n">[<b>1</b>/9]</span></div>
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Capability catalog</span><span class="sq-secbar-n">[<b>1</b>/10]</span></div>
     <section class="sq-sec" id="capabilities">
       <div class="sq-catalog">
         <div class="sq-cat-left">
@@ -111,7 +111,7 @@
     </section>
 
     <!-- ============================== [2/9] WHAT WE DO ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; What we do</span><span class="sq-secbar-n">[<b>2</b>/9]</span></div>
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; What we do</span><span class="sq-secbar-n">[<b>2</b>/10]</span></div>
     <section class="sq-sec" id="what-we-do">
       <div class="sq-center-head">
         <h2 class="sq-h2">AI. Network. <em>Trust.</em> One system, not three programs.</h2>
@@ -147,8 +147,77 @@
       </div>
     </section>
 
-    <!-- ============================== [3/9] HOW WE WORK ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; How we work</span><span class="sq-secbar-n">[<b>3</b>/9]</span></div>
+    <!-- ============================== [3/10] ZERO TRUST FABRIC ============================== -->
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Zero trust fabric</span><span class="sq-secbar-n">[<b>3</b>/10]</span></div>
+    <section class="sq-sec" id="zero-trust">
+      <div class="sq-center-head">
+        <span class="sq-kicker">Never trust, always verify</span>
+        <h2 class="sq-h2">Zero trust, engineered <em>into the network.</em></h2>
+        <p class="sq-p">Every session authenticated, every device checked, every flow scoped to least
+          privilege. Not a bolt-on product: an access fabric wired through identity, segment and policy.</p>
+      </div>
+
+      <div class="sq-zt-board">
+        <span class="sq-zt-note tl" aria-hidden="true">NEVER TRUST.<br>ALWAYS VERIFY.</span>
+        <span class="sq-zt-note br" aria-hidden="true">LEAST PRIVILEGE BY DEFAULT.</span>
+
+        <svg class="sq-zt-traces reveal" viewBox="0 0 1000 640" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M500 96 V 208" fill="none"/>
+          <path d="M368 430 H 250 V 500" fill="none"/>
+          <path d="M632 400 H 790 V 452" fill="none"/>
+        </svg>
+
+        <div class="sq-zt-chip reveal" aria-hidden="true">
+          <span class="p t"></span><span class="p b"></span>
+          IDENTITY
+        </div>
+
+        <figure class="sq-zt-card reveal">
+          <figcaption class="sq-zt-card-h"><span>ACCESS REQUEST</span><span>#4187</span></figcaption>
+          <ul>
+            <li><span class="k">user</span><b>s.chen@corp</b><span class="ok">MFA &#10003;</span></li>
+            <li><span class="k">device</span><b>managed &middot; patched</b><span class="ok">&#10003;</span></li>
+            <li><span class="k">posture</span><b>compliant</b><span class="ok">&#10003;</span></li>
+            <li><span class="k">segment</span><b>finance / erp</b><span class="ok">scoped</span></li>
+          </ul>
+          <div class="sq-zt-card-f"><span class="sq-zt-allow">ALLOW</span><span>least-privilege session &middot; app only, never the network</span></div>
+        </figure>
+
+        <div class="sq-zt-pill reveal" aria-hidden="true"><span class="d"></span>SESSION VERIFIED &middot; re-checked continuously</div>
+
+        <pre class="sq-zt-code reveal" aria-hidden="true"><code><em>policy</em> "finance-erp" {
+  allow  = identity.mfa
+        &amp;&amp; device.compliant
+  scope  = <b>"least-privilege"</b>
+  verify = <b>"continuous"</b>
+}</code></pre>
+      </div>
+
+      <div class="sq-zt-feats">
+        <div class="sq-zt-feat reveal">
+          <span class="sq-zt-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 19c1.2-3 3.6-4.5 6.5-4.5s5.3 1.5 6.5 4.5"/></svg></span>
+          <h3 class="sq-h3">Identity-first access</h3>
+          <p class="sq-p">Access follows the person and the device posture, not the IP address. SSO, MFA and
+            conditional policy in front of every application.</p>
+        </div>
+        <div class="sq-zt-feat reveal">
+          <span class="sq-zt-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="3.5" width="7" height="7"/><rect x="13.5" y="3.5" width="7" height="7"/><rect x="3.5" y="13.5" width="7" height="7"/><rect x="13.5" y="13.5" width="7" height="7"/></svg></span>
+          <h3 class="sq-h3">Microsegmentation</h3>
+          <p class="sq-p">The network is carved into small, policy-bound segments, so one compromised host
+            is a contained event, not a lateral-movement runway.</p>
+        </div>
+        <div class="sq-zt-feat reveal">
+          <span class="sq-zt-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3.5l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9v-5z"/><path d="M9 12l2 2 4-4.5"/></svg></span>
+          <h3 class="sq-h3">Continuous verification</h3>
+          <p class="sq-p">Trust decays. Sessions are re-evaluated as posture, location and behaviour change,
+            and revoked the moment they drift.</p>
+        </div>
+      </div>
+      <p class="sq-zt-more"><a class="sq-tlink" href="what-we-do.html#specialised">Explore Identity &amp; Zero Trust <span class="arr">&rarr;</span></a></p>
+    </section>
+
+    <!-- ============================== [4/10] HOW WE WORK ============================== -->
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; How we work</span><span class="sq-secbar-n">[<b>4</b>/10]</span></div>
     <section class="sq-sec" id="how-we-work">
       <div class="sq-split-head">
         <h2 class="sq-h2">How we <em>work.</em></h2>
@@ -184,7 +253,7 @@
     </section>
 
     <!-- ============================== [4/9] PROOF ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Proof</span><span class="sq-secbar-n">[<b>4</b>/9]</span></div>
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Proof</span><span class="sq-secbar-n">[<b>5</b>/10]</span></div>
     <section class="sq-sec" id="proof">
       <div class="sq-proof-grid">
         <div class="sq-proof-copy">
@@ -234,7 +303,7 @@
     </section>
 
     <!-- ============================== [5/9] ENGAGEMENTS ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Engagements</span><span class="sq-secbar-n">[<b>5</b>/9]</span></div>
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Engagements</span><span class="sq-secbar-n">[<b>6</b>/10]</span></div>
     <section class="sq-sec" id="engagements">
       <div class="sq-uc-head">
         <h2 class="sq-h2">Best as <em>one integrated program.</em><br>Or scoped to each mission.</h2>
@@ -285,7 +354,7 @@
     </section>
 
     <!-- ============================== [6/9] HOW WE ENGAGE ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; How we engage</span><span class="sq-secbar-n">[<b>6</b>/9]</span></div>
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; How we engage</span><span class="sq-secbar-n">[<b>7</b>/10]</span></div>
     <section class="sq-sec" id="engage">
       <div class="sq-center-head">
         <h2 class="sq-h2">CausQ works <em>wherever you run.</em></h2>
@@ -331,7 +400,7 @@
     </section>
 
     <!-- ============================== [7/9] POINT OF VIEW ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Point of view</span><span class="sq-secbar-n">[<b>7</b>/9]</span></div>
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Point of view</span><span class="sq-secbar-n">[<b>8</b>/10]</span></div>
     <section class="sq-sec sq-sec-flush" id="pov">
       <div class="sq-povband">
         <div class="sq-povchart" aria-hidden="true">
@@ -368,7 +437,7 @@
     </section>
 
     <!-- ============================== [8/9] WAYS OF WORKING ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Ways of working</span><span class="sq-secbar-n">[<b>8</b>/9]</span></div>
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; Ways of working</span><span class="sq-secbar-n">[<b>9</b>/10]</span></div>
     <section class="sq-sec" id="working">
       <div class="sq-center-head">
         <h2 class="sq-h2">Simple to start<span class="dot">.</span></h2>
@@ -415,7 +484,7 @@
     </section>
 
     <!-- ============================== [9/9] FAQ ============================== -->
-    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; FAQ</span><span class="sq-secbar-n">[<b>9</b>/9]</span></div>
+    <div class="sq-secbar" data-secbar><span class="sq-secbar-k">&#10095;&nbsp; FAQ</span><span class="sq-secbar-n">[<b>10</b>/10]</span></div>
     <section class="sq-sec" id="faq">
       <div class="sq-faq">
         <details class="sq-faq-item" open>
