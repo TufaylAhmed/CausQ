@@ -94,7 +94,8 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 Dates use the project's clock (mid-2026).
 
 - **Homepage rebuilt on the supermemory.ai structure** (2026-07-05, branch
-  `redesign/context-grid`, commit `92a3269`, NOT yet merged or deployed). The
+  `redesign/context-grid`, commit `92a3269`; merged to `main` and pushed to
+  GitHub on 2026-07-05, `c05f63d..9dc4b04`). The
   user rejected the earlier redesign attempts and asked to restart from `main`
   (`c05f63d`), analyze supermemory.ai in the browser, and clone its homepage
   structure for causq.com in white + teal. Shipped as a full `index.html`
@@ -113,8 +114,12 @@ Dates use the project's clock (mid-2026).
   watermark wordmark band above the shared footer. Zero border-radius inside
   the homepage, teal `#0E7490`-`#083344` gradient cards, brand fonts kept.
   NOTE: worked from a scratchpad GitHub clone because the OneDrive checkout had
-  7 dataless placeholder files that hung git (mmap timeouts); the OneDrive copy
-  needs a `git pull` once those files hydrate.
+  dataless placeholder files that hung git (mmap timeouts). Resolved 2026-07-05:
+  the broken `.git` was swapped for a fresh clone from GitHub (old one kept at
+  `.git-broken-20260705/`), tracked placeholder files were re-materialized from
+  HEAD, and the working clone was rescued to `~/dev/causq-site`. ~24k untracked
+  files under `portal/` etc. (incl. `.env` files) remain cloud-only until
+  OneDrive hydrates them.
 - **Google Analytics 4 added sitewide** (2026-06-14). Wired GA4 property
   `G-9E2P7FB4HZ` (gtag.js) into the site. Loaded once from `assets/js/main.js`
   via a small `initAnalytics()` IIFE at the top of the file, so every page that
