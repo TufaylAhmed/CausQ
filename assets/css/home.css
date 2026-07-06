@@ -257,7 +257,7 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
 .sq-statrow{ display: flex; width: 100%; border: 1px dashed rgba(255,255,255,.35); margin-top: 8px; }
 .sq-stat{ flex: 1; padding: 16px 10px; text-align: center; display: flex; flex-direction: column; gap: 5px; }
 .sq-stat + .sq-stat{ border-left: 1px dashed rgba(255,255,255,.35); }
-.sq-stat b{ font-family:'Albert Sans',sans-serif; font-size: clamp(1.4rem, 2.2vw, 2rem); font-weight: 700; color: #fff; letter-spacing: -.02em; }
+.sq-stat b{ font-family:'Albert Sans',sans-serif; font-size: clamp(2rem, 2.6vw, 2.6rem); font-weight: 700; color: #fff; letter-spacing: -.02em; }
 .sq-stat span{ font-family: var(--sq-mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.72); }
 .sq-duo-card .sq-btn{ margin-top: auto; }
 .sq-rowlist{ width: 100%; border-top: 1px solid var(--sq-line); margin-top: 6px; list-style: none; padding: 0; }
@@ -674,6 +674,23 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
   .sq-final-band{ grid-template-columns: 1fr; }
   .sq-uc-head{ flex-direction: column; align-items: flex-start; }
 }
+/* comparison table: below ~848px the 720px table starts scrolling sideways,
+   so collapse it into stacked per-row cards with labelled value cells */
+@media (max-width: 820px){
+  .sq-tablewrap{ overflow-x: visible; border: 0; }
+  .sq-table{ min-width: 0; }
+  .sq-table, .sq-table tbody{ display: block; }
+  .sq-table thead{ display: none; }
+  .sq-table tr{ display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--sq-line); }
+  .sq-table tr + tr{ margin-top: 12px; }
+  .sq-table td{ border-bottom: 0; }
+  .sq-table td.f{ grid-column: 1 / -1; width: auto; padding: 13px 16px; border-bottom: 1px solid var(--sq-line); }
+  .sq-table td:not(.f){ display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; padding: 12px 6px; }
+  .sq-table td:not(.f)::before{ font-family: var(--sq-mono); font-size: .56rem; letter-spacing: .08em; text-transform: uppercase; color: var(--sq-mute); }
+  .sq-table td.hi::before{ content: "CausQ"; color: var(--sq-teal-ink); }
+  .sq-table td:nth-child(3)::before{ content: "Big consultancy"; }
+  .sq-table td:nth-child(4)::before{ content: "Staff aug."; }
+}
 @media (max-width: 640px){
   .sq-hero{ padding: 84px 20px 64px; }
   .sq-sec{ padding: 60px 20px; }
@@ -682,6 +699,11 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
   .sq-step{ border-left: 0; }
   .sq-step:nth-child(n+2){ border-top: 1px solid var(--sq-line); }
   .sq-proof-grid{ grid-template-columns: 1fr; }
+  /* stat trio stacks into label rows so the big numbers keep their size */
+  .sq-statrow{ flex-direction: column; }
+  .sq-stat{ flex-direction: row; align-items: baseline; justify-content: space-between; gap: 14px; text-align: left; padding: 13px 16px; }
+  .sq-stat + .sq-stat{ border-left: 0; border-top: 1px dashed rgba(255,255,255,.35); }
+  .sq-stat span{ text-align: right; }
   .sq-uc{ flex-basis: 82vw; }
   .sq-faq-item p{ padding-left: 4px; }
   .sq-final-head{ margin-bottom: 40px; }
