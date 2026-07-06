@@ -93,6 +93,16 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Apple-glass header + animated logo** (2026-07-06, commit `614c881`, live).
+  Homepage nav is now near-transparent dark glass (saturate 180% + blur 20px)
+  over the dark hero, thinning to translucent white glass on scroll; global
+  scrolled bar lightened .78 to .6. Homepage body gained the `dark-hero` class
+  (white links, inverted wordmark) plus a menu-open exception so the inverted
+  logo returns to ink on the white mobile overlay. Logo lockup animates: the
+  wordmark slides in on load, the signal dot pops on after it, hover lifts the
+  mark with a teal glow and speeds the radar pings; reduced-motion disables
+  the entrance. Cache-bust to `?v=20260706a` on styles.css (22 pages) +
+  home.css. Deployed via SSH pull and verified live.
 - **Zero-trust access-fabric section added to the homepage** (2026-07-05,
   commit `f7056ea`, live). The user pointed at Tailark Pro block
   `hero-section-16` (`npx shadcn add @tailark-pro/hero-section-16`); the pro
