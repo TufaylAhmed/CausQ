@@ -236,7 +236,23 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
   display: flex; align-items: center; justify-content: center;
   outline: 1px dashed rgba(6,182,212,.5); outline-offset: 6px;
 }
-.sq-cat-viz{ width: min(58%, 380px); }
+/* per-capability photo under the line art: the figure's gradient stays as the
+   base, the photo fades in over it, and ::before re-lays the dot grid plus a
+   teal wash on top so the white strokes stay legible on any image */
+.sq-cat-card .sq-cat-img{
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transform: scale(1.06);
+  transition: opacity .55s ease, transform 4.8s linear;
+}
+.sq-cat-card .sq-cat-img.is-in{ opacity: .55; transform: scale(1); }
+.sq-cat-card::before{
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(rgba(255,255,255,.14) 1px, transparent 1.4px),
+    linear-gradient(145deg, rgba(14,116,144,.55), rgba(8,51,68,.82));
+  background-size: 14px 14px, cover;
+}
+.sq-cat-viz{ width: min(58%, 380px); position: relative; z-index: 2; }
 .sq-cat-viz svg{ width: 100%; height: auto; display: block; }
 .sq-cat-copy{ padding: 30px 4px 0; }
 .sq-cat-copy .sq-h3{ margin-top: 10px; font-size: clamp(1.5rem, 2.4vw, 2rem); }
@@ -257,8 +273,17 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
 .sq-statrow{ display: flex; width: 100%; border: 1px dashed rgba(255,255,255,.35); margin-top: 8px; }
 .sq-stat{ flex: 1; padding: 16px 10px; text-align: center; display: flex; flex-direction: column; gap: 5px; }
 .sq-stat + .sq-stat{ border-left: 1px dashed rgba(255,255,255,.35); }
-.sq-stat b{ font-family:'Albert Sans',sans-serif; font-size: clamp(2rem, 2.6vw, 2.6rem); font-weight: 700; color: #fff; letter-spacing: -.02em; }
-.sq-stat span{ font-family: var(--sq-mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.72); }
+.sq-stat b{
+  font-family:'Albert Sans',sans-serif; font-size: clamp(2.3rem, 3vw, 3rem);
+  font-weight: 700; color: #fff; letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+/* unit symbol rides the big numeral at reduced size in the accent cyan */
+.sq-stat b i{ font-style: normal; font-size: .55em; font-weight: 700; color: #67e8f9; margin-left: 1px; }
+/* direct child only: the animated [data-count] span inside <b> must NOT
+   inherit this tiny mono label style (that was the shrunken-counter bug) */
+.sq-stat > span{ font-family: var(--sq-mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.72); }
+.sq-stat b span{ font: inherit; color: inherit; letter-spacing: inherit; text-transform: none; }
 .sq-duo-card .sq-btn{ margin-top: auto; }
 .sq-rowlist{ width: 100%; border-top: 1px solid var(--sq-line); margin-top: 6px; list-style: none; padding: 0; }
 .sq-rowlist li{ display: flex; justify-content: space-between; gap: 16px; align-items: baseline; padding: 13px 2px; border-bottom: 1px solid var(--sq-line); }
@@ -388,6 +413,17 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
   display: flex; align-items: center; justify-content: center;
 }
 .sq-step-viz svg{ width: 56%; height: auto; }
+/* tiles that carry a photo: image base, teal wash + dot grid over it, white
+   line art on top (set from home.js via --tile-img) */
+.sq-step-viz.has-img, .sq-mode-viz.has-img{
+  background-image:
+    radial-gradient(rgba(255,255,255,.16) 1px, transparent 1.3px),
+    linear-gradient(160deg, rgba(14,116,144,.5), rgba(8,51,68,.82)),
+    var(--tile-img);
+  background-size: 12px 12px, cover, cover;
+  background-position: 0 0, center, center;
+  background-repeat: repeat, no-repeat, no-repeat;
+}
 .sq-step .sq-h3{ font-size: 1.18rem; }
 .sq-step .sq-p{ font-size: .93rem; }
 
@@ -408,11 +444,29 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
 .sq-table th.hi, .sq-table td.hi{ background: var(--sq-tint); border-inline: 1px solid var(--sq-teal); color: var(--sq-teal-ink); font-weight: 700; }
 .sq-table thead th.hi{ border-top: 1px solid var(--sq-teal); position: relative; }
 .sq-best{ display: block; margin: 0 auto 6px; width: max-content; padding: 2px 8px; background: var(--sq-deep); color: #fff; font-size: .6rem; letter-spacing: .14em; }
-.sq-yes{ display: inline-block; width: 22px; height: 22px; background: var(--sq-deep); position: relative; }
-.sq-yes::after{ content: ""; position: absolute; left: 7px; top: 3px; width: 6px; height: 11px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(43deg); }
-.sq-yes.muted{ background: #b7c3c9; }
-.sq-part{ font-family: var(--sq-mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 8px; background: #fdf5e3; color: #8a6a1f; border: 1px solid #ecd9a8; }
-.sq-no{ color: var(--sq-mute); }
+/* shadcn-style status badges: round icon chip (ring drawn with an inset
+   shadow so it follows the radius) + tiny mono label. The chips are the one
+   deliberate exception to the page's zero-radius rule. */
+.sq-table tbody tr{ transition: background .15s; }
+.sq-table tbody tr:hover td:not(.hi){ background: #f7fafb; }
+.sq-ci{ display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+.sq-ci svg{
+  width: 26px; height: 26px; padding: 5px; box-sizing: border-box;
+  border-radius: 999px !important;
+  fill: none; stroke: currentColor; stroke-width: 2.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.sq-ci.ci-yes svg{ background: var(--sq-deep); color: #fff; }
+.sq-ci.ci-ok svg{ background: #eef1f3; color: #5c6470; box-shadow: inset 0 0 0 1px var(--sq-line); }
+.sq-ci.ci-part svg{ background: #fffbeb; color: #a16207; stroke-width: 1.8; box-shadow: inset 0 0 0 1px #ecd9a8; }
+.sq-ci.ci-part svg .h{ fill: currentColor; stroke: none; opacity: .55; }
+.sq-ci.ci-no svg{ background: transparent; color: #9aa4ad; box-shadow: inset 0 0 0 1px var(--sq-line); }
+.sq-ci em{
+  font-style: normal; font-family: var(--sq-mono); font-size: .58rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--sq-mute);
+}
+.sq-ci.ci-yes em{ color: var(--sq-teal-ink); font-weight: 500; }
+.sq-ci.ci-part em{ color: #a16207; }
 .sq-strip{
   display: flex; justify-content: center; gap: 10px; margin-top: 48px; padding: 20px;
   background: var(--sq-tint); border: 1px solid var(--sq-line);
@@ -562,6 +616,7 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
   font-size: clamp(3rem, 6.5vw, 5.2rem); line-height: 1; color: #fff;
   font-variant-numeric: tabular-nums;
 }
+.sq-final-counter b i{ font-style: normal; font-size: .5em; color: #67e8f9; margin-left: 2px; }
 .sq-final-card{
   border: 1.5px solid var(--sq-teal); padding: 30px 32px; position: relative;
   display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
@@ -588,6 +643,32 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
   font-size: 28px; font-weight: 600; letter-spacing: -.025em; line-height: 34px;
 }
 .sq-foot-sub{ margin: 0; color: rgba(255,255,255,.7); font-size: 14px; line-height: 22px; max-width: 40ch; }
+/* The Brief subscribe: one segmented input+button row wired to /api/subscribe
+   by main.js (which also swaps the form for .form-success on submit) */
+.sq-foot-brief{ margin-top: 6px; display: flex; flex-direction: column; gap: 12px; max-width: 430px; }
+.sq-sub-form{ display: flex; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.06); }
+.sq-sub-form:focus-within{ border-color: #67e8f9; background: rgba(255,255,255,.1); }
+.sq-sub-form input{
+  flex: 1; min-width: 0; padding: 13px 16px; border: 0; background: transparent;
+  color: #fff; font: inherit; font-size: .92rem;
+}
+.sq-sub-form input::placeholder{ color: rgba(255,255,255,.45); }
+.sq-sub-form input:focus{ outline: none; }
+.sq-sub-form button{
+  display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border: 0;
+  border-left: 1px solid rgba(255,255,255,.35); background: #fff; color: var(--sq-deep);
+  font-family: inherit; font-weight: 600; font-size: .9rem; cursor: pointer; transition: background .2s;
+}
+.sq-sub-form button:hover{ background: #ecfeff; }
+.sq-sub-form button .arr{ transition: transform .25s; }
+.sq-sub-form button:hover .arr{ transform: translateX(3px); }
+.sq-sub-ok{
+  align-items: center; gap: 10px; padding: 13px 16px; text-align: left;
+  border: 1px dashed rgba(255,255,255,.4); color: #fff; font-size: .92rem;
+}
+.sq-sub-ok.show{ display: flex; }
+.sq-sub-ok .d{ width: 8px; height: 8px; background: #67e8f9; flex: none; animation: sq-zt-pulse 1.8s ease infinite; }
+.sq-foot-note{ margin: 0; color: rgba(255,255,255,.55); font-size: 12px; line-height: 18px; }
 .sq-foot-cols{ flex: 2 1 0; display: flex; gap: 48px; justify-content: flex-end; }
 .sq-foot-col{ display: flex; flex-direction: column; gap: 16px; }
 .sq-foot-label{
@@ -703,7 +784,7 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
   .sq-statrow{ flex-direction: column; }
   .sq-stat{ flex-direction: row; align-items: baseline; justify-content: space-between; gap: 14px; text-align: left; padding: 13px 16px; }
   .sq-stat + .sq-stat{ border-left: 0; border-top: 1px dashed rgba(255,255,255,.35); }
-  .sq-stat span{ text-align: right; }
+  .sq-stat > span{ text-align: right; }
   .sq-uc{ flex-basis: 82vw; }
   .sq-faq-item p{ padding-left: 4px; }
   .sq-final-head{ margin-bottom: 40px; }
@@ -723,4 +804,8 @@ body.home-sq .sq-logos .logo-cell:hover .wm{ font-size: .95rem; color: rgba(255,
   .sq-hero-inner > *:nth-child(6){ animation-delay: .38s; }
   .sq-hero-inner > *:nth-child(7){ animation-delay: .44s; }
   @keyframes sq-rise{ to{ opacity: 1; transform: none; } }
+}
+@media (prefers-reduced-motion: reduce){
+  .sq-cat-card .sq-cat-img{ transition: opacity .3s ease; transform: none; }
+  .sq-cat-card .sq-cat-img.is-in{ transform: none; }
 }
