@@ -121,7 +121,7 @@ body::after{
 
 /* -------------------------------------------------------------- NAV */
 .nav{ position:fixed; inset:0 0 auto 0; z-index:1000; transition:background .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease); border-bottom:1px solid transparent; }
-.nav.scrolled{ background:rgba(255,255,255,.78); -webkit-backdrop-filter:saturate(180%) blur(20px); backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid var(--line); }
+.nav.scrolled{ background:rgba(255,255,255,.6); -webkit-backdrop-filter:saturate(180%) blur(22px); backdrop-filter:saturate(180%) blur(22px); border-bottom:1px solid var(--line); }
 .nav-inner{ max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter); height:74px; display:flex; align-items:center; justify-content:space-between; gap:30px; }
 .brand{ display:flex; align-items:center; font-family:'Albert Sans',sans-serif; font-weight:800; font-size:1.45rem; letter-spacing:-.04em; color:var(--ink); }
 .brand .dot{ width:.4em; height:.4em; border-radius:50%; background:var(--signal); margin-left:.16em; margin-bottom:-.05em; box-shadow:0 0 0 0 var(--signal-glow); animation:pulse 3s var(--ease) infinite; }
@@ -441,16 +441,26 @@ a.feature:hover .feature-media img{ transform:scale(1.055); filter:saturate(1.14
 }
 .brand:hover .qmark .rad{ background:var(--signal-deep); }
 
-/* Authentic CausQ wordmark (first line), with the radiating brand dot trailing it */
+/* Authentic CausQ wordmark (first line), with the radiating brand dot trailing it.
+   On load the wordmark slides in, then the signal dot pops on: mark "goes live". */
 .brand .logo-lockup{ display:flex; align-items:center; }
-.brand .logo-img{ height:30px; width:auto; display:block; transition:filter .4s var(--ease); }
-.brand .logo-lockup .rad{ position:relative; align-self:flex-end; width:8px; height:8px; margin:0 0 5px 5px; border-radius:50%; background:var(--signal); box-shadow:0 0 8px 1px var(--signal-glow); }
+.brand .logo-img{ height:30px; width:auto; display:block; transition:filter .4s var(--ease), transform .35s var(--ease); animation:logoIn .7s var(--ease); }
+.brand .logo-lockup .rad{ position:relative; align-self:flex-end; width:8px; height:8px; margin:0 0 5px 5px; border-radius:50%; background:var(--signal); box-shadow:0 0 8px 1px var(--signal-glow); animation:radPop .5s var(--ease) .55s backwards; }
 .brand .logo-lockup .rad::before,
 .brand .logo-lockup .rad::after{ content:""; position:absolute; left:50%; top:50%; width:100%; height:100%; border-radius:50%; border:1.5px solid var(--signal); transform:translate(-50%,-50%) scale(1); animation:radiate 2.8s var(--ease) infinite; }
 .brand .logo-lockup .rad::after{ animation-delay:1.4s; }
+@keyframes logoIn{ from{ opacity:0; transform:translateX(-12px); } to{ opacity:1; transform:none; } }
+@keyframes radPop{ 0%{ opacity:0; transform:scale(0); } 60%{ opacity:1; transform:scale(1.4); } 100%{ opacity:1; transform:scale(1); } }
+/* hover: the mark lifts with a soft signal glow and the radar wakes up */
+.brand:hover .logo-img{ transform:translateY(-1.5px); filter:drop-shadow(0 3px 12px rgba(6,182,212,.35)); }
 .brand:hover .logo-lockup .rad{ background:var(--signal-deep); }
+.brand:hover .logo-lockup .rad::before,
+.brand:hover .logo-lockup .rad::after{ animation-duration:1.3s; }
 /* the ink wordmark flips to white over dark image heroes until the nav is scrolled */
 body.dark-hero .nav:not(.scrolled) .brand .logo-img{ filter:invert(1); }
+body.dark-hero .nav:not(.scrolled) .brand:hover .logo-img{ filter:invert(1) drop-shadow(0 3px 12px rgba(6,182,212,.55)); }
+/* the white mobile-menu overlay would swallow an inverted (white) wordmark */
+body.menu-open.dark-hero .nav:not(.scrolled) .brand .logo-img{ filter:none; }
 
 /* ----------------------------------------------------------------- brand mark
    Reusable CausQ logo lockup: wordmark + a radiating teal "signal" dot.
@@ -496,6 +506,7 @@ body.menu-open.dark-hero .nav:not(.scrolled) .client-login{ color:var(--ink-mute
 @media (prefers-reduced-motion: reduce){
   .cq-rad::before, .cq-rad::after,
   .brand .logo-lockup .rad::before, .brand .logo-lockup .rad::after,
+  .brand .logo-img, .brand .logo-lockup .rad,
   .brand .dot{ animation:none; }
 }
 

@@ -32,8 +32,18 @@ body.home-sq{ --sq-gutter: max(64px, calc((100vw - 1440px) / 2)); }
 .sq-page *, .sq-page *::before, .sq-page *::after{ border-radius: 0 !important; }
 .sq-page{ color: var(--sq-ink); }
 
-/* nav, restyled flat for the home frame */
-body.home-sq .nav{ background: rgba(255,255,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--sq-line); }
+/* nav: almost-transparent Apple glass. A whisper of dark smoke over the hero
+   image at the top, thinning to a translucent white bar once scrolled. */
+body.home-sq .nav{
+  background: rgba(10,14,16,.28);
+  -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+body.home-sq .nav.scrolled{
+  background: rgba(255,255,255,.6);
+  -webkit-backdrop-filter: saturate(180%) blur(22px); backdrop-filter: saturate(180%) blur(22px);
+  border-bottom: 1px solid var(--sq-line);
+}
 body.home-sq .nav .btn{ border-radius: 0; }
 /* Mobile menu: the bar's backdrop-filter makes .nav the containing block for
    the fixed .nav-links overlay, collapsing it to the bar's height. Drop it
