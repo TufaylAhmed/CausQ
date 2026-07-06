@@ -93,6 +93,29 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **Homepage polish pass: counters, comparison, subscribe, autoplay, photos**
+  (2026-07-07, commits `05e9658` + `ca91824`, deployed and verified live). Five
+  user asks in one pass. (1) Design-build stat counters: root cause of the tiny
+  numbers was `.sq-stat span`'s .62rem mono label rule also matching the
+  animated `[data-count]` span inside `<b>`; scoped to `.sq-stat > span`,
+  numerals now clamp(2.3rem,3vw,3rem) with the times/percent unit as a smaller
+  cyan `<i>` symbol (final CTA counter matched). (2) What-you-get comparison
+  rebuilt with shadcn-style round icon chips (teal check / muted check /
+  half-moon Partial / x No, inset-shadow rings + tiny mono labels, row hover);
+  also collapses to stacked labelled cards under 820px (from `05e9658`).
+  (3) The Brief subscribe form added to the homepage's custom `sq-footer`
+  (it was lost when the homepage stopped using the shared footer); plain
+  `form[data-endpoint="/api/subscribe"]` markup, main.js wires submit/success/
+  Turnstile automatically. (4) Capability catalog auto-advances every 4.5s via
+  IntersectionObserver (only while on screen; pauses on hover/focus, resets on
+  manual pick, respects reduced motion). (5) Placeholder photos from
+  `assets/img/` layered UNDER the blueprint line art (teal wash + dot grid over
+  the image, white strokes on top) on the catalog card (per-capability,
+  cross-fading), the four how-we-work steps and three engage-mode tiles; user
+  will swap the images later. GOTCHA learned: a relative `url()` placed in a
+  CSS custom property from JS resolves against the stylesheet URL
+  (`assets/css/`), not the page — resolve with `new URL(path, document.baseURI)`
+  first. Cache-bust `home.css`/`home.js` at `v=20260707a`.
 - **Apple-glass header + animated logo** (2026-07-06, commit `614c881`, live).
   Homepage nav is now near-transparent dark glass (saturate 180% + blur 20px)
   over the dark hero, thinning to translucent white glass on scroll; global
