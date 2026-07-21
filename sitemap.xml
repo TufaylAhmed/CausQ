@@ -22,4 +22,5 @@
   <url><loc>https://causq.com/responsible-ai.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://causq.com/security.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://causq.com/compliance.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://causq.com/design/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>

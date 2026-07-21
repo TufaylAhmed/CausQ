@@ -27,6 +27,9 @@ deployment:
     - /bin/cp -f article-nis2-dora.html $DEPLOYPATH
     - /bin/cp -f article-three-programs.html $DEPLOYPATH
     - /bin/cp -f article-zero-trust.html $DEPLOYPATH
+    # Landing pages in subdirectories
+    - /bin/mkdir -p $DEPLOYPATH/design
+    - /bin/cp -f design/index.html $DEPLOYPATH/design/
     # Static assets and images
     - /bin/cp -fR assets $DEPLOYPATH
     - /bin/cp -f Logo-website-white-.webp $DEPLOYPATH

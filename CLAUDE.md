@@ -93,6 +93,23 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **/design lead-gen landing page shipped** (2026-07-21). New standalone page at
+  `design/index.html` (live URL `causq.com/design/`) to win website-development and
+  digital-marketing clients, branded "CausQ Studio". Locked dark theme, brand teal,
+  Albert Sans / Hanken Grotesk / IBM Plex Mono. Hero is a vanilla three.js port of
+  the shadcn "DottedSurface" component (CDN three@0.152.2 UMD, teal-graded wave
+  point field, pauses offscreen and when tab hidden, static single frame under
+  prefers-reduced-motion). Sections: fact strip, 6-cell services bento (uses
+  think-feature.jpg / think-2.jpg), 01-04 process, sticky split with CSS
+  scroll-driven parallax (`animation-timeline: view()`) over do-hero.jpg, 3
+  engagement cards (Growth Retainer featured), statement band, one-open FAQ, teal
+  CTA band. Contact actions everywhere: WhatsApp `wa.me/919686633999` (prefilled
+  message; nav, hero, plan cards, CTA band, green floating FAB) and
+  `mailto:hello@causq.com`. Scoped layer: `assets/css/design.css` +
+  `assets/js/design.js` (?v=20260721); styles.css/main.js untouched. Inline gtag
+  GA4 snippet (page does not load main.js). Added to `.cpanel.yml` (new-page rule)
+  and `sitemap.xml`.
+
 - **Homepage polish pass: counters, comparison, subscribe, autoplay, photos**
   (2026-07-07, commits `05e9658` + `ca91824`, deployed and verified live). Five
   user asks in one pass. (1) Design-build stat counters: root cause of the tiny
