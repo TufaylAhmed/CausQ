@@ -93,6 +93,23 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **/digital restyled onto the OFF+BRAND editorial system + animation layer**
+  (2026-07-21, third pass). User supplied an "OFF+BRAND" style reference and
+  asked for richer section animations. Full restyle of digital/index.html +
+  digital.css (?v=20260721c): warm parchment canvas #e5e4e0, ink #1d1d1d,
+  paper #fff cells with 1px ash #bfbebe hairline outlines, flat/shadowless,
+  cards 0px radius, interactive elements 10px, single typeface (Inter as the
+  spec's stand-in), monumental uppercase display headlines (lh .85), museum
+  11px/.05em section labels, iridescent gradient sphere (255deg yellow-pink-
+  blue-white) + concentric ash ring ornaments as the hero's only color event.
+  Animation layer (own ideas): count-up stats with left-drawn hairlines
+  ("Scaling ambitious businesses" band), monochrome conic donut that sweeps to
+  62% on scroll (@property --dg-p) with counting center, pulsing ink pings on
+  the dotted map card, hover overlays (ink panels sliding up) + grayscale-to-
+  color image hover on grid-paper work cards, CSS column parallax kept, logo
+  wall now a hairline 2x5 grid of white cells (10 ink Simple Icons logos).
+  All animations gated on prefers-reduced-motion. Testimonials remain visible
+  placeholders; prices remain placeholder USD figures.
 - **/digital rebuilt as faithful template clone** (2026-07-21, second pass).
   User wanted the Aceternity "Productized Agency" look ditto. Rebuilt
   digital/index.html + assets/css/digital.css on the template's exact system
