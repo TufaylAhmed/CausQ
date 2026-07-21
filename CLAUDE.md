@@ -93,6 +93,21 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **/digital lead-gen landing page shipped** (2026-07-21). Second standalone
+  page at `digital/index.html` (live `causq.com/digital/`), branded "CausQ
+  Digital", structure cloned from the Aceternity "Productized Agency" template
+  demo (studied in browser; all code and copy original, CausQ teal instead of
+  the template's yellow). Warm-paper canvas with dark rounded feature cards:
+  hero card with teal eclipse-horizon glow + giant CausQ watermark and in-card
+  nav, Simple Icons stack-logo strip, 3-card services bento, "Shipped"
+  watermark work gallery with CSS scroll-driven column parallax, CausQ vs
+  traditional-agency comparison table, dark pricing card (Launch Site $2,400 /
+  Growth Partner $1,900mo featured / Product Build custom; NOTE prices are
+  placeholders the user should confirm), FAQ accordion, dark CTA card.
+  WhatsApp CTAs + green FAB + mailto same as /design. Scoped layer:
+  `assets/css/digital.css` + `assets/js/digital.js` (?v=20260721). Registered
+  in `.cpanel.yml` + `sitemap.xml`.
+
 - **/design lead-gen landing page shipped** (2026-07-21). New standalone page at
   `design/index.html` (live URL `causq.com/design/`) to win website-development and
   digital-marketing clients, branded "CausQ Studio". Locked dark theme, brand teal,

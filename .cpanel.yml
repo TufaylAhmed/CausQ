@@ -30,6 +30,8 @@ deployment:
     # Landing pages in subdirectories
     - /bin/mkdir -p $DEPLOYPATH/design
     - /bin/cp -f design/index.html $DEPLOYPATH/design/
+    - /bin/mkdir -p $DEPLOYPATH/digital
+    - /bin/cp -f digital/index.html $DEPLOYPATH/digital/
     # Static assets and images
     - /bin/cp -fR assets $DEPLOYPATH
     - /bin/cp -f Logo-website-white-.webp $DEPLOYPATH
