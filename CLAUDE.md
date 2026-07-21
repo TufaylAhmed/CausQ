@@ -93,6 +93,21 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **/digital rebuilt as faithful template clone** (2026-07-21, second pass).
+  User wanted the Aceternity "Productized Agency" look ditto. Rebuilt
+  digital/index.html + assets/css/digital.css on the template's exact system
+  (values extracted from the live demo via computed styles): off-white canvas
+  #F0EFEC, pure-black 24px-radius feature cards, #FFCC00 accent tiles (5px
+  radius), Inter 600 tight-tracking display, amber eclipse-horizon glow, faint
+  tile grid in the hero, macOS traffic-light browser frames around imagery.
+  Sections now mirror the template set: hero card, 3-row grayscale logo wall
+  (stack logos, honest framing), "Replace your digital department" bento
+  (frame card + CSS conic donut + dotted world-map card + wide design/dev
+  card), "Projects" watermark gallery in framed tiles with CSS column
+  parallax, testimonials (PLACEHOLDER quotes marked for replacement), stats
+  band, 7-row VS comparison, black pricing card, FAQ, big black footer with
+  CTA + link columns. Template's images/code/copy NOT copied (licensed
+  assets); imagery substituted from assets/img. Cache-bust ?v=20260721b.
 - **/digital lead-gen landing page shipped** (2026-07-21). Second standalone
   page at `digital/index.html` (live `causq.com/digital/`), branded "CausQ
   Digital", structure cloned from the Aceternity "Productized Agency" template
