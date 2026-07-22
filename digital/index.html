@@ -16,7 +16,7 @@
   <title>Digital Marketing &amp; Web/App Development | CausQ Digital</title>
   <meta name="description" content="CausQ Digital is your digital team on subscription: web and app development, e-commerce, SEO, and paid marketing at fixed prices. Chat on WhatsApp or email us to start this week." />
   <link rel="canonical" href="https://causq.com/digital/" />
-  <meta name="theme-color" content="#e5e4e0" />
+  <meta name="theme-color" content="#1d1d1d" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="CausQ" />
   <meta property="og:url" content="https://causq.com/digital/" />
@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/digital.css?v=20260722b" />
+  <link rel="stylesheet" href="../assets/css/digital.css?v=20260722d" />
   <noscript>
     <style>
       .dg-loader{ display:none !important; }
@@ -62,7 +62,7 @@
   <!-- =============================== NAV =============================== -->
   <nav class="dg-nav" aria-label="Primary">
     <a class="dg-brand" href="https://causq.com/" aria-label="CausQ home">
-      <img src="../assets/img/logo-causq.png" alt="CausQ" />
+      <img src="../assets/img/causq-word-white.png" alt="CausQ" />
       <span class="dg-label">Digital</span>
     </a>
     <div class="dg-nav-links">
@@ -79,11 +79,27 @@
 
   <!-- =============================== HERO =============================== -->
   <header class="dg-hero">
-    <div class="dg-rings" aria-hidden="true"><i></i><i></i><i></i></div>
-    <div class="dg-sphere" aria-hidden="true"></div>
-    <div class="dg-wrap dg-hero-in">
+    <div class="dg-orbwrap" aria-hidden="true">
+      <div class="dg-sphere"></div>
+      <svg class="dg-orb-rings" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="43" stroke-dasharray="0.6 3.2"/>
+        <circle cx="50" cy="50" r="49" stroke-dasharray="0.6 4.4"/>
+      </svg>
+    </div>
+    <div class="dg-wrap">
       <span class="dg-label dg-rv" style="--i:0">CausQ Digital, Web, Apps &amp; Growth</span>
-      <h1 data-split>Your digital team, on subscription.</h1>
+      <div class="dg-hero-heads" role="heading" aria-level="1" aria-label="Your digital team, on subscription." style="margin-top:30px">
+        <div aria-hidden="true">
+          <span class="dg-hl l1"><span class="dg-line-w"><span class="dg-line" style="--l:0">Your digital</span></span></span>
+          <span class="dg-hl l2"><span class="dg-line-w"><span class="dg-line" style="--l:1">team, on</span></span></span>
+          <span class="dg-hl l3"><span class="dg-line-w"><span class="dg-line" style="--l:2">subscription.</span></span></span>
+        </div>
+        <div class="dg-heads-knock" aria-hidden="true">
+          <span class="dg-hl l1"><span class="dg-line-w"><span class="dg-line" style="--l:0">Your digital</span></span></span>
+          <span class="dg-hl l2"><span class="dg-line-w"><span class="dg-line" style="--l:1">team, on</span></span></span>
+          <span class="dg-hl l3"><span class="dg-line-w"><span class="dg-line" style="--l:2">subscription.</span></span></span>
+        </div>
+      </div>
       <div class="dg-hero-foot dg-rv" style="--i:2">
         <p>We design, build, and grow websites and apps that drive results: development, e-commerce, SEO, and paid marketing from one senior team.</p>
         <div class="dg-hero-cta">
@@ -95,7 +111,22 @@
         </div>
       </div>
     </div>
+    <span class="dg-scrollcue" aria-hidden="true">Scroll &darr;</span>
   </header>
+
+  <!-- =============================== MANIFESTO =============================== -->
+  <section class="dg-sec dg-manifesto">
+    <div class="dg-wrap">
+      <h2 class="dg-rv">With code + campaigns, we turn websites into <em>sales machines</em>.</h2>
+      <div class="dg-founder">
+        <div class="dg-rv" style="--i:1">
+          <span class="dg-label">We are a founder-led, global web development and digital marketing team.</span>
+          <a class="dg-ghost" href="https://causq.com/who-we-are.html"><span>About CausQ</span><span class="arr">&rarr;</span></a>
+        </div>
+        <p class="dg-rv" style="--i:2">Every business has a story, from new founders finding their voice to established brands refining their edge. We make sure yours shows up sharp: a site engineered to convert, campaigns measured honestly, and a team you can reach on WhatsApp any day of the week.</p>
+      </div>
+    </div>
+  </section>
 
   <main>
 
@@ -178,7 +209,7 @@
           <div class="dg-work-col is-early">
             <article class="dg-shot dg-rv">
               <h3>Marketing sites</h3>
-              <span class="dg-shot-sub">Design + build</span>
+              <span class="dg-plus" aria-hidden="true">+</span><span class="dg-shot-sub">Design + build</span>
               <div class="dg-gridpaper">
                 <img src="../assets/img/think-3.jpg" alt="Marketing site build" loading="lazy" />
                 <div class="dg-ov"><span>Launch-ready in three weeks</span><span class="arr">&rarr;</span></div>
@@ -186,7 +217,7 @@
             </article>
             <article class="dg-shot dg-rv">
               <h3>Web apps &amp; portals</h3>
-              <span class="dg-shot-sub">Product engineering</span>
+              <span class="dg-plus" aria-hidden="true">+</span><span class="dg-shot-sub">Product engineering</span>
               <div class="dg-gridpaper">
                 <img src="../assets/img/pillar-ai.jpg" alt="Web application build" loading="lazy" />
                 <div class="dg-ov"><span>Scoped and dated in writing</span><span class="arr">&rarr;</span></div>
@@ -194,7 +225,7 @@
             </article>
             <article class="dg-shot dg-rv">
               <h3>SEO &amp; content</h3>
-              <span class="dg-shot-sub">Rank + retain</span>
+              <span class="dg-plus" aria-hidden="true">+</span><span class="dg-shot-sub">Rank + retain</span>
               <div class="dg-gridpaper">
                 <img src="../assets/img/insight-2.jpg" alt="SEO and content program" loading="lazy" />
                 <div class="dg-ov"><span>Structure first, then content</span><span class="arr">&rarr;</span></div>
@@ -204,7 +235,7 @@
           <div class="dg-work-col is-late">
             <article class="dg-shot dg-rv">
               <h3>E-commerce</h3>
-              <span class="dg-shot-sub">Storefronts + checkout</span>
+              <span class="dg-plus" aria-hidden="true">+</span><span class="dg-shot-sub">Storefronts + checkout</span>
               <div class="dg-gridpaper">
                 <img src="../assets/img/think-5.jpg" alt="E-commerce storefront build" loading="lazy" />
                 <div class="dg-ov"><span>Catalog to checkout, wired</span><span class="arr">&rarr;</span></div>
@@ -212,7 +243,7 @@
             </article>
             <article class="dg-shot dg-rv">
               <h3>Performance campaigns</h3>
-              <span class="dg-shot-sub">Google + Meta</span>
+              <span class="dg-plus" aria-hidden="true">+</span><span class="dg-shot-sub">Google + Meta</span>
               <div class="dg-gridpaper">
                 <img src="../assets/img/do-network.jpg" alt="Performance marketing campaigns" loading="lazy" />
                 <div class="dg-ov"><span>Tracking first, spend second</span><span class="arr">&rarr;</span></div>
@@ -220,7 +251,7 @@
             </article>
             <article class="dg-shot dg-rv">
               <h3>Brand systems</h3>
-              <span class="dg-shot-sub">Identity + voice</span>
+              <span class="dg-plus" aria-hidden="true">+</span><span class="dg-shot-sub">Identity + voice</span>
               <div class="dg-gridpaper">
                 <img src="../assets/img/hero.jpg" alt="Brand system work" loading="lazy" />
                 <div class="dg-ov"><span>Logo, palette, type, voice</span><span class="arr">&rarr;</span></div>
@@ -441,7 +472,7 @@
 
       <div class="dg-foot-grid">
         <div>
-          <a href="https://causq.com/" aria-label="CausQ home"><img src="../assets/img/logo-causq.png" alt="CausQ" /></a>
+          <a href="https://causq.com/" aria-label="CausQ home"><img src="../assets/img/causq-word-white.png" alt="CausQ" /></a>
           <p class="dg-foot-tag">Web, apps, and growth for ambitious businesses. Global, remote-first.</p>
         </div>
         <div>
@@ -484,6 +515,6 @@
     <svg aria-hidden="true"><use href="#wa"/></svg>
   </a>
 
-  <script src="../assets/js/digital.js?v=20260722b" defer></script>
+  <script src="../assets/js/digital.js?v=20260722d" defer></script>
 </body>
 </html>

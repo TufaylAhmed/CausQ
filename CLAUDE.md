@@ -93,6 +93,22 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **/digital rebuilt dark to match the real reference site** (2026-07-22,
+  fourth pass). Side-by-side in Chrome showed the live itsoffbrand.com is a
+  DARK ink site (DESIGN.md's parchment spec did not match the homepage):
+  giant staggered uppercase hero words interlocking a huge soft peach orb
+  that bleeds off the top-right (their orb is a WebGL canvas; text turns
+  accent-colored where it crosses the orb via duplicated headline layers),
+  dashed ring ornaments, SCROLL cue, all-dark sections with offset work
+  columns and plus markers. Rebuilt ours to match (?v=20260722d): full dark
+  token flip (#1d1d1d canvas, #cfcecb type, #232324 cells), three staggered
+  hero lines with an ink-teal knockout clone clipped to the orb circle (JS
+  sets --kx/--ky/--kr, aria-label preserved), new soft-body orb shader
+  (ivory base + drifting peach/pink/blush/yellow blobs + sphere shading,
+  buffer capped at 1000px after a renderer stall in testing, CSS radial
+  fallback when WebGL unavailable), dashed SVG rings, scroll cue, manifesto
+  section with founder two-col block, plus markers on work cards. Loader now
+  #151516 so the curtain reads against the ink page.
 - **/digital: WebGL orb + hardened motion boot** (2026-07-22, follow-up).
   User compared against the reference site and reported flat orb + animations
   not firing. Reference's orb turned out to be a WebGL canvas; wrote our own

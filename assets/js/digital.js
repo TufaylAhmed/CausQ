@@ -67,27 +67,29 @@
     host.appendChild(canvas);
 
     var vsrc = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+    // soft-body orb: ivory base with slow drifting blush blobs and sphere shading
     var fsrc =
       'precision mediump float;' +
       'uniform float uT;uniform vec2 uR;' +
-      'vec3 Y=vec3(.980,.796,.055),P=vec3(.941,.420,.659),B=vec3(.471,.729,.902),W=vec3(1.);' +
-      'vec3 ramp(float x){x=clamp(x,0.,1.);' +
-      ' if(x<.35)return mix(Y,P,x/.35);' +
-      ' if(x<.70)return mix(P,B,(x-.35)/.35);' +
-      ' return mix(B,W,(x-.70)/.30);}' +
+      'float blob(vec2 uv,vec2 c,float k){vec2 d=uv-c;return exp(-k*dot(d,d));}' +
       'void main(){' +
       ' vec2 uv=(gl_FragCoord.xy/uR)*2.-1.;' +
       ' float r=length(uv);' +
-      ' float edge=1.-smoothstep(.90,.995,r);' +
+      ' float edge=1.-smoothstep(.965,.998,r);' +
       ' if(edge<=0.){discard;}' +
-      ' float t=uT*.14;' +
-      ' float n=.47-.34*(uv.x*.55+uv.y*.62);' +          // yellow top-right, blue low-left
-      ' n+=.17*sin(uv.x*1.9-uv.y*1.3+t*1.6);' +
-      ' n+=.13*sin(uv.y*2.7+t*1.05);' +
-      ' n+=.09*sin((uv.x+uv.y)*3.3-t*.72);' +
-      ' vec3 col=ramp(n);' +
-      ' col=mix(col,W,smoothstep(.45,.98,r)*.38);' +      // dissolve to white at the rim
-      ' col+=.05*smoothstep(.6,.0,length(uv-vec2(.45,.5)));' + // soft top-right bloom
+      ' float t=uT*.10;' +
+      ' vec3 col=vec3(1.,.965,.905);' +
+      ' vec2 p1=vec2(.45+.18*sin(t*.7), .40+.15*cos(t*.6));' +
+      ' vec2 p2=vec2(-.45+.20*sin(t*.5+2.1), -.35+.18*cos(t*.8+1.2));' +
+      ' vec2 p3=vec2(.05+.25*sin(t*.4+4.0), -.75+.10*cos(t*.5+3.3));' +
+      ' vec2 p4=vec2(-.15+.20*sin(t*.6+1.0), .70+.12*cos(t*.7+.6));' +
+      ' col=mix(col, vec3(1.,.82,.60),  blob(uv,p1,2.2)*.90);' +   // peach
+      ' col=mix(col, vec3(.96,.62,.78), blob(uv,p2,1.8)*.85);' +   // pink
+      ' col=mix(col, vec3(.93,.45,.62), blob(uv,p3,2.6)*.70);' +   // deep blush
+      ' col=mix(col, vec3(1.,.90,.55),  blob(uv,p4,2.4)*.80);' +   // yellow crown
+      ' col=mix(col, vec3(.72,.86,.90), blob(uv,vec2(.55,-.65),3.5)*.35);' + // cool fleck
+      ' col*= .94 + .08*blob(uv,vec2(-.25,.35),1.6);' +            // soft key light
+      ' col*= 1. - .10*smoothstep(.55,1.,r);' +                    // rim shading
       ' gl_FragColor=vec4(col*edge,edge);}';
 
     function compile(type, src) {
@@ -116,11 +118,12 @@
     gl.clearColor(0, 0, 0, 0);
 
     function resize() {
-      var d = Math.min(window.devicePixelRatio || 1, 1.5);
-      var s = host.clientWidth;
-      canvas.width = Math.round(s * d); canvas.height = Math.round(s * d);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(uR, canvas.width, canvas.height);
+      // soft gradient content upscales invisibly; cap the buffer hard so the
+      // shader never becomes a multi-megapixel fill on weak GPUs
+      var s = Math.min(Math.round(host.clientWidth * Math.min(window.devicePixelRatio || 1, 1.25)), 1000);
+      canvas.width = s; canvas.height = s;
+      gl.viewport(0, 0, s, s);
+      gl.uniform2f(uR, s, s);
     }
     resize();
     if ('ResizeObserver' in window) new ResizeObserver(resize).observe(host);
@@ -149,6 +152,23 @@
     document.addEventListener('visibilitychange', function () {
       document.hidden ? stop() : start();
     });
+  }
+
+  /* ------------------------------------------------ headline knockout */
+  function initKnock() {
+    var heads = document.querySelector('.dg-hero-heads');
+    var orb = document.querySelector('.dg-orbwrap');
+    if (!heads || !orb) return;
+    function upd() {
+      var hr = heads.getBoundingClientRect(), or = orb.getBoundingClientRect();
+      heads.style.setProperty('--kx', (or.left + or.width / 2 - hr.left) + 'px');
+      heads.style.setProperty('--ky', (or.top + or.height / 2 - hr.top) + 'px');
+      heads.style.setProperty('--kr', (or.width / 2 * 0.985) + 'px');
+    }
+    upd();
+    window.addEventListener('resize', upd);
+    setTimeout(upd, 700);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(upd);
   }
 
   /* ------------------------------------------------ line splitter */
@@ -310,6 +330,7 @@
   /* ------------------------------------------------ boot: loader first, never blocked */
   runLoader(function () { document.body.classList.add('dg-ready'); });
   initOrb();
+  initKnock();
   initReveals();
   initCounters();
   initSmoothScroll();
