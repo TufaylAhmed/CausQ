@@ -93,6 +93,17 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **/digital: WebGL orb + hardened motion boot** (2026-07-22, follow-up).
+  User compared against the reference site and reported flat orb + animations
+  not firing. Reference's orb turned out to be a WebGL canvas; wrote our own
+  fragment-shader orb (digital.js initOrb, ?v=20260722b): flowing iridescent
+  field (yellow top-right through pink to blue, white rim dissolve), initial
+  frame drawn synchronously, CSS gradient kept as no-WebGL fallback, pauses
+  offscreen/hidden, still frame under reduced motion, DPR capped 1.5.
+  Robustness pass on the loader: counts immediately (no fonts wait), hard
+  4.5s fail-open timer, fail-open on window error, noscript style block
+  reveals everything. Reveals strengthened (36px/.85s), nav drop-in after
+  curtain, font-split fallback at 1.2s.
 - **/digital motion system: preloader, split-text, smooth scroll, cursor**
   (2026-07-22). User asked for the itsoffbrand.com motion feel, ditto, with a
   CausQ-logo loading screen; marketing/DESIGN.md holds the style tokens.
