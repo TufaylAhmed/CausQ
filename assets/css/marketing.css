@@ -1,0 +1,778 @@
+/* ==========================================================================
+   CausQ Marketing — /marketing
+   Standalone landing page. Does not share styles.css or main.js.
+   Direction: instrument panel. Engineer-led marketing, read like a system.
+   ========================================================================== */
+
+:root{
+  /* Canvas: cool blue-black, reads as instrument housing rather than fashion black */
+  --vault:      #080d10;
+  --vault-2:    #0d151a;
+  --vault-3:    #121d23;
+
+  /* Brand signal teal, carried through from styles.css */
+  --trace:      #06B6D4;
+  --trace-hot:  #67e8f9;
+  --trace-deep: #0891b2;
+  --trace-soft: rgba(6,182,212,.10);
+  --trace-glow: rgba(6,182,212,.28);
+
+  --bone:       #e6e8e6;
+  --bone-2:     #b6bdc0;
+  --mute:       #6b7a80;
+  --flat:       #3d4a50;
+
+  --line:       rgba(230,232,230,.13);
+  --line-soft:  rgba(230,232,230,.07);
+
+  --maxw:       1320px;
+  --gutter:     28px;
+  --rail:       76px;
+
+  --ease:       cubic-bezier(.22,1,.36,1);
+  --ease-snap:  cubic-bezier(.16,1,.3,1);
+
+  --f-display:  'Albert Sans', system-ui, sans-serif;
+  --f-body:     'Hanken Grotesk', system-ui, sans-serif;
+  --f-mono:     'IBM Plex Mono', ui-monospace, monospace;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ -webkit-text-size-adjust:100%; }
+
+body.mk{
+  margin:0;
+  background:var(--vault);
+  color:var(--bone);
+  font-family:var(--f-body);
+  font-size:17px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+body.mk.is-loading{ overflow:hidden; }
+
+img{ max-width:100%; display:block; }
+
+a{ color:inherit; }
+
+:focus-visible{
+  outline:2px solid var(--trace-hot);
+  outline-offset:3px;
+}
+
+/* --------------------------------------------------------------------------
+   Type scale
+   -------------------------------------------------------------------------- */
+
+.mk-display{
+  font-family:var(--f-display);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:-.03em;
+  line-height:.92;
+  margin:0;
+  /* vh term keeps the hero inside one screen on short, wide viewports */
+  font-size:clamp(2.4rem, min(6.6vw, 12vh), 6.6rem);
+}
+
+.mk-h2{
+  font-family:var(--f-display);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:-.025em;
+  line-height:.96;
+  margin:0;
+  font-size:clamp(2rem, 4.6vw, 4rem);
+}
+
+.mk-h3{
+  font-family:var(--f-display);
+  font-weight:700;
+  letter-spacing:-.015em;
+  line-height:1.1;
+  margin:0;
+  font-size:clamp(1.15rem, 1.7vw, 1.5rem);
+}
+
+.mk-lede{
+  font-size:clamp(1.02rem, 1.35vw, 1.28rem);
+  line-height:1.55;
+  color:var(--bone-2);
+  margin:0;
+  max-width:56ch;
+}
+
+.mk-body{ color:var(--bone-2); margin:0; }
+
+/* Mono utility: the instrument-panel voice */
+.mk-mono{
+  font-family:var(--f-mono);
+  font-size:.7rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--mute);
+}
+
+.mk-tick{ color:var(--trace); }
+
+/* Offset pill label, sits outside the content grid */
+.mk-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  border:1px solid var(--line);
+  padding:.34rem .72rem;
+  font-family:var(--f-mono);
+  font-size:.66rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--bone-2);
+  white-space:nowrap;
+}
+
+.mk-pill::before{
+  content:"";
+  width:5px; height:5px;
+  background:var(--trace);
+  flex:none;
+}
+
+/* --------------------------------------------------------------------------
+   Shell + layout
+   -------------------------------------------------------------------------- */
+
+.mk-wrap{
+  max-width:var(--maxw);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+
+.mk-sec{
+  position:relative;
+  z-index:2;
+  padding-block:clamp(5rem, 11vw, 10rem);
+  border-top:1px solid var(--line-soft);
+}
+
+.mk-sec:first-of-type{ border-top:0; }
+
+/* Once the mark has room to sit beside the text, reserve its column so no
+   section content ever runs underneath the ring. */
+@media (min-width:1100px){
+  .mk-sec > .mk-wrap{ padding-right:26%; }
+}
+
+/* Section head: mono index left, title right. Encodes reading order. */
+.mk-sec-head{
+  display:grid;
+  grid-template-columns:var(--rail) 1fr;
+  gap:clamp(1rem,3vw,2.5rem);
+  align-items:start;
+  margin-bottom:clamp(2.4rem,5vw,4.5rem);
+}
+
+.mk-sec-idx{
+  font-family:var(--f-mono);
+  font-size:.7rem;
+  letter-spacing:.1em;
+  color:var(--trace);
+  padding-top:.6rem;
+  border-top:1px solid var(--trace);
+}
+
+.mk-sec-head .mk-lede{ margin-top:1.15rem; }
+
+/* --------------------------------------------------------------------------
+   Preloader — mono BUILD counter, mark draws outline then fills
+   -------------------------------------------------------------------------- */
+
+.mk-boot{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  background:var(--vault);
+  display:grid;
+  place-items:center;
+  transition:opacity .7s var(--ease), visibility .7s var(--ease);
+}
+
+.mk-boot.is-done{ opacity:0; visibility:hidden; }
+
+.mk-boot-inner{ display:grid; justify-items:center; gap:2.2rem; }
+
+.mk-boot-readout{
+  display:flex;
+  gap:1.4rem;
+  align-items:baseline;
+  font-family:var(--f-mono);
+  font-size:.72rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--mute);
+}
+
+.mk-boot-pct{ color:var(--bone); font-variant-numeric:tabular-nums; }
+
+.mk-boot-bar{
+  width:min(240px, 52vw);
+  height:1px;
+  background:var(--line);
+  position:relative;
+  overflow:hidden;
+}
+
+.mk-boot-bar span{
+  position:absolute;
+  inset:0 100% 0 0;
+  background:var(--trace);
+  transition:right .25s linear;
+}
+
+/* --------------------------------------------------------------------------
+   Signature: pinned oscilloscope Q
+   Fixed behind content. Waveform amplitude is driven by scroll position.
+   -------------------------------------------------------------------------- */
+
+/* Offset to the right so the left-biased text column never sits on the ring. */
+.mk-scope{
+  position:fixed;
+  top:50%;
+  left:79%;
+  transform:translate(-50%,-50%);
+  width:min(34vw, 400px);
+  aspect-ratio:1;
+  z-index:1;
+  pointer-events:none;
+  opacity:.62;
+}
+
+.mk-scope svg{ width:100%; height:100%; overflow:visible; }
+
+.mk-scope-ring{
+  fill:none;
+  stroke:var(--bone);
+  stroke-width:9;
+  opacity:.3;
+}
+
+/* Crosses the bowl edge so the mark reads as a Q, not a stray diagonal. */
+.mk-scope-tail{
+  fill:none;
+  stroke:var(--bone);
+  stroke-width:22;
+  stroke-linecap:butt;
+  opacity:.3;
+}
+
+/* No drop-shadow filter here: it forces a full repaint of the trace on every
+   frame and starves the reveal transitions. The glow is faked by the static
+   blurred halo underneath instead. */
+.mk-scope-wave{
+  fill:none;
+  stroke:var(--trace);
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* Static, never repainted: sits behind the live trace to imply glow. */
+.mk-scope-halo{
+  position:absolute;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width:62%; height:10%;
+  background:var(--trace-glow);
+  filter:blur(26px);
+  pointer-events:none;
+}
+
+.mk-scope-sweep{
+  fill:none;
+  stroke:var(--trace-hot);
+  stroke-width:1;
+  opacity:.5;
+}
+
+/* Live readout pinned under the mark */
+.mk-scope-meta{
+  position:fixed;
+  left:79%;
+  top:calc(50% + min(17vw, 200px) + 26px);
+  transform:translateX(-50%);
+  z-index:1;
+  pointer-events:none;
+  display:flex;
+  gap:1.5rem;
+  font-family:var(--f-mono);
+  font-size:.66rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--mute);
+  white-space:nowrap;
+}
+
+.mk-scope-meta b{
+  font-weight:400;
+  color:var(--trace);
+  font-variant-numeric:tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+
+.mk-hero{
+  position:relative;
+  z-index:2;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding-block:clamp(1.5rem,4vw,2.5rem) clamp(2rem,5vw,3.5rem);
+}
+
+.mk-hero-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+
+.mk-brand{
+  font-family:var(--f-display);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:-.02em;
+  font-size:1.05rem;
+  text-decoration:none;
+}
+
+.mk-brand em{ font-style:normal; color:var(--trace); }
+
+.mk-hero-mid{ padding-block:clamp(1.5rem,4vw,3rem); }
+
+.mk-hero-mid .mk-display{ max-width:15ch; }
+
+.mk-hero-mid .mk-display .mk-tick{ color:var(--trace); }
+
+/* Single left column: the right half of the hero belongs to the mark and its
+   readout, so nothing here may drift under them. */
+.mk-hero-foot{
+  display:grid;
+  gap:clamp(1.3rem,2.5vw,2rem);
+  justify-items:start;
+  max-width:min(52ch, 56%);
+}
+
+.mk-hero-foot .mk-lede{ max-width:44ch; }
+
+@media (max-width:900px){
+  .mk-hero-foot{ max-width:none; }
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+
+.mk-cta-row{
+  display:flex;
+  gap:.75rem;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.mk-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  padding:.92rem 1.5rem;
+  font-family:var(--f-mono);
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  text-decoration:none;
+  border:1px solid var(--trace);
+  background:var(--trace);
+  color:#04181d;
+  transition:background .25s var(--ease), color .25s var(--ease), transform .25s var(--ease);
+}
+
+.mk-btn:hover{ background:var(--trace-hot); border-color:var(--trace-hot); transform:translateY(-2px); }
+
+.mk-btn-ghost{
+  background:transparent;
+  color:var(--bone);
+  border-color:var(--line);
+}
+
+.mk-btn-ghost:hover{
+  background:transparent;
+  color:var(--trace-hot);
+  border-color:var(--trace-hot);
+  transform:translateY(-2px);
+}
+
+.mk-btn svg{ width:13px; height:13px; flex:none; }
+
+/* --------------------------------------------------------------------------
+   Contrast panels — activity vs outcome
+   -------------------------------------------------------------------------- */
+
+/* Opaque fill rather than backdrop-filter: the blur cost is not worth it over
+   a flat dark canvas, and it competes with the reveal transitions. */
+.mk-split{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+  border:1px solid var(--line);
+  background:var(--vault-2);
+}
+
+.mk-split-cell{
+  padding:clamp(1.6rem,3vw,2.6rem);
+  border-right:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+  gap:.9rem;
+}
+
+.mk-split-cell:last-child{ border-right:0; }
+
+.mk-split-tag{
+  font-family:var(--f-mono);
+  font-size:.64rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--flat);
+}
+
+.mk-split-cell.is-live .mk-split-tag{ color:var(--trace); }
+
+.mk-split-metric{
+  font-family:var(--f-display);
+  font-weight:800;
+  font-size:clamp(1.9rem,3.4vw,2.9rem);
+  line-height:1;
+  letter-spacing:-.03em;
+  color:var(--flat);
+  font-variant-numeric:tabular-nums;
+}
+
+.mk-split-cell.is-live .mk-split-metric{ color:var(--bone); }
+
+.mk-split-note{ font-size:.93rem; color:var(--mute); margin:0; }
+
+.mk-split-cell.is-live .mk-split-note{ color:var(--bone-2); }
+
+/* --------------------------------------------------------------------------
+   Channels — instrument channel rows
+   -------------------------------------------------------------------------- */
+
+.mk-chan{ border-top:1px solid var(--line); }
+
+.mk-chan-row{
+  display:grid;
+  grid-template-columns:var(--rail) minmax(0,1.05fr) minmax(0,1.45fr) auto;
+  gap:clamp(.8rem,2.5vw,2rem);
+  align-items:baseline;
+  padding-block:clamp(1.5rem,2.8vw,2.1rem);
+  border-bottom:1px solid var(--line);
+  position:relative;
+  transition:background .3s var(--ease);
+}
+
+.mk-chan-row:hover{ background:var(--trace-soft); }
+
+.mk-chan-key{
+  font-family:var(--f-mono);
+  font-size:.68rem;
+  letter-spacing:.1em;
+  color:var(--trace);
+}
+
+.mk-chan-note{ font-size:.95rem; color:var(--mute); margin:0; }
+
+.mk-chan-out{
+  font-family:var(--f-mono);
+  font-size:.64rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--bone-2);
+  border:1px solid var(--line);
+  padding:.3rem .6rem;
+  white-space:nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Method — a real sequence, so the numbering carries information
+   -------------------------------------------------------------------------- */
+
+.mk-steps{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+
+.mk-step{
+  background:var(--vault);
+  padding:clamp(1.5rem,2.8vw,2.4rem);
+  display:flex;
+  flex-direction:column;
+  gap:.85rem;
+  min-height:250px;
+}
+
+.mk-step-n{
+  font-family:var(--f-mono);
+  font-size:.68rem;
+  letter-spacing:.12em;
+  color:var(--trace);
+}
+
+.mk-step p{ font-size:.94rem; color:var(--mute); margin:0; }
+
+.mk-step-out{
+  margin-top:auto;
+  padding-top:1rem;
+  border-top:1px solid var(--line-soft);
+  font-family:var(--f-mono);
+  font-size:.62rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--bone-2);
+}
+
+/* --------------------------------------------------------------------------
+   Crosshair grid — hairline tiles with + ticks at intersections
+   -------------------------------------------------------------------------- */
+
+/* Fixed 5 across so the ten tiles form a clean 2 x 5 block rather than
+   an orphan row. Steps down in whole columns, never leaving a ragged edge. */
+.mk-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--line);
+  border-left:1px solid var(--line);
+}
+
+@media (max-width:900px){ .mk-grid{ grid-template-columns:repeat(2,1fr); } }
+
+.mk-grid-cell{
+  position:relative;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  min-height:104px;
+  display:grid;
+  place-items:center;
+  padding:1rem;
+  font-family:var(--f-mono);
+  font-size:.72rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--bone-2);
+  transition:color .25s var(--ease), background .25s var(--ease);
+}
+
+.mk-grid-cell:hover{ color:var(--trace-hot); background:var(--trace-soft); }
+
+/* crosshair tick at each cell's top-left corner */
+.mk-grid-cell::before{
+  content:"+";
+  position:absolute;
+  top:0; left:0;
+  transform:translate(-50%,-50%);
+  font-family:var(--f-mono);
+  font-size:.68rem;
+  line-height:1;
+  color:var(--line);
+  color:rgba(230,232,230,.3);
+}
+
+/* --------------------------------------------------------------------------
+   Engagement tiers
+   -------------------------------------------------------------------------- */
+
+.mk-tiers{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(255px,1fr));
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+
+.mk-tier{
+  background:var(--vault);
+  padding:clamp(1.6rem,3vw,2.4rem);
+  display:flex;
+  flex-direction:column;
+  gap:1.05rem;
+}
+
+.mk-tier.is-pick{ background:var(--vault-2); }
+
+.mk-tier-head{ display:flex; justify-content:space-between; align-items:center; gap:.8rem; }
+
+.mk-tier ul{ list-style:none; margin:0; padding:0; display:grid; gap:.6rem; }
+
+.mk-tier li{
+  font-size:.92rem;
+  color:var(--mute);
+  padding-left:1.15rem;
+  position:relative;
+}
+
+.mk-tier li::before{
+  content:"";
+  position:absolute;
+  left:0; top:.62em;
+  width:6px; height:1px;
+  background:var(--trace);
+}
+
+.mk-tier .mk-btn{ margin-top:auto; justify-content:center; }
+
+/* --------------------------------------------------------------------------
+   FAQ — one open at a time
+   -------------------------------------------------------------------------- */
+
+.mk-faq{ border-top:1px solid var(--line); }
+
+.mk-faq-item{ border-bottom:1px solid var(--line); }
+
+.mk-faq-q{
+  width:100%;
+  background:none;
+  border:0;
+  color:var(--bone);
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:clamp(1rem,1.6vw,1.28rem);
+  letter-spacing:-.01em;
+  text-align:left;
+  padding:1.5rem 3rem 1.5rem 0;
+  cursor:pointer;
+  position:relative;
+  display:block;
+  transition:color .25s var(--ease);
+}
+
+.mk-faq-q:hover{ color:var(--trace-hot); }
+
+.mk-faq-q::after{
+  content:"+";
+  position:absolute;
+  right:.35rem; top:50%;
+  transform:translateY(-50%);
+  font-family:var(--f-mono);
+  font-weight:400;
+  font-size:1.1rem;
+  color:var(--trace);
+  transition:transform .3s var(--ease);
+}
+
+.mk-faq-item.is-open .mk-faq-q::after{ transform:translateY(-50%) rotate(45deg); }
+
+.mk-faq-a{
+  overflow:hidden;
+  max-height:0;
+  transition:max-height .42s var(--ease);
+}
+
+.mk-faq-a p{
+  margin:0;
+  padding:0 3rem 1.6rem 0;
+  color:var(--mute);
+  font-size:.98rem;
+  max-width:70ch;
+}
+
+/* --------------------------------------------------------------------------
+   Closing CTA + footer
+   -------------------------------------------------------------------------- */
+
+.mk-close{ text-align:center; }
+
+.mk-close .mk-display{ margin-inline:auto; max-width:14ch; }
+
+.mk-close .mk-lede{ margin:1.6rem auto 2.4rem; text-align:center; }
+
+.mk-close .mk-cta-row{ justify-content:center; }
+
+.mk-foot{
+  position:relative;
+  z-index:2;
+  border-top:1px solid var(--line);
+  padding-block:2.2rem 2.6rem;
+}
+
+.mk-foot-inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+
+.mk-foot a{ text-decoration:none; color:var(--mute); transition:color .25s var(--ease); }
+
+.mk-foot a:hover{ color:var(--trace-hot); }
+
+.mk-foot-links{ display:flex; gap:1.4rem; flex-wrap:wrap; }
+
+/* --------------------------------------------------------------------------
+   Reveal on scroll
+   -------------------------------------------------------------------------- */
+
+.mk-rise{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity .8s var(--ease), transform .8s var(--ease);
+}
+
+.mk-rise.is-in{ opacity:1; transform:none; }
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width:900px){
+  .mk-hero-foot{ grid-template-columns:1fr; }
+  .mk-chan-row{ grid-template-columns:var(--rail) 1fr; row-gap:.5rem; }
+  .mk-chan-note{ grid-column:2; }
+  .mk-chan-out{ grid-column:2; justify-self:start; }
+  /* No room for a side-by-side mark: recentre it and drop it well back. The
+     readout is dropped entirely, since fixed at this width it lands on top of
+     the content it is meant to annotate. */
+  .mk-scope{ left:50%; width:70vw; opacity:.16; }
+  .mk-scope-meta{ display:none; }
+}
+
+@media (max-width:640px){
+  :root{ --gutter:20px; --rail:44px; }
+  body.mk{ font-size:16px; }
+  .mk-sec-head{ grid-template-columns:1fr; gap:.75rem; }
+  .mk-sec-idx{ justify-self:start; padding-right:1.5rem; }
+  .mk-split-cell{ border-right:0; border-bottom:1px solid var(--line); }
+  .mk-split-cell:last-child{ border-bottom:0; }
+  .mk-scope-meta{ font-size:.58rem; gap:1rem; }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .mk-rise{ opacity:1; transform:none; }
+  .mk-scope-sweep{ display:none; }
+}
