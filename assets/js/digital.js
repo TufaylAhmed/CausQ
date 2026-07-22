@@ -255,33 +255,10 @@
     els.forEach(function (el) { io.observe(el); });
   }
 
-  /* ------------------------------------------------ inertial smooth scroll */
-  function initSmoothScroll() {
-    if (rm || !finePointer) return;
-    var target = 0, animating = false;
-    function max() { return document.documentElement.scrollHeight - window.innerHeight; }
-    function loop() {
-      var current = window.scrollY;
-      var next = current + (target - current) * 0.11;
-      if (Math.abs(target - next) < 0.5) {
-        window.scrollTo(0, target);
-        animating = false;
-        return;
-      }
-      window.scrollTo(0, next);
-      requestAnimationFrame(loop);
-    }
-    window.addEventListener('wheel', function (e) {
-      if (e.ctrlKey) return;
-      e.preventDefault();
-      if (!animating) target = window.scrollY;
-      target = Math.max(0, Math.min(max(), target + e.deltaY));
-      if (!animating) { animating = true; requestAnimationFrame(loop); }
-    }, { passive: false });
-    window.addEventListener('scroll', function () {
-      if (!animating) target = window.scrollY;
-    }, { passive: true });
-  }
+  /* Note: no wheel-hijack smooth scrolling here. A lerped scroll loop fights
+     every programmatic scroll (anchor links, back-navigation, focus jumps) and
+     leaves the page stuck mid-animation. Native scrolling plus CSS
+     scroll-behavior:smooth for anchors is the robust choice. */
 
   /* ------------------------------------------------ cursor dot */
   function initCursor() {
@@ -328,12 +305,19 @@
   }
 
   /* ------------------------------------------------ boot: loader first, never blocked */
-  runLoader(function () { document.body.classList.add('dg-ready'); });
+  // a preloaded page must always open on the hero; otherwise the curtain lifts
+  // on whatever scroll position the browser restored
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+
+  runLoader(function () {
+    window.scrollTo(0, 0);
+    document.body.classList.add('dg-ready');
+  });
   initOrb();
   initKnock();
   initReveals();
   initCounters();
-  initSmoothScroll();
   initCursor();
   initFaq();
   var y = document.getElementById('dg-year');

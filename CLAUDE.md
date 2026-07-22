@@ -93,6 +93,16 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **/digital: removed the wheel-hijack smooth scroll (bug)** (2026-07-22).
+  Chrome comparison exposed it: the lerp loop fought every programmatic
+  scroll, so window.scrollTo was a no-op and the page could sit stuck
+  mid-document (it would have broken the Services/Work/Pricing/FAQ anchor
+  links and back-navigation, and it stalled the renderer once). Deleted
+  initSmoothScroll; native scrolling + CSS scroll-behavior:smooth handles
+  anchors. Also set history.scrollRestoration='manual' so a preloaded page
+  always opens on the hero, moved the hero paragraph/CTAs into a left column
+  capped at 46% so they never sit under the orb, moved the scroll cue left
+  clear of the WhatsApp FAB, and eased the orb right. ?v=20260722f.
 - **/digital rebuilt dark to match the real reference site** (2026-07-22,
   fourth pass). Side-by-side in Chrome showed the live itsoffbrand.com is a
   DARK ink site (DESIGN.md's parchment spec did not match the homepage):
