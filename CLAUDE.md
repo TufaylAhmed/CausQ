@@ -93,6 +93,20 @@ Cloudflare aggressively caches CSS/JS. When you change `styles.css` or
 
 Dates use the project's clock (mid-2026).
 
+- **/digital motion system: preloader, split-text, smooth scroll, cursor**
+  (2026-07-22). User asked for the itsoffbrand.com motion feel, ditto, with a
+  CausQ-logo loading screen; marketing/DESIGN.md holds the style tokens.
+  Studied the live site's machinery (Webflow + Lenis + Taxi.js, split-text
+  attrs, ink preloader with stepped % counter, custom cursor) and implemented
+  original equivalents in assets/js/digital.js (?v=20260722): ink #1d1d1d
+  preloader with CausQ wordmark clip-sweep + 5%-stepped counter + curtain
+  lift (quick variant on repeat visits via sessionStorage); runtime headline
+  line-splitting with masked rise reveals (aria-label preserved on split
+  heads); wheel-driven inertial smooth scroll (desktop fine-pointer only);
+  trailing cursor dot that grows over links; image clip-path reveals on
+  grid-paper tiles; sphere/rings load intro + scroll drift. All gated on
+  prefers-reduced-motion. NOTE: hidden-tab testing throttles the loader
+  timers; verify on a visible browser.
 - **/digital restyled onto the OFF+BRAND editorial system + animation layer**
   (2026-07-21, third pass). User supplied an "OFF+BRAND" style reference and
   asked for richer section animations. Full restyle of digital/index.html +

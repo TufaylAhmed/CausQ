@@ -35,9 +35,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/digital.css?v=20260721c" />
+  <link rel="stylesheet" href="../assets/css/digital.css?v=20260722" />
 </head>
-<body class="dg">
+<body class="dg dg-locked">
+
+  <!-- Preloader: CausQ wordmark sweep + stepped counter, curtain lifts on done -->
+  <div class="dg-loader" id="dg-loader" aria-hidden="true">
+    <img src="../assets/img/causq-word-white.png" alt="" />
+    <div class="dg-load-num">0%</div>
+    <span class="dg-load-lbl">Loading</span>
+  </div>
 
   <!-- Shared WhatsApp glyph -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -68,7 +75,7 @@
     <div class="dg-sphere" aria-hidden="true"></div>
     <div class="dg-wrap dg-hero-in">
       <span class="dg-label dg-rv" style="--i:0">CausQ Digital, Web, Apps &amp; Growth</span>
-      <h1 class="dg-rv" style="--i:1">Your digital team, on subscription.</h1>
+      <h1 data-split>Your digital team, on subscription.</h1>
       <div class="dg-hero-foot dg-rv" style="--i:2">
         <p>We design, build, and grow websites and apps that drive results: development, e-commerce, SEO, and paid marketing from one senior team.</p>
         <div class="dg-hero-cta">
@@ -108,7 +115,7 @@
       <div class="dg-wrap">
         <div class="dg-sec-head dg-rv">
           <span class="dg-label">Services</span>
-          <h2>Replace your digital department.</h2>
+          <h2 data-split>Replace your digital department.</h2>
         </div>
         <div class="dg-bento">
           <article class="dg-bcard dg-b-frame dg-rv" style="--i:0">
@@ -157,7 +164,7 @@
       <div class="dg-wrap">
         <div class="dg-sec-head dg-rv">
           <span class="dg-label">Selected work</span>
-          <h2>What we ship.</h2>
+          <h2 data-split>What we ship.</h2>
         </div>
         <div class="dg-work">
           <div class="dg-work-col is-early">
@@ -221,7 +228,7 @@
     <section class="dg-sec" id="testimonials">
       <div class="dg-wrap">
         <div class="dg-sec-head dg-rv">
-          <h2>What clients say.</h2>
+          <h2 data-split>What clients say.</h2>
         </div>
         <div class="dg-quotes">
           <figure class="dg-quote dg-rv" style="--i:0">
@@ -254,7 +261,7 @@
       <div class="dg-wrap">
         <div class="dg-sec-head dg-rv">
           <span class="dg-label">Scaling ambitious businesses</span>
-          <h2>Built to move fast.</h2>
+          <h2 data-split>Built to move fast.</h2>
         </div>
         <div class="dg-stats">
           <div class="dg-stat dg-rv" style="--i:0"><b><span data-count="3" data-suffix="">0</span> weeks</b><span>Typical launch for a marketing site</span></div>
@@ -268,7 +275,7 @@
     <section class="dg-sec">
       <div class="dg-wrap">
         <div class="dg-sec-head dg-rv">
-          <h2>CausQ Digital vs traditional providers.</h2>
+          <h2 data-split>CausQ Digital vs traditional providers.</h2>
         </div>
         <div class="dg-vs dg-rv" style="--i:1">
           <div class="dg-vs-row">
@@ -320,7 +327,7 @@
       <div class="dg-wrap">
         <div class="dg-sec-head dg-rv">
           <span class="dg-label">Pricing</span>
-          <h2>Simple pricing, no meters.</h2>
+          <h2 data-split>Simple pricing, no meters.</h2>
           <p>Every engagement starts with a free scoping call on WhatsApp. Prices below are starting points and confirmed in writing before work begins.</p>
         </div>
         <div class="dg-plans">
@@ -373,7 +380,7 @@
     <section class="dg-sec" id="faq">
       <div class="dg-wrap">
         <div class="dg-sec-head dg-rv">
-          <h2>Frequently asked questions.</h2>
+          <h2 data-split>Frequently asked questions.</h2>
         </div>
         <div class="dg-faq">
           <div class="dg-faq-item dg-rv" style="--i:0">
@@ -410,7 +417,7 @@
   <footer class="dg-foot" id="contact">
     <div class="dg-wrap">
       <div class="dg-foot-cta">
-        <h2 class="dg-rv">Make your website a sales machine.</h2>
+        <h2 data-split class="dg-rv">Make your website a sales machine.</h2>
         <div class="dg-foot-actions dg-rv" style="--i:1">
           <a class="dg-pill" href="https://wa.me/919686633999?text=Hi%20CausQ%2C%20I%27d%20like%20to%20talk%20about%20a%20project." target="_blank" rel="noopener">
             <svg aria-hidden="true"><use href="#wa"/></svg>
@@ -469,6 +476,6 @@
     <svg aria-hidden="true"><use href="#wa"/></svg>
   </a>
 
-  <script src="../assets/js/digital.js?v=20260721c" defer></script>
+  <script src="../assets/js/digital.js?v=20260722" defer></script>
 </body>
 </html>
