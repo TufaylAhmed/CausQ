@@ -32,6 +32,8 @@ deployment:
     - /bin/cp -f design/index.html $DEPLOYPATH/design/
     - /bin/mkdir -p $DEPLOYPATH/digital
     - /bin/cp -f digital/index.html $DEPLOYPATH/digital/
+    - /bin/mkdir -p $DEPLOYPATH/marketing
+    - /bin/cp -f marketing/index.html $DEPLOYPATH/marketing/
     # Static assets and images
     - /bin/cp -fR assets $DEPLOYPATH
     - /bin/cp -f Logo-website-white-.webp $DEPLOYPATH
